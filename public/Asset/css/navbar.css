@@ -1,0 +1,195 @@
+/* Styles généraux */
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    list-style: none;
+    text-decoration: none;
+    font-family: 'Roboto', sans-serif;
+}
+
+@font-face {
+    font-family: 'JejuHallasan-Regular';
+    src: url(/Asset/font/jejuhallasan/JejuHallasan-Regular.ttf);
+}
+
+body {
+    background-color: #0F2C33;
+}
+
+/* Logo */
+.logo {
+    width: 15rem;
+    height: auto;
+}
+
+.navbar-brand {
+    flex: 0 0 auto;
+}
+
+/* Navbar container */
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    background-color: #0F2C33;
+}
+
+
+.navbar-toggler {
+    background-color: #EFA00F;
+    border: none;
+    margin-left: auto;
+}
+
+/* Liens */
+.nav-link {
+    color: #E6D1B4;
+    font-size: 1.3rem;
+    margin: 0 10px;
+    font-family: 'JejuHallasan-Regular';
+}
+
+.nav-link:hover {
+    color: #EFA00F;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .navbar-toggler {
+        position: relative;
+        right: 0;
+    }
+    .navbar-nav {
+        flex-direction: column;
+        text-align: center;
+    }
+    .nav-link {
+        margin: 10px 0;
+    }
+}
+
+
+/* Section 1 */
+.burger {
+    margin-top: 10vh;
+    width: 100vw;
+    height: 60vh;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.burgeur {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+}
+
+
+@media (max-width: 768px) {
+    .burger {
+        height: 40vh;
+    }
+}
+
+.bloc_num {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.logo-container {
+    margin-right: 15px; 
+}
+
+.numero {
+    font-size: 2rem;
+    color: #EFA00F;
+    font-weight: bold;
+    text-decoration: none;
+}
+h1 {
+    font-weight: 400;
+    font-size: 7rem;
+    color: #E6D1B4;
+    font-family: 'JejuHallasan-Regular';
+    margin-bottom: 50px;
+}
+
+.numero {
+    text-decoration: none;
+    font-family: "Jost", sans-serif;
+    font-size: 11rem;
+    font-weight: 900;
+    line-height: 3rem;
+    color: #EFA00F;
+    margin-bottom: 100px;
+}
+
+.bi {
+    color: #EFA00F;
+    font-size: 60rem;
+}
+
+/* Responsive Navbar */
+@media (max-width: 768px) {
+    .logo {
+        width: 10rem;
+    }
+    .nav-link {
+        font-size: 1rem;
+        margin: 10px 0;
+    }
+    .navbar-nav {
+
+        flex-direction: column;
+        width: 100%;
+        text-align: center;
+    }
+    .navbar-nav.show {
+        display: flex;
+    }
+}
+
+/* Animation pour le toggle */
+.navbar-toggler.collapsed .navbar-nav {
+    display: flex;
+}
+
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2rem;
+    }
+    .numero {
+        font-size: 1.5rem;
+        line-height: 2rem;
+    }
+    .produit {
+        font-size: 1.8rem;
+    }
+    .pres p {
+        font-size: 1rem;
+    }
+    .im1 {
+        width: 80px;
+        height: 80px;
+    }
+    .overlay-text {
+        font-size: 1.2rem;
+    }
+    .avis_pagination {
+        width: 100%;
+    }
+    .specialite {
+        margin-top: 100px;
+    }
+}
