@@ -8,9 +8,10 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     height: auto !important;
     aspect-ratio: 16 / 9;
-    clip-path: polygon(0 8%, 75% 0%, 100% 8%, 100% 99%, 23% 95%, 0 100%);
+    clip-path: polygon(0 5%, 75% 0%, 100% 8%, 100% 99%, 23% 95%, 0 100%);
     display: block;
 }
+
 
 /* Titres */
 h2 {
@@ -89,7 +90,7 @@ h3 {
 @media (max-width: 768px) {
     .menu-container {
         width: 95vw;
-        clip-path: polygon(0 5%, 70% 0%, 100% 5%, 100% 100%, 20% 97%, 0 100%);
+        clip-path: polygon(0 3%, 70% 0%, 100% 3%, 100% 100%, 20% 97%, 0 100%);
     }
 
     h2 {
@@ -103,6 +104,40 @@ h3 {
     .burger-item p {
         font-size: 1rem;
     }
+}
+
+/* section pizza  */
+
+.pizza {
+    display: flex;
+    flex-direction: column;
+}
+
+.pizza-item {
+    padding: 1rem;
+
+}
+
+.pizza-item:last-child {
+    border-bottom: none;
+}
+
+.pizza-item h3 {
+    margin: 0;
+    font-size: 1.8em;
+    text-align: center;
+    color: #022e33;
+}
+
+.pizza-item p {
+    margin: 5px 0;
+    font-size: 1.2em;
+    text-align: center;
+    margin-bottom: 1rem;
+    color: #ddcbae;
+}
+.space{
+    margin-top: 8rem;
 }
 
 /* Section Tacos */

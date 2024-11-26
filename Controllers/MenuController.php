@@ -12,6 +12,7 @@ use App\Repository\SoftRepository;
 use App\Repository\VinsRepository;
 use App\Repository\BieresRepository;
 use App\Repository\SupplementsRepository;
+use App\Repository\PizzaRepository;
 
 
 class MenuController extends Controller
@@ -40,6 +41,8 @@ class MenuController extends Controller
         $bieres = $BieresRepository->findAll();
         $SupplementsRepository = new SupplementsRepository();
         $supplements = $SupplementsRepository->findAll();
+        $PizzaRepository = new PizzaRepository();
+        $pizzas = $PizzaRepository->findAll();
         $this->render("Menu/index", [
             'burgers' => $burgers,
             'tacos' => $tacos,
@@ -52,6 +55,7 @@ class MenuController extends Controller
             'vins' => $vins,
             'bieres' => $bieres,
             'supplements' => $supplements,
+            'pizzas' => $pizzas,
         ]);
     }
 }

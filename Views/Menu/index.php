@@ -21,6 +21,20 @@ echo '<link rel="stylesheet" href="/Asset/css/menu.css">';
     </div>
 </div>
 
+<!-- Section Pizza -->
+<h2>Nos Pizzas</h2>
+<div class="menu-container">
+    <div class="pizza mt-5">
+        <?php foreach ($pizzas as $pizza): ?>
+            <div class="pizza-item">
+                <h3><?= htmlspecialchars($pizza->nom); ?> <?= htmlspecialchars($pizza->prix); ?> €</h3>
+                <p><?= htmlspecialchars($pizza->description); ?></p>
+            </div>
+        <?php endforeach; ?>
+        <div class="space"></div>
+    </div>
+</div>
+
 <!-- Section Tacos -->
 <section>
     <h2>Nos Tacos</h2>

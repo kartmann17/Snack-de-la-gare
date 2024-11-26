@@ -66,12 +66,22 @@
                 <a href="/DashSnack/liste" class="admin-link">Liste Snacks</a>
             </div>
 
-             <!-- Ajout Snack -->
+             <!-- Ajout Pizza -->
+           <div class="admin-link-container">
+                <a href="/DashPizza" class="admin-link">Ajout Pizza</a>
+            </div>
+
+            <!-- Liste Pizza -->
+           <div class="admin-link-container">
+                <a href="/DashPizza/liste" class="admin-link">Liste Pizzas</a>
+            </div>
+
+             <!-- Ajout Supplement -->
            <div class="admin-link-container">
                 <a href="/DashSupplements" class="admin-link">Ajout Supp</a>
             </div>
 
-            <!-- Liste Snack -->
+            <!-- Liste Supplements -->
            <div class="admin-link-container">
                 <a href="/DashSupplements/liste" class="admin-link">Liste Supplement</a>
             </div>
