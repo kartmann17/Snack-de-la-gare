@@ -7,7 +7,7 @@ echo '<link rel="stylesheet" href="/Asset/css/dashburger.css">';
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header bg-primary text-white">
-                    <h2 class="text-center">Ajouter un Burger</h2>
+                    <h2 class="text-center  e">Ajouter un Burger</h2>
                 </div>
                 <div class="card-body">
                     <form action="/DashBurgers/ajoutBurger" method="POST" enctype="multipart/form-data">
