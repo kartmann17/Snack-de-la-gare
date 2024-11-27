@@ -10,7 +10,11 @@
     <?php foreach ($horaires as $horaire): ?>
         <p>
             <strong><?= htmlspecialchars($horaire['jour']) ?></strong><br>
-            <?= htmlspecialchars($horaire['ouverture_M']) ?> et <?= htmlspecialchars($horaire['ouverture_S']) ?>
+            <?= htmlspecialchars($horaire['ouverture_M']) ?>
+            <?php if (!empty($horaire['ouverture_M']) && !empty($horaire['ouverture_S'])): ?>
+                et
+            <?php endif; ?>
+            <?= htmlspecialchars($horaire['ouverture_S']) ?>
         </p>
     <?php endforeach; ?>
 </div>
