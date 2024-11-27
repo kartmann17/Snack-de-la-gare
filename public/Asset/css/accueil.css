@@ -23,10 +23,19 @@
 }
 
 .im1 {
-    width: 120px;
-    height: 120px;
-    border: solid #2E9CA0;
+    width: 150px;
+    height: 150px;
     border-radius: 50%;
+}
+
+.images img {
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Animation fluide pour l'agrandissement */
+    cursor: pointer; /* Indique que l'élément est interactif */
+}
+
+.images img:hover {
+    transform: scale(2); /* Agrandit l'image à 1.2x sa taille originale */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Ajoute une ombre pour l'effet de mise en avant */
 }
 
 /* Fin Section 1 */
@@ -59,7 +68,18 @@
 .carousels {
     width: 100%;
     max-width: 700px;
+}
 
+.custom-carousel .carousel-inner img {
+    height: 500px;
+    object-fit: cover;
+    width: 100%;
+}
+
+@media (max-width: 768px) {
+    .custom-carousel .carousel-inner img {
+        height: 300px; /* Hauteur réduite pour les petits écrans */
+    }
 }
 
 /* Div nos spécialités */

@@ -43,7 +43,7 @@ h2 {
     display: block;
     width: 100%;
     padding: 12px;
-    background-color: #38453a;
+    background-color: #f78f2e;
     color: white;
     font-family: "Roboto Serif", sans-serif;
     text-align: center;
@@ -54,7 +54,7 @@ h2 {
 }
 
 .admin-link:hover {
-    background-color: #f78f2e;
+    background-color: #2E9CA0;
 }
 
 @media (max-width: 768px) {

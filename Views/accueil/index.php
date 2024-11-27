@@ -13,9 +13,9 @@
         </p>
     </div>
     <div class="images m-auto d-flex justify-content-between mt-5">
-        <img class="im1" src="Asset/images/pain.png" alt="pain_presentation">
-        <img class="im1" src="Asset/images/salade.png" alt="salade_presentation">
-        <img class="im1" src="Asset/images/viande.png" alt="viande_presentation">
+        <img class="im1" src="Asset/images/arturrro-4yzEtTQLdL4-unsplash.jpg" alt="pain_presentation">
+        <img class="im1" src="Asset/images/gaelle-marcel-M-K4R83Rcm0-unsplash.jpg" alt="salade_presentation">
+        <img class="im1" src="Asset/images/madie-hamilton-GXehL5_crJ4-unsplash.jpg" alt="viande_presentation">
     </div>
     <div class="pres text-center m-auto mt-5 w-75">
         <p>Avec WALTER, l'originalité est toujours au menu !
@@ -36,36 +36,31 @@
     </div>
 </div>
 <!-- fin titre en ce moment avec image en fond-->
+
+<!--carousel avec produit proposé-->
 <section class="container-fluid mt-5 ">
-    <!--carousel avec produit proposé-->
-    <div class="carousels m-auto mt-5">
-        <div id="carouselExampleControls" class="carousel slide " data-bs-ride="carousel">
-            <div class="carousel-inner">
-                <div class="carousel-item active">
-                    <img src="Asset/images/tacos.png" class="d-block w-100 " alt="tacos">
-                </div>
-                <div class="carousel-item">
-                    <img src="Asset/images/kebab.jpg" class="d-block w-100" alt="kebbab">
-                </div>
-                <div class="carousel-item">
-                    <img src="Asset/images/burger.jpg" class="d-block w-100" alt="burger">
-                </div>
+    <div id="carouselExampleSlidesOnly" class="carousels slide custom-carousel m-auto" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="Asset/images/burger.jpg" class="d-block w-100 " alt="Burger">
             </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls"
-                data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls"
-                data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-            </button>
+            <div class="carousel-item">
+                <img src="Asset/images/pizza4.jpg" class="d-block w-100 " alt="Pizza">
+            </div>
+            <div class="carousel-item">
+                <img src="Asset/images/kebab.jpg" class="d-block w-100 " alt="Kebab">
+            </div>
+            <div class="carousel-item">
+                <img src="Asset/images/Tacos2.jpg" class="d-block w-100 " alt="Tacos">
+            </div>
+            <div class="carousel-item">
+                <img src="Asset/images/kinder.jpg" class="d-block w-100 " alt="Kinder">
+            </div>
         </div>
     </div>
-    <!--fin carousel avec produit proposé-->
-
 </section>
+<!--fin carousel avec produit proposé-->
+
 <!--titre Nos spécialité avec image en fond-->
 <div>
     <div class="image-container mt-5">
@@ -78,9 +73,9 @@
 <!--rond nos spécialités-->
 <div class="specialite mb-5">
     <div class="images m-auto d-flex justify-content-between">
-        <img class="im1" src="Asset/images/burger2.png" alt="pain_presentation">
-        <img class="im1" src="Asset/images/kebbab.png" alt="salade_presentation">
-        <img class="im1" src="Asset/images/tacos2.png" alt="viande_presentation">
+        <img class="im1" src="Asset/images/Burger3.jpg" alt="pain_presentation">
+        <img class="im1" src="Asset/images/plaque-pizza-u.jpg" alt="salade_presentation">
+        <img class="im1" src="Asset/images/assiette.jpg" alt="viande_presentation">
     </div>
 </div>
 <!--fin rond nos spécialités-->
@@ -88,7 +83,7 @@
 
 <!--titre Vos avis avec image en fond-->
 <div>
-    <div class="image-container ">
+    <div class="image-container">
         <img src="Asset/images/Pasted_Graphic_1.png" alt="Image" class="img-fluid">
         <div class="overlay-text">Vos avis !</div>
     </div>
