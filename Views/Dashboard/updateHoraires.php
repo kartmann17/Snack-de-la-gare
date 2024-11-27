@@ -25,7 +25,7 @@
                             <!-- Heure de fin -->
                             <div class="mb-3">
                                 <label for="horaire_fin" class="form-label">Horaire après midi</label>
-                                <input type="text" class="form-control" id="horaire_fin" name="ouverture_S" value="<?= $horaire['ouverture_S'] ?>" required>
+                                <input type="text" class="form-control" id="horaire_fin" name="ouverture_S" value="<?= $horaire['ouverture_S'] ?>">
                             </div>
 
 
