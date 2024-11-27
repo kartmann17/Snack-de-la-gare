@@ -10,21 +10,19 @@ class DashHoraireController extends Controller
 
     public function __construct()
     {
-        $this->HoraireRepository = new HoraireRepository;
+        $this->HoraireRepository = new HoraireRepository();
     }
 
     public function liste()
     {
         $horaires = $this->HoraireRepository->getAllHoraires();
+
         if (isset($_SESSION['id_User'])) {
             $title = "Liste Horaires";
-            $this->render(
-                'Dashboard/listeHoraires',
-                [
-                    'horaires' => $horaires,
-                    'title' => $title
-                ]
-            );
+            $this->render('Dashboard/listeHoraires', [
+                'horaires' => $horaires,
+                'title' => $title
+            ]);
         } else {
             http_response_code(404);
         }
@@ -33,9 +31,9 @@ class DashHoraireController extends Controller
     public function addHoraire()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SESSION['id_User'])) {
-            $jour = $_POST['jour'];
-            $ouverture_M = $_POST['ouverture_M'];
-            $ouverture_S = $_POST['ouverture_S'];
+            $jour = $_POST['jour'] ?? null;
+            $ouverture_M = $_POST['ouverture_M'] ?? null;
+            $ouverture_S = $_POST['ouverture_S'] ?? null;
 
             $this->HoraireRepository->ajouterHoraire($jour, $ouverture_M, $ouverture_S);
 
@@ -49,51 +47,47 @@ class DashHoraireController extends Controller
 
     public function updateHoraire($id)
     {
-
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $jour = $_POST['jour'];
-            $ouverture_M = $_POST['ouverture_M'];
-            $ouverture_S = $_POST['ouverture_S'];
+            $jour = $_POST['jour'] ?? null;
+            $ouverture_M = $_POST['ouverture_M'] ?? null;
+            $ouverture_S = $_POST['ouverture_S'] ?? null;
 
-            // Appel de la méthode
             $result = $this->HoraireRepository->updateHoraire($id, $jour, $ouverture_M, $ouverture_S);
             if ($result) {
                 header("Location: /Dashboard");
                 exit;
             } else {
-                echo "erreur";
+                echo "Erreur lors de la mise à jour de l'horaire.";
             }
         }
-        // Récupération de l'horaire pour pré-remplir le formulaire
+
+        // Pré-remplir le formulaire avec les données existantes
         $horaire = $this->HoraireRepository->getHoraireById($id);
         $title = "Modifier un Horaire";
-        $this->render(
-            'Dashboard/updateHoraires',
-            [
-                'horaire' => $horaire,
-                'title' => $title
-            ]
-        );
+
+        $this->render('Dashboard/updateHoraires', [
+            'horaire' => $horaire,
+            'title' => $title
+        ]);
     }
 
     public function deleteHoraire($id)
     {
         if (isset($_SESSION['id_User'])) {
-            $HoraireRepository = new HoraireRepository();
-            $HoraireRepository->deleteHoraire($id);
+            $this->HoraireRepository->deleteHoraire($id);
 
             header("Location: /DashHoraire/liste");
             exit;
         } else {
             http_response_code(403);
-            echo "Accès refusé";
+            echo "Accès refusé.";
         }
     }
-
 
     public function index()
     {
         $title = "Ajout Horaire";
+
         if (isset($_SESSION['id_User'])) {
             $this->render("Dashboard/addHoraire", compact('title'));
         } else {
