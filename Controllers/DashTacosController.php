@@ -13,7 +13,7 @@ class DashTacosController extends Controller
         $title = "Ajout Tacos";
         if (isset($_SESSION['id_User'])) {
             // Affichage de la vue
-            $this->render("Dashboard/addTacos", compact('title'));
+            $this->render("Dashboard/addtacos", compact('title'));
         } else {
             http_response_code(404);
         }

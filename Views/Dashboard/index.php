@@ -83,7 +83,7 @@
 
             <!-- Liste Supplements -->
            <div class="admin-link-container">
-                <a href="/DashSupplements/liste" class="admin-link">Liste Supplement</a>
+                <a href="/DashSupplements/liste" class="admin-link">Liste Supp</a>
             </div>
 
             <!-- Ajout Soft -->
