@@ -39,6 +39,6 @@ echo '<link rel="stylesheet" href="/Asset/css/food.css">';
     </div>
 
     <div class="text-end">
-        <a href="/dash" class="btn btn-secondary">Annuler</a>
+        <a href="/Dashboard" class="btn btn-secondary">Annuler</a>
     </div>
 </div>
