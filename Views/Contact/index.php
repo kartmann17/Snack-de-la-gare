@@ -7,13 +7,12 @@
 </div>
 
 <div class="banner m-auto mt-5 w-75">
-    <p><strong>Lundi</strong><br>11h30-13h30 et 18h30-21h30</p>
-    <p><strong>Mardi</strong><br>11h30-13h30 et 18h30-21h30</p>
-    <p><strong>Mercredi</strong><br>11h30-13h30 et 18h30-21h30</p>
-    <p><strong>Jeudi</strong><br>11h30-13h30 et 18h30-21h30</p>
-    <p><strong>Vendredi</strong><br>11h30-13h30 et 18h30-21h30</p>
-    <p><strong>Samedi</strong><br>---</p>
-    <p><strong>Dimanche</strong><br>18h30-21h30</p>
+    <?php foreach ($horaires as $horaire): ?>
+        <p>
+            <strong><?= htmlspecialchars($horaire['jour']) ?></strong><br>
+            <?= htmlspecialchars($horaire['ouverture_M']) ?> et <?= htmlspecialchars($horaire['ouverture_S']) ?>
+        </p>
+    <?php endforeach; ?>
 </div>
 
 <div class="mt-5 mb-5">

@@ -2,11 +2,14 @@
 
 namespace App\Controllers;
 
+use App\Repository\HoraireRepository;
 class ContactController extends Controller
 {
     public function index()
     {
-        $this->render("Contact/index");
+        $HoraireRepository = new HoraireRepository();
+        $horaire = $HoraireRepository->getAllHoraires();
+        $this->render("Contact/index", compact("horaire"));
     }
 
 

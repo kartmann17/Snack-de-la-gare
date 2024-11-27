@@ -1,3 +1,4 @@
+<?php
 echo '<link rel="stylesheet" href="/Asset/css/dashburger.css">';
 ?>
 
