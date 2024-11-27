@@ -8,7 +8,7 @@ class ContactController extends Controller
     public function index()
     {
         $HoraireRepository = new HoraireRepository();
-        $horaire = $HoraireRepository->getAllHoraires();
+        $horaires = $HoraireRepository->getAllHoraires();
         $this->render("Contact/index", compact("horaire"));
     }
 
