@@ -13,7 +13,7 @@ class DashBurgersController extends Controller
         $title = "Ajout Burgers";
         if (isset($_SESSION['id_User'])) {
             // Affichage de la vue
-            $this->render("Dashboard/addBurgers", compact('title'));
+            $this->render("Dashboard/addburgers", compact('title'));
         } else {
             http_response_code(404);
         }
