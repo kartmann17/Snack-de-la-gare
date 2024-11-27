@@ -4,7 +4,7 @@
         <h2 class="mb-4 text-center">Dashboard Admin</h2>
         <div class="dashboard-container">
             <div class="admin-link-container">
-                <a href="/DashBurgers/index" class="admin-link">Ajout Burger</a>
+                <a href="/DashBurgers" class="admin-link">Ajout Burger</a>
             </div>
             <div class="admin-link-container">
                 <a href="/DashBurgers/liste" class="admin-link">Liste Burgers</a>
