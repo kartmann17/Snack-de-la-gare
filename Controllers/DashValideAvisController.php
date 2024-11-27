@@ -23,13 +23,14 @@ class DashValideAvisController extends Controller
     // affichage de la liste des avis
     public function liste()
     {
+        $title = "Liste Avis";
+        
         $AvisRepository = new AvisRepository();
+
         $Avis = $AvisRepository->findAll();
+
         if (isset($_SESSION['id_User'])) {
-            $this->render(
-                "Dashboard/listeAvis",
-                compact("Avis")
-            );
+            $this->render("Dashboard/listeAvis",compact("Avis"));
         } else {
             http_response_code(404);
         }
