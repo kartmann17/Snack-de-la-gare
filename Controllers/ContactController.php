@@ -9,7 +9,7 @@ class ContactController extends Controller
     {
         $HoraireRepository = new HoraireRepository();
         $horaires = $HoraireRepository->getAllHoraires();
-        $this->render("Contact/index", compact("horaire"));
+        $this->render("Contact/index", compact("horaires"));
     }
 
 
