@@ -4,8 +4,21 @@ namespace App\Controllers;
 
 use App\Repository\AvisRepository;
 
-class DashValideAvisController extends DashboardController
+class DashValideAvisController extends Controller
 {
+
+
+    //affichage de la page valider avis avec uniquement les avis non validé
+    public function index()
+    {
+        $AvisRepository = new AvisRepository();
+        $Avis = $AvisRepository->findNonValides();
+        if (isset($_SESSION['id_User'])) {
+            $this->render("Dashboard/valideAvis", compact("Avis"));
+        } else {
+            http_response_code(404);
+        }
+    }
 
     // affichage de la liste des avis
     public function liste()
@@ -62,19 +75,6 @@ class DashValideAvisController extends DashboardController
             exit();
         } else {
             echo "Erreur : ID manquant.";
-        }
-    }
-
-
-    //affichage de la page valider avis avec uniquement les avis non validé
-    public function index()
-    {
-        $AvisRepository = new AvisRepository();
-        $Avis = $AvisRepository->findNonValides();
-        if (isset($_SESSION['id_User'])) {
-            $this->render("Dashboard/valideAvis", compact("Avis"));
-        } else {
-            http_response_code(404);
         }
     }
 }
