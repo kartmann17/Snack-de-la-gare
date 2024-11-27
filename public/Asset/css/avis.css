@@ -1,0 +1,100 @@
+.image-container {
+    position: relative;
+    width: 100vw;
+}
+
+.image-container img {
+    width: 100vw;
+    height: auto;
+}
+
+.overlay-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2rem; /* Ajustement pour l’adapter aux petits écrans */
+    font-weight: 400;
+    font-family: 'JejuHallasan-Regular';
+    color: black;
+    text-align: center;
+}
+
+/* Conteneur du formulaire */
+.review-form-container {
+    width: 100%;
+    max-width: 500px;
+    margin: 20px auto;
+    border: 5px solid #16a085; /* Bordure couleur turquoise */
+    padding: 20px;
+    border-radius: 8px;
+    background-color: transparent; /* Fond transparent */
+    text-align: center; /* Centre le contenu du formulaire */
+    color: #fff;
+    font-family: 'Roboto', sans-serif;
+}
+
+/* Titre du formulaire */
+.review-form h2 {
+    color: #16a085; /* Couleur turquoise pour le titre */
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+/* Styles pour les étoiles */
+.stars {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: center;
+}
+
+.stars input[type="radio"] {
+    display: none;
+}
+
+.stars label {
+    font-size: 2rem;
+    color: #ccc;
+    cursor: pointer;
+}
+
+.stars input[type="radio"]:checked ~ label,
+.stars label:hover,
+.stars label:hover ~ label {
+    color: #EFA00F;
+}
+
+/* Champ Pseudo et Commentaire */
+.form-group input,
+.form-group textarea {
+    width: 80%;
+    padding: 10px;
+    margin: 10px auto;
+    border: 1px solid #16a085;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    color: #333;
+    font-size: 1rem;
+    text-align: center;
+}
+
+/* Placeholder color */
+
+button[type="submit"] {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #0F2C33;
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+button[type="submit"]:hover {
+    background-color: #EFA00F;
+}

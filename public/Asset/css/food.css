@@ -1,0 +1,169 @@
+h2 {
+    color: #E6D1B4;
+    font-family: 'JejuHallasan-Regular';
+  }
+
+/* Liste Burgers */
+.table-actions {
+    width: 120px;
+    text-align: center;
+}
+
+
+.table-description {
+    max-width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+.table-actions .btn {
+    margin: 2px 0;
+    font-size: 0.9rem;
+    padding: 5px 10px;
+}
+
+
+.table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+
+.table td,
+.table th {
+    vertical-align: middle;
+    text-align: center;
+}
+
+
+.table img {
+    max-width: 80px;
+    max-height: 80px;
+    object-fit: cover;
+}
+
+
+/* liste avis */
+.avis-container {
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    overflow-x: auto;
+}
+
+
+.table-actions {
+    width: 120px;
+    text-align: center;
+}
+
+
+.table-commentaire {
+    max-width: 300px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+
+.table-actions .d-flex {
+    gap: 5px;
+}
+
+
+@media (max-width: 768px) {
+    .table-commentaire {
+        max-width: 200px;
+    }
+
+    .table-actions {
+        width: auto;
+    }
+}
+
+
+/* liste tacos, kebab, burger */
+
+.table-nom {
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+.table-description {
+    max-width: 300px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+.table-actions {
+    width: 150px;
+    text-align: center;
+}
+
+
+.img-thumbnail {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+}
+
+
+.table-responsive {
+    overflow-x: auto;
+}
+
+@media (max-width: 768px) {
+    .table-actions {
+        width: auto;
+    }
+    .table-nom, .table-description {
+        max-width: 100px;
+    }
+}
+
+
+/* liste salade ,snack, sauce, soft, viande, vins, biere*/
+.table-nom {
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.table-description {
+    max-width: 250px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+.table-actions {
+    width: 150px;
+    text-align: center;
+}
+
+
+.table-responsive {
+    overflow-x: auto;
+}
+
+@media (max-width: 768px) {
+    .table-actions {
+        width: auto; /
+    }
+    .table-nom, .table-description {
+        max-width: 120px;
+    }
+}
+
+
+
+

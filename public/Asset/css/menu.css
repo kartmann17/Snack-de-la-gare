@@ -1,0 +1,238 @@
+/* Container principal */
+.menu-container {
+    padding: 20px;
+    width: 90vw;
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: #00a0a0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    height: auto !important;
+    aspect-ratio: 16 / 9;
+    clip-path: polygon(0 5%, 75% 0%, 100% 8%, 100% 99%, 23% 95%, 0 100%);
+    display: block;
+}
+
+
+/* Titres */
+h2 {
+    margin-top: 1rem;
+    text-align: center;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    color: #E6D1B4;
+    font-family: 'JejuHallasan-Regular';
+    font-size: 2rem;
+}
+
+.color {
+    color: #022e33;
+}
+
+h3 {
+    color: #022e33;
+    font-family: 'JejuHallasan-Regular';
+    font-size: 2em;
+}
+
+/* Section Burgers */
+.burgers {
+    display: flex;
+    flex-direction: column;
+}
+
+.burger-item {
+    padding: 1rem;
+    margin-top: 2rem;
+}
+
+.burger-item:last-child {
+    border-bottom: none;
+}
+
+.burger-item h3 {
+    margin: 0;
+    font-size: 1.8em;
+    text-align: center;
+    color: #022e33;
+}
+
+.burger-item h4 {
+    margin: 5px 0;
+    font-size: 1.2em;
+    text-align: center;
+    margin-bottom: 1rem;
+    color: #022e33;
+}
+
+.burger-item p {
+    margin: 5px 0;
+    font-size: 1.2em;
+    text-align: center;
+    margin-bottom: 1rem;
+    color: #ddcbae;
+}
+
+.price {
+    font-weight: bold;
+}
+
+/* Bandes explicatives */
+.band {
+    background-color: #E6D1B4;
+    margin-bottom: 100px;
+}
+
+.band h2 {
+    color: black;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .menu-container {
+        width: 95vw;
+        clip-path: polygon(0 3%, 70% 0%, 100% 3%, 100% 100%, 20% 97%, 0 100%);
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+
+    h3 {
+        font-size: 1.4rem;
+    }
+
+    .burger-item p {
+        font-size: 1rem;
+    }
+}
+
+/* section pizza  */
+
+.pizza {
+    display: flex;
+    flex-direction: column;
+}
+
+.pizza-item {
+    padding: 1rem;
+
+}
+
+.pizza-item:last-child {
+    border-bottom: none;
+}
+
+.pizza-item h3 {
+    margin: 0;
+    font-size: 1.8em;
+    text-align: center;
+    color: #022e33;
+}
+
+.pizza-item p {
+    margin: 5px 0;
+    font-size: 1.2em;
+    text-align: center;
+    margin-bottom: 1rem;
+    color: #ddcbae;
+}
+.space{
+    margin-top: 8rem;
+}
+
+/* Section Tacos */
+.tacos-item {
+    margin-top: 4rem;
+}
+
+.tacos-item:last-child {
+    border-bottom: none;
+}
+
+.tacos-item h3 {
+    font-size: 1.8em;
+    text-align: center;
+    color: #ddcbae;
+}
+
+/* Section Viande */
+.viande-item h3 {
+    margin: 0;
+    font-size: 1.8em;
+    text-align: center;
+    margin-top: 2rem;
+    color: #ddcbae;
+}
+
+/* Section Sauces */
+.sauce-item {
+    margin-right: 10px;
+    font-weight: bold;
+    color: #ddcbae;
+    font-family: 'JejuHallasan-Regular';
+}
+
+/* Section Kebabs */
+.kebab-item h3 {
+    margin: 0;
+    font-size: 1.8em;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #ddcbae;
+}
+
+.description {
+    margin-top: 10px;
+    font-size: 1.7em;
+    color: #022e33;
+    font-weight: bold;
+}
+
+.description .highlight {
+    color: #022e33;
+    font-weight: bold;
+}
+
+.vide {
+    height: 8vh;
+}
+
+/* Section Softs */
+.soft-item h3 {
+    color: #ddcbae;
+    font-family: 'JejuHallasan-Regular';
+}
+
+/* Section Vins */
+.vins-item h3 {
+    font-size: 1.8em;
+    color: #022e33;
+}
+
+.vins-item h4 {
+    margin: 5px 0;
+    font-size: 1.2em;
+    margin-bottom: 1rem;
+    color: #022e33;
+}
+
+/* Section Bières */
+.biere-item h3 {
+    font-size: 1.8em;
+    color: #022e33;
+}
+
+.biere-item h4 {
+    margin: 5px 0;
+    font-size: 1.2em;
+    margin-bottom: 1rem;
+    color: #022e33;
+}
+/* Bandes explicatives nos soft */
+.bands {
+    background-color: #E6D1B4;
+    margin-top: 100px;
+}
+.bands h2 {
+    color: black;
+}

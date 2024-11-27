@@ -1,0 +1,33 @@
+.card-header {
+    color: #fff;
+    text-align: center;
+}
+
+.card {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-label {
+    font-weight: bold;
+    color: #f78f2e;
+}
+
+.btn-primary {
+    background-color: #f78f2e;
+    border-color: #f78f2e;
+}
+
+.btn-primary:hover {
+    background-color: #e67823;
+    border-color: #e67823;
+}
+
+.btn-secondary {
+    background-color: #38453a;
+    border-color: #38453a;
+}
+
+.btn-secondary:hover {
+    background-color: #2c3a2e;
+    border-color: #2c3a2e;
+}
