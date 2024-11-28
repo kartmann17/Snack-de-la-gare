@@ -25,15 +25,18 @@ class HoraireRepository extends MongoConnection
 
     public function getAllHoraires()
     {
-        return $this->collection->find()->toArray();
+        return $this->collection->find([], ['sort' => ['index' => 1]])->toArray();
     }
 
     public function ajouterHoraire($jour, $ouverture_M, $ouverture_S)
     {
+        $jours = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
+        $index = array_search($jour, $jours) + 1;
         $horaire = [
             'jour' => $jour,
             'ouverture_M' => $ouverture_M,
             'ouverture_S' => $ouverture_S,
+            'index' => $index,
         ];
         $this->collection->insertOne($horaire)->getInsertedId();
     }
@@ -46,12 +49,15 @@ class HoraireRepository extends MongoConnection
 
     public function updateHoraire($id, $jour, $ouverture_M, $ouverture_S)
     {
+        $jours = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
+        $index = array_search($jour, $jours) + 1;
         $filter = ['_id' => new \MongoDB\BSON\ObjectId($id)];
         $update = [
             '$set' => [
                 'jour' => $jour,
                 'ouverture_M' => $ouverture_M,
-                'ouverture_S' => $ouverture_S
+                'ouverture_S' => $ouverture_S,
+                'index' => $index
             ]
         ];
         $result = $this->collection->updateOne($filter, $update);
