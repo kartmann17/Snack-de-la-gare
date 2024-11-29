@@ -13,9 +13,9 @@
         </p>
     </div>
     <div class="images m-auto d-flex justify-content-between mt-5">
-        <img class="im1" src="Asset/images/arturrro-4yzEtTQLdL4-unsplash.jpg" alt="pain_presentation">
-        <img class="im1" src="Asset/images/gaelle-marcel-M-K4R83Rcm0-unsplash.jpg" alt="salade_presentation">
-        <img class="im1" src="Asset/images/madie-hamilton-GXehL5_crJ4-unsplash.jpg" alt="viande_presentation">
+        <img class="im1" src="Asset/images/arturrro-4yzEtTQLdL4-unsplash.jpg" loading="lazy" width="300" height="200" alt="pain_presentation">
+        <img class="im1" src="Asset/images/gaelle-marcel-M-K4R83Rcm0-unsplash.jpg" loading="lazy" width="300" height="200" alt="salade_presentation">
+        <img class="im1" src="Asset/images/madie-hamilton-GXehL5_crJ4-unsplash.jpg" loading="lazy" width="300" height="200" alt="viande_presentation">
     </div>
     <div class="pres text-center m-auto mt-5 w-75">
         <p>Avec WALTER, l'originalité est toujours au menu !
@@ -31,7 +31,7 @@
 <!--titre en ce moment avec image en fond-->
 <div>
     <div class="image-container mt-5">
-        <img src="Asset/images/Pasted_Graphic_1.png" alt="Image" class="img-fluid">
+        <img src="Asset/images/Pasted_Graphic_1.png" alt="Image" loading="lazy" class="img-fluid">
         <div class="overlay-text">En ce Moment !</div>
     </div>
 </div>
@@ -42,19 +42,19 @@
     <div id="carouselExampleSlidesOnly" class="carousels slide custom-carousel m-auto" data-bs-ride="carousel">
         <div class="carousel-inner">
             <div class="carousel-item active">
-                <img src="Asset/images/burger.jpg" class="d-block w-100 " alt="Burger">
+                <img src="Asset/images/burger.jpg" class="d-block w-100 " loading="lazy" alt="Burger">
             </div>
             <div class="carousel-item">
-                <img src="Asset/images/pizza4.jpg" class="d-block w-100 " alt="Pizza">
+                <img src="Asset/images/pizza4.jpg" class="d-block w-100 " loading="lazy" alt="Pizza">
             </div>
             <div class="carousel-item">
-                <img src="Asset/images/kebab.jpg" class="d-block w-100 " alt="Kebab">
+                <img src="Asset/images/kebab.jpg" class="d-block w-100 " loading="lazy" alt="Kebab">
             </div>
             <div class="carousel-item">
-                <img src="Asset/images/Tacos2.jpg" class="d-block w-100 " alt="Tacos">
+                <img src="Asset/images/Tacos2.jpg" class="d-block w-100 " loading="lazy" alt="Tacos">
             </div>
             <div class="carousel-item">
-                <img src="Asset/images/kinder.jpg" class="d-block w-100 " alt="Kinder">
+                <img src="Asset/images/kinder.jpg" class="d-block w-100 " loading="lazy" alt="Kinder">
             </div>
         </div>
     </div>
@@ -64,7 +64,7 @@
 <!--titre Nos spécialité avec image en fond-->
 <div>
     <div class="image-container mt-5">
-        <img src="Asset/images/Pasted_Graphic_1.png" alt="Image" class="img-fluid">
+        <img src="Asset/images/Pasted_Graphic_1.png" loading="lazy" alt="Image" class="img-fluid">
         <div class="overlay-text">Nos spécialités !</div>
     </div>
 </div>
@@ -73,9 +73,9 @@
 <!--rond nos spécialités-->
 <div class="specialite mb-5">
     <div class="images m-auto d-flex justify-content-between">
-        <img class="im1" src="Asset/images/Burger3.jpg" alt="pain_presentation">
-        <img class="im1" src="Asset/images/plaque-pizza-u.jpg" alt="salade_presentation">
-        <img class="im1" src="Asset/images/assiette.jpg" alt="viande_presentation">
+        <img class="im1" src="Asset/images/Burger3.jpg" loading="lazy" width="300" height="200" alt="pain_presentation">
+        <img class="im1" src="Asset/images/plaque-pizza-u.jpg" loading="lazy" width="300" height="200" alt="salade_presentation">
+        <img class="im1" src="Asset/images/assiette.jpg" loading="lazy" width="300" height="200" alt="viande_presentation">
     </div>
 </div>
 <!--fin rond nos spécialités-->
@@ -84,7 +84,7 @@
 <!--titre Vos avis avec image en fond-->
 <div>
     <div class="image-container">
-        <img src="Asset/images/Pasted_Graphic_1.png" alt="Image" class="img-fluid">
+        <img src="Asset/images/Pasted_Graphic_1.png" alt="Image" loading="lazy" class="img-fluid">
         <div class="overlay-text">Vos avis !</div>
     </div>
 </div>

@@ -8,6 +8,11 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="/Asset/css/navbar.css">
     <link rel="stylesheet" href="/Asset/css/footer.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="/Asset/icones/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/Asset/icones/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/Asset/icones/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/Asset/icones/favicon-32x32.png">
+    <link rel="manifest" href="/Asset/icones/site.webmanifest">
 </head>
 
 <body>
@@ -56,7 +61,7 @@
 </nav>
 
     <div class="burger">
-        <img class="burgeur" src="/Asset/images/burger_page_acceuil.jpeg" alt="">
+        <img class="burgeur" src="/Asset/images/burger_page_acceuil.jpeg" width="600" height="400" loading="lazy" alt="un burgeur délicieux">
     </div>
     <div class="bloc_num d-flex align-items-center justify-content-center mt-5">
         <div class="text-center">
