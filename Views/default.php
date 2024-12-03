@@ -61,17 +61,7 @@
 </nav>
 
     <div class="burger">
-    <img
-    class="burgeur"
-    src="https://res.cloudinary.com/dr7jxgr70/image/upload/f_auto,q_auto/c_scale,w_800/v1733239254/burger_page_acceuil.jpg"
-    srcset="
-        https://res.cloudinary.com/dr7jxgr70/image/upload/f_auto,q_auto/c_scale,w_400/v1733239254/burger_page_acceuil.jpg 400w,
-        https://res.cloudinary.com/dr7jxgr70/image/upload/f_auto,q_auto/c_scale,w_800/v1733239254/burger_page_acceuil.jpg 800w,
-        https://res.cloudinary.com/dr7jxgr70/image/upload/f_auto,q_auto/c_scale,w_1200/v1733239254/burger_page_acceuil.jpg 1200w
-    "
-    sizes="(max-width: 768px) 400px, 800px"
-    loading="lazy"
-    alt="un burgeur délicieux">
+        <img class="burgeur" src="https://res.cloudinary.com/dr7jxgr70/image/upload/v1733239254/burger_page_acceuil_emtvkb.webp" width="600" height="400" loading="lazy" alt="un burgeur délicieux">
     </div>
     <div class="bloc_num d-flex align-items-center justify-content-center mt-5">
         <div class="text-center">
