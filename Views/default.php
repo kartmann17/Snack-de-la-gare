@@ -61,7 +61,7 @@
 </nav>
 
     <div class="burger">
-        <img class="burgeur" src="https://res.cloudinary.com/dr7jxgr70/image/upload/v1733222346/burger_page_acceuil_p44aod.jpg" width="600" height="400" loading="lazy" alt="un burgeur délicieux">
+        <img class="burgeur" src="https://res.cloudinary.com/dr7jxgr70/image/upload/v1733239254/burger_page_acceuil_emtvkb.webp" width="600" height="400" loading="lazy" alt="un burgeur délicieux">
     </div>
     <div class="bloc_num d-flex align-items-center justify-content-center mt-5">
         <div class="text-center">
