@@ -8,7 +8,7 @@
 
 <!-- formulaire avis  -->
 <div class="review-form-container mt-5">
-    <form class="review-form" action="/Avis/ajoutAvis" method="POST">
+    <form class="review-form" id="avisForm" action="/Avis/ajoutAvis" method="POST">
     <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
         <h2>Votre avis nous intéresse</h2>
 
@@ -38,3 +38,4 @@
     </form>
 </div>
 <!-- fin formulaire avis -->
+<script src="/Asset/Js/asyncavis.js"></script>
