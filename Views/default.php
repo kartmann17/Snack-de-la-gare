@@ -81,6 +81,7 @@
         <footer class="footer-container">
             <ul class="wrapper">
                 <li class="icon facebook">
+                <a href="https://www.facebook.com/p/Snack-de-la-gare-100038549299473/?locale=fr_FR" target="blank" rel="noopener noreferrer">
                     <span class="tooltip">Facebook</span>
                     <svg
                         viewBox="0 0 320 512"
@@ -90,6 +91,7 @@
                         <path
                             d="M279.14 288l14.22-92.66h-88.91v-60.13c0-25.35 12.42-50.06 52.24-50.06h40.42V6.26S260.43 0 225.36 0c-73.22 0-121.08 44.38-121.08 124.72v70.62H22.89V288h81.39v224h100.17V288z"></path>
                     </svg>
+                </a>
                 </li>
                 <li class="icon instagram">
                     <span class="tooltip">Instagram</span>
@@ -111,6 +113,9 @@
             </div>
             <div class="copyright">
                 <p>&copy; 2024 - Snack de la gare</p>
+                <a href="/Rgpd">Rgpd</a>
+                <a href="/Cgu">CGU</a>
+                <a href="/MentionLegale">Mentions légales</a>
             </div>
         </footer>
     </div>

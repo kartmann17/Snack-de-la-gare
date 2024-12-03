@@ -20,6 +20,14 @@
     font-size: 1rem;
 }
 
+.copyright a {
+    color: #E6D1B4;
+    text-decoration: none;
+    padding-left: 20px; 
+    padding-right: 10px
+
+}
+
 /* Font Awesome Icons */
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css');
 
