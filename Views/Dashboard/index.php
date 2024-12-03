@@ -116,6 +116,16 @@
                 <a href="/DashBieres/liste" class="admin-link">Liste Bières</a>
             </div>
 
+              <!-- Ajout En ce moment -->
+           <div class="admin-link-container">
+                <a href="/DashEnCeMoment" class="admin-link">En ce moment</a>
+            </div>
+
+            <!-- Liste En ce moment -->
+           <div class="admin-link-container">
+                <a href="/DashEnCeMoment/liste" class="admin-link">Liste E-C-MT</a>
+            </div>
+
             <!-- Ajout Horaire -->
            <div class="admin-link-container">
                 <a href="/DashHoraire" class="admin-link">Ajout Horaire</a>

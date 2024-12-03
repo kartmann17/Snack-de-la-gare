@@ -1,7 +1,7 @@
 <link rel="stylesheet" href="/Asset/css/avis.css">
 <div>
     <div class="image-container">
-        <img src="Asset/images/Pasted_Graphic_1.png" alt="Image" class="img-fluid">
+        <img src="https://res.cloudinary.com/dr7jxgr70/image/upload/v1733222366/Pasted_Graphic_1_ecmuft.png" alt="Image" class="img-fluid">
         <div class="overlay-text">Vos Avis</div>
     </div>
 </div>

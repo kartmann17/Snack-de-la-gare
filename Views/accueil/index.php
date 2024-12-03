@@ -13,9 +13,9 @@
         </p>
     </div>
     <div class="images m-auto d-flex justify-content-between mt-5">
-        <img class="im1" src="Asset/images/arturrro-4yzEtTQLdL4-unsplash.jpg" loading="lazy" width="300" height="200" alt="pain_presentation">
-        <img class="im1" src="Asset/images/gaelle-marcel-M-K4R83Rcm0-unsplash.jpg" loading="lazy" width="300" height="200" alt="salade_presentation">
-        <img class="im1" src="Asset/images/madie-hamilton-GXehL5_crJ4-unsplash.jpg" loading="lazy" width="300" height="200" alt="viande_presentation">
+        <img class="im1" src="https://res.cloudinary.com/dr7jxgr70/image/upload/v1733222344/arturrro-4yzEtTQLdL4-unsplash_iw9dus.jpg" loading="lazy" width="300" height="200" alt="pain_presentation">
+        <img class="im1" src="https://res.cloudinary.com/dr7jxgr70/image/upload/v1733222363/gaelle-marcel-M-K4R83Rcm0-unsplash_lxlr9t.jpg" loading="lazy" width="300" height="200" alt="salade_presentation">
+        <img class="im1" src="https://res.cloudinary.com/dr7jxgr70/image/upload/v1733222601/madie-hamilton-GXehL5_crJ4-unsplash_1_sdmrka.jpg" loading="lazy" width="300" height="200" alt="viande_presentation">
     </div>
     <div class="pres text-center m-auto mt-5 w-75">
         <p>Avec WALTER, l'originalité est toujours au menu !
@@ -31,31 +31,21 @@
 <!--titre en ce moment avec image en fond-->
 <div>
     <div class="image-container mt-5">
-        <img src="Asset/images/Pasted_Graphic_1.png" alt="Image" loading="lazy" class="img-fluid">
+        <img src="https://res.cloudinary.com/dr7jxgr70/image/upload/v1733222366/Pasted_Graphic_1_ecmuft.png" alt="Image" loading="lazy" class="img-fluid">
         <div class="overlay-text">En ce Moment !</div>
     </div>
 </div>
 <!-- fin titre en ce moment avec image en fond-->
 
 <!--carousel avec produit proposé-->
-<section class="container-fluid mt-5 ">
+<section class="container-fluid mt-5">
     <div id="carouselExampleSlidesOnly" class="carousels slide custom-carousel m-auto" data-bs-ride="carousel">
         <div class="carousel-inner">
-            <div class="carousel-item active">
-                <img src="Asset/images/burger.jpg" class="d-block w-100 " loading="lazy" alt="Burger">
-            </div>
-            <div class="carousel-item">
-                <img src="Asset/images/pizza4.jpg" class="d-block w-100 " loading="lazy" alt="Pizza">
-            </div>
-            <div class="carousel-item">
-                <img src="Asset/images/kebab.jpg" class="d-block w-100 " loading="lazy" alt="Kebab">
-            </div>
-            <div class="carousel-item">
-                <img src="Asset/images/Tacos2.jpg" class="d-block w-100 " loading="lazy" alt="Tacos">
-            </div>
-            <div class="carousel-item">
-                <img src="Asset/images/kinder.jpg" class="d-block w-100 " loading="lazy" alt="Kinder">
-            </div>
+            <?php foreach ($encemoments as $index => $encemoment): ?>
+                <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
+                    <img src="<?= htmlspecialchars($encemoment->img) ?>" class="d-block w-100" alt="en ce moment">
+                </div>
+            <?php endforeach; ?>
         </div>
     </div>
 </section>
@@ -64,7 +54,7 @@
 <!--titre Nos spécialité avec image en fond-->
 <div>
     <div class="image-container mt-5">
-        <img src="Asset/images/Pasted_Graphic_1.png" loading="lazy" alt="Image" class="img-fluid">
+        <img src="https://res.cloudinary.com/dr7jxgr70/image/upload/v1733222366/Pasted_Graphic_1_ecmuft.png" loading="lazy" alt="Image" class="img-fluid">
         <div class="overlay-text">Nos spécialités !</div>
     </div>
 </div>
@@ -73,9 +63,9 @@
 <!--rond nos spécialités-->
 <div class="specialite mb-5">
     <div class="images m-auto d-flex justify-content-between">
-        <img class="im1" src="Asset/images/Burger3.jpg" loading="lazy" width="300" height="200" alt="pain_presentation">
-        <img class="im1" src="Asset/images/plaque-pizza-u.jpg" loading="lazy" width="300" height="200" alt="salade_presentation">
-        <img class="im1" src="Asset/images/assiette.jpg" loading="lazy" width="300" height="200" alt="viande_presentation">
+        <img class="im1" src="https://res.cloudinary.com/dr7jxgr70/image/upload/v1733222361/Burger3_nulryq.jpg" loading="lazy" width="300" height="200" alt="burger">
+        <img class="im1" src="https://res.cloudinary.com/dr7jxgr70/image/upload/v1733222369/plaque-pizza-u_u43w3y.jpg" loading="lazy" width="300" height="200" alt="pizza plateau">
+        <img class="im1" src="https://res.cloudinary.com/dr7jxgr70/image/upload/v1733222362/assiette_ddknkw.jpg" loading="lazy" width="300" height="200" alt="assiette">
     </div>
 </div>
 <!--fin rond nos spécialités-->
@@ -84,7 +74,7 @@
 <!--titre Vos avis avec image en fond-->
 <div>
     <div class="image-container">
-        <img src="Asset/images/Pasted_Graphic_1.png" alt="Image" loading="lazy" class="img-fluid">
+        <img src="https://res.cloudinary.com/dr7jxgr70/image/upload/v1733222366/Pasted_Graphic_1_ecmuft.png" alt="Image" loading="lazy" class="img-fluid">
         <div class="overlay-text">Vos avis !</div>
     </div>
 </div>

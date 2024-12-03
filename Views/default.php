@@ -20,7 +20,7 @@
     <div class="container-fluid d-flex align-items-center justify-content-between">
 
         <a class="navbar-brand d-flex align-items-center" href="/">
-            <img src="/Asset/images/logoV2.png" alt="logo-accueil" height="60">
+            <img src="https://res.cloudinary.com/dr7jxgr70/image/upload/v1733222368/logoV2_xgml3q.png" alt="logo-accueil" height="60">
         </a>
         <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
             aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -61,7 +61,7 @@
 </nav>
 
     <div class="burger">
-        <img class="burgeur" src="/Asset/images/burger_page_acceuil.jpeg" width="600" height="400" loading="lazy" alt="un burgeur délicieux">
+        <img class="burgeur" src="https://res.cloudinary.com/dr7jxgr70/image/upload/v1733222346/burger_page_acceuil_p44aod.jpg" width="600" height="400" loading="lazy" alt="un burgeur délicieux">
     </div>
     <div class="bloc_num d-flex align-items-center justify-content-center mt-5">
         <div class="text-center">
