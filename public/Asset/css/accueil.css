@@ -18,8 +18,12 @@
 
 /* Bloc image rond */
 .images {
-    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
     max-width: 600px;
+    margin: 0 auto;
 }
 
 .im1 {
@@ -31,13 +35,13 @@
 }
 
 .images img {
-    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Animation fluide pour l'agrandissement */
-    cursor: pointer; /* Indique que l'élément est interactif */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
 }
 
 .images img:hover {
-    transform: scale(2); /* Agrandit l'image à 1.2x sa taille originale */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Ajoute une ombre pour l'effet de mise en avant */
+    transform: scale(2);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 /* Fin Section 1 */
@@ -90,17 +94,11 @@
 }
 
 /* Section 3 */
-
-
 @media (max-width: 768px) {
     h1 {
         font-size: 2rem;
     }
 
-    .numero {
-        font-size: 1.5rem;
-        line-height: 2rem;
-    }
 
     .produit {
         font-size: 1.8rem;
@@ -124,7 +122,6 @@
     }
 }
 
-
 /* card avis */
 .avis {
     margin: 70px auto;
@@ -140,10 +137,6 @@
 p {
     font-family: roboto, serif;
 
-}
-
-.card-body p {
-    font-size: 30px;
 }
 
 /* Style des étoiles */

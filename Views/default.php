@@ -19,7 +19,7 @@
 <nav class="navbar navbar-expand-lg bg-body-transparent">
     <div class="container-fluid d-flex align-items-center justify-content-between">
 
-        <a class="navbar-brand d-flex align-items-center" href="/">
+        <a class="navbar-brand d-flex align-items-center logo" href="/">
             <img src="https://res.cloudinary.com/dr7jxgr70/image/upload/v1733222368/logoV2_xgml3q.png" alt="logo-accueil" height="60">
         </a>
         <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
@@ -66,8 +66,8 @@
     <div class="bloc_num d-flex align-items-center justify-content-center mt-5">
         <div class="text-center">
             <h1>Commander</h1>
-            <div class="d-flex align-items-center">
-                <a class="numero align-middle" href="tel:0476385922">04 76 38 59 22</a>
+            <div class="numero">
+                <a href="tel:0476385922">04 76 38 59 22</a>
             </div>
         </div>
     </div>
