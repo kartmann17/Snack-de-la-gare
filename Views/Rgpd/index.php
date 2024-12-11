@@ -8,7 +8,7 @@ echo '<link rel="stylesheet" href="/Asset/css/cguRgpdMention.css">';
 
     <div class="section text-center">
         <h2>Dernière mise à jour</h2>
-        <p>[date]</p>
+        <p>11-12-2024</p>
         <p>
             Chez Snack de la Gare, nous prenons la confidentialité et la protection de vos données personnelles très au sérieux. Cette politique de confidentialité décrit comment nous collectons, utilisons, et protégeons vos données lorsque vous visitez notre site ou utilisez nos services.
         </p>
@@ -20,9 +20,8 @@ echo '<link rel="stylesheet" href="/Asset/css/cguRgpdMention.css">';
             Le responsable du traitement des données personnelles est :
             <ul>
                 <li><strong>Nom</strong> : Snack de la Gare</li>
-                <li><strong>Adresse</strong> : [Votre adresse]</li>
-                <li><strong>Téléphone</strong> : [Votre numéro]</li>
-                <li><strong>Email</strong> : [Votre email]</li>
+                <li><strong>Adresse</strong> : 95 route de St Lattier 38840 St Hilaire du Rosier</li>
+                <li><strong>Téléphone</strong> : 04 76 38 59 22</li>
             </ul>
         </p>
     </div>
@@ -71,8 +70,8 @@ echo '<link rel="stylesheet" href="/Asset/css/cguRgpdMention.css">';
                 <li>Nos employés et collaborateurs dans le cadre de la gestion des commandes et des services.</li>
                 <li>Nos prestataires (par exemple : services de paiement ou plateformes de livraison) dans le strict cadre nécessaire à leurs missions.</li>
                 <li>Les autorités compétentes en cas de demande légale.</li>
+                <li>Nous ne vendons jamais vos données personnelles à des tiers.</li>
             </ul>
-            Nous ne vendons jamais vos données personnelles à des tiers.
         </p>
     </div>
 
@@ -99,8 +98,8 @@ echo '<link rel="stylesheet" href="/Asset/css/cguRgpdMention.css">';
                 <li>Droit à la portabilité : Recevoir vos données dans un format structuré.</li>
                 <li>Droit d’opposition : Refuser l’utilisation de vos données à des fins marketing.</li>
                 <li>Droit à la limitation : Limiter temporairement l’utilisation de vos données.</li>
+                <li>Pour exercer ces droits, contactez-nous à [email du snack].</li>
             </ul>
-            Pour exercer ces droits, contactez-nous à [email du snack].
         </p>
     </div>
 
@@ -111,8 +110,8 @@ echo '<link rel="stylesheet" href="/Asset/css/cguRgpdMention.css">';
             <ul>
                 <li>Améliorer l’expérience utilisateur.</li>
                 <li>Analyser la fréquentation de notre site.</li>
+                <li> Vous pouvez gérer ou désactiver les cookies via les paramètres de votre navigateur. Pour en savoir plus, consultez notre [Politique de Cookies].</li>
             </ul>
-            Vous pouvez gérer ou désactiver les cookies via les paramètres de votre navigateur. Pour en savoir plus, consultez notre [Politique de Cookies].
         </p>
     </div>
 
@@ -133,9 +132,8 @@ echo '<link rel="stylesheet" href="/Asset/css/cguRgpdMention.css">';
         <p>
             Pour toute question concernant notre politique de confidentialité ou le traitement de vos données, vous pouvez nous contacter :
             <ul>
-                <li>Email : [Votre email]</li>
-                <li>Téléphone : [Votre numéro]</li>
-                <li>Adresse : [Votre adresse]</li>
+                <li>Téléphone : 04 76 38 59 22</li>
+                <li>Adresse : 95 route de St Lattier 38840 St Hilaire du Rosier</li>
             </ul>
         </p>
     </div>
