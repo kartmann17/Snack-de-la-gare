@@ -11,18 +11,17 @@ echo '<link rel="stylesheet" href="/Asset/css/cguRgpdMention.css">';
             Le présent site est édité par :
             <ul>
                 <li><strong>Nom de l’entreprise</strong> : Snack de la Gare</li>
-                <li><strong>Forme juridique</strong> : [Exemple : SARL, SAS, entreprise individuelle]</li>
-                <li><strong>Capital social</strong> : [Exemple : 10 000 €]</li>
-                <li><strong>Siège social</strong> : [Votre adresse]</li>
-                <li><strong>Numéro SIRET</strong> : [Votre numéro SIRET]</li>
-                <li><strong>RCS</strong> : [Ville d’enregistrement]</li>
-                <li><strong>Numéro de TVA intracommunautaire</strong> : [Exemple : FR123456789]</li>
+                <li><strong>Forme juridique</strong> : SARL</li>
+                <li><strong>Capital social</strong> : 200 €</li>
+                <li><strong>Siège social</strong> : 95 route de St Lattier 38840 St Hilaire du Rosier</li>
+                <li><strong>Numéro SIRET</strong> : 98203794700016</li>
+                <li><strong>RCS</strong> : Grenoble</li>
+                <li><strong>Numéro de TVA intracommunautaire</strong> : 98203794700016</li>
             </ul>
             <strong>Contact :</strong>
             <ul>
-                <li>Téléphone : [Votre numéro de téléphone]</li>
-                <li>Email : [Votre email]</li>
-                <li>Site internet : [Adresse URL du site]</li>
+                <li>Téléphone : 04 76 38 59 22</li>
+                <li>Site internet : https://snack-de-la-gare-ecf70c13b3bc.herokuapp.com/</li>
             </ul>
         </p>
     </div>
@@ -32,10 +31,9 @@ echo '<link rel="stylesheet" href="/Asset/css/cguRgpdMention.css">';
         <p>
             Le site est hébergé par :
             <ul>
-                <li><strong>Nom de l’hébergeur</strong> : [Exemple : OVH, Infomaniak, etc.]</li>
-                <li><strong>Adresse</strong> : [Adresse complète de l’hébergeur]</li>
-                <li><strong>Téléphone</strong> : [Numéro de contact de l’hébergeur]</li>
-                <li><strong>Site web</strong> : [URL de l’hébergeur]</li>
+                <li><strong>Nom de l’hébergeur</strong> : Heroku</li>
+                <li><strong>Adresse</strong> : 415 Mission Street Suite 300 San Francisco, CA 94105 </li>
+                <li><strong>Site web</strong> : www.heroku.com</li>
             </ul>
         </p>
     </div>
@@ -44,9 +42,9 @@ echo '<link rel="stylesheet" href="/Asset/css/cguRgpdMention.css">';
         <h2>3. Directeur de la publication</h2>
         <p>
             <ul>
-                <li><strong>Nom et prénom</strong> : [Nom du gérant ou du responsable légal]</li>
-                <li><strong>Qualité</strong> : [Exemple : Gérant, Directeur]</li>
-                <li><strong>Contact</strong> : [Email de contact]</li>
+                <li><strong>Nom et prénom</strong> : Blanchet Lionel </li>
+                <li><strong>Qualité</strong> : Baby Dev</li>
+                <li><strong>Contact</strong> : dronex.contact@gmail.com</li>
             </ul>
         </p>
     </div>
@@ -94,9 +92,8 @@ echo '<link rel="stylesheet" href="/Asset/css/cguRgpdMention.css">';
         <p>
             Pour toute question relative aux mentions légales, vous pouvez nous contacter :
             <ul>
-                <li>Email : [Votre email]</li>
-                <li>Téléphone : [Votre numéro de téléphone]</li>
-                <li>Adresse : [Votre adresse complète]</li>
+                <li>Téléphone : 04 76 38 59 22</li>
+                <li>Adresse :  95 route de St Lattier 38840 St Hilaire du Rosier</li>
             </ul>
         </p>
     </div>
@@ -105,8 +102,8 @@ echo '<link rel="stylesheet" href="/Asset/css/cguRgpdMention.css">';
         <h2>10. Crédits</h2>
         <p>
             <ul>
-                <li>Conception et développement : [Nom ou société ayant réalisé le site]</li>
-                <li>Images : [Indiquez les sources des images, si elles proviennent de banques d’images ou si elles sont sous licence.]</li>
+                <li>Conception et développement : Blanchet Lionel Apprenti Dev</li>
+                <li>Images : Unsplash libre de droit et photos personnel</li>
             </ul>
         </p>
     </div>

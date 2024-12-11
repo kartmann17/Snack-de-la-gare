@@ -145,6 +145,16 @@
            <div class="admin-link-container">
                 <a href="/DashValideAvis/liste" class="admin-link">Liste Avis</a>
             </div>
+
+             <!-- Ajout User -->
+           <div class="admin-link-container">
+                <a href="/DashUser" class="admin-link">Ajout User</a>
+            </div>
+
+            <!-- Liste User -->
+           <div class="admin-link-container">
+                <a href="/DashUser/liste" class="admin-link">Liste User</a>
+            </div>
         </div>
     </div>
 </div>

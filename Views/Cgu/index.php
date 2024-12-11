@@ -110,9 +110,8 @@ echo '<link rel="stylesheet" href="/Asset/css/cguRgpdMention.css">';
         <p>
             Pour toute question concernant les présentes CGU ou le fonctionnement du site, vous pouvez nous contacter :
             <ul>
-                <li>Email : [Votre email]</li>
-                <li>Téléphone : [Votre numéro de téléphone]</li>
-                <li>Adresse : [Votre adresse complète]</li>
+                <li>Téléphone : 04 76 38 59 22</li>
+                <li>Adresse :  95 route de St Lattier 38840 St Hilaire du Rosier</li>
             </ul>
         </p>
     </div>
