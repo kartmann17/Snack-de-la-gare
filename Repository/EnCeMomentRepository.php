@@ -2,10 +2,11 @@
 
 namespace App\Repository;
 
-class EnCeMomentRepository extends Repository{
-    
-    public function __construct(){
+class EnCeMomentRepository extends MongoRepository
+{
 
-        $this->table = "En_ce_moments";
+    public function table($data): string
+    {
+        return $this->create("En_ce_moments",$data);
     }
 }

@@ -2,11 +2,11 @@
 
 namespace App\Repository;
 
-class SnackRepository extends Repository
+class SnackRepository extends MongoRepository
 {
-    public function __construct()
+    public function table($data)
     {
-        $this->table = "Nos_Snacks";
+       return $this->create("Nos_Snacks", $data);
     }
 
 }

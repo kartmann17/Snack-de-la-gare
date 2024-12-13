@@ -7,6 +7,13 @@
 </div>
 
 <div class="banner m-auto mt-5 w-75">
+    <?php
+    // Trier les horaires par `_id`
+    usort($horaires, function ($a, $b) {
+        return strcmp((string)$a['_id'], (string)$b['_id']);
+    });
+    ?>
+
     <?php foreach ($horaires as $horaire): ?>
         <p>
             <strong><?= htmlspecialchars($horaire['jour']) ?></strong><br>

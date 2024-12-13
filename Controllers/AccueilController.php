@@ -17,7 +17,8 @@ class AccueilController extends Controller
         $Avis = $AvisRepository->findAll();
 
         $EnCeMomentRepository = new EnCeMomentRepository();
-        $encemoments = $EnCeMomentRepository->findAll();
+        $alias = "En_ce_moments";
+        $encemoments = $EnCeMomentRepository->findAll($alias);
 
         // Passer les données à la vue via la méthode render
         $this->render("accueil/index", [

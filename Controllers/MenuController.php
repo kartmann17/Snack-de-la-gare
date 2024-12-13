@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Controllers;
+
 use App\Repository\BurgersRepository;
 use App\Repository\TacosRepository;
 use App\Repository\ViandeRepository;
@@ -20,38 +21,62 @@ class MenuController extends Controller
     public function index()
     {
         $BurgersRepository = new BurgersRepository();
-        $burgers = $BurgersRepository->findAll();
+        $alias = "burgers";
+        $burgers = $BurgersRepository->findAll($alias);
+
         $TacosRepository = new TacosRepository();
-        $tacos = $TacosRepository->findAll();
+        $alias = "Tacos";
+        $tacos = $TacosRepository->findAll($alias);
+
         $ViandeRepository = new ViandeRepository();
-        $viande = $ViandeRepository->findAll();
+        $alias = "Viandes";
+        $viande = $ViandeRepository->findAll($alias);
+
         $SauceRepository = new SauceRepository();
-        $sauce = $SauceRepository->findAll();
+        $alias = "Sauces";
+        $sauce = $SauceRepository->findAll($alias);
+
         $KebabsRepository = new KebabsRepository();
-        $kebabs = $KebabsRepository->findAll();
+        $alias = "kebabs";
+        $kebabs = $KebabsRepository->findAll($alias);
+
         $SaladesRepository = new SaladesRepository();
-        $salades = $SaladesRepository->findAll();
+        $alias = "Nos_Salades";
+        $salades = $SaladesRepository->findAll($alias);
+
         $SnackRepository = new SnackRepository();
-        $snack = $SnackRepository->findAll();
+        $alias = "Nos_Snacks";
+        $snack = $SnackRepository->findAll($alias);
+
         $SoftRepository = new SoftRepository();
-        $soft = $SoftRepository->findAll();
+        $alias = "Nos_Soft";
+        $soft = $SoftRepository->findAll($alias);
+
         $VinsRepository = new VinsRepository();
-        $vins = $VinsRepository->findAll();
+        $alias = "Nos_Vins";
+        $vins = $VinsRepository->findAll($alias);
+
         $BieresRepository = new BieresRepository();
-        $bieres = $BieresRepository->findAll();
+        $alias = "Nos_Bieres";
+        $bieres = $BieresRepository->findAll($alias);
+
         $SupplementsRepository = new SupplementsRepository();
-        $supplements = $SupplementsRepository->findAll();
+        $alias = "Supplements";
+        $supplements = $SupplementsRepository->findAll($alias);
+
         $PizzaRepository = new PizzaRepository();
-        $pizzas = $PizzaRepository->findAll();
+        $alias = "Pizza";
+        $pizzas = $PizzaRepository->findAll($alias);
+
         $this->render("Menu/index", [
             'burgers' => $burgers,
             'tacos' => $tacos,
             'viande' => $viande,
-           'sauce' => $sauce,
+            'sauce' => $sauce,
             'kebabs' => $kebabs,
-           'salades' => $salades,
-           'snack' => $snack,
-           'soft' => $soft,
+            'salades' => $salades,
+            'snack' => $snack,
+            'soft' => $soft,
             'vins' => $vins,
             'bieres' => $bieres,
             'supplements' => $supplements,

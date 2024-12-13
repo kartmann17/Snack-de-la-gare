@@ -26,8 +26,8 @@ class DashValideAvisController extends Controller
         $title = "Liste Avis";
 
         $AvisRepository = new AvisRepository();
-
-        $Avis = $AvisRepository->findAll();
+        $alias = "avis";
+        $Avis = $AvisRepository->findAll($alias);
 
         if (isset($_SESSION['id_User'])) {
             $this->render("Dashboard/listeavis",compact("Avis"));
@@ -38,30 +38,46 @@ class DashValideAvisController extends Controller
 
     //suppression des avis
     public function deleteAvis()
-    {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+{
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $id = $_POST['id'] ?? null;
 
-            $id = $_POST['id'] ?? null;
-
-            if ($id) {
+        if ($id) {
+            try {
                 $AvisRepository = new AvisRepository();
+                $alias = 'avis';
 
-                $result = $AvisRepository->delete($id);
+                // Vérifier l'existence de l'avis avant suppression
+                $avis = $AvisRepository->find($alias, $id);
+                if (!$avis) {
+                    $_SESSION['error_message'] = "L'avis avec l'ID $id n'existe pas.";
+                    header("Location: /DashValideAvis/liste");
+                    exit();
+                }
 
-                if ($result) {
+                // Supprimer l'avis dans MongoDB
+                $deletedCount = $AvisRepository->delete(
+                    $alias,
+                    ['_id' => new \MongoDB\BSON\ObjectId($id)]
+                );
+
+                if ($deletedCount > 0) {
                     $_SESSION['success_message'] = "L'avis a été supprimé avec succès.";
                 } else {
                     $_SESSION['error_message'] = "Erreur lors de la suppression de l'avis.";
                 }
-            } else {
-                $_SESSION['error_message'] = "ID invalide.";
+            } catch (\Exception $e) {
+                $_SESSION['error_message'] = "Erreur lors de la suppression : " . $e->getMessage();
             }
-
-            // Redirection vers la liste des avis après supression
-            header("Location: /DashValideAvis/liste");
-            exit();
+        } else {
+            $_SESSION['error_message'] = "ID invalide.";
         }
+
+        // Redirection après tentative de suppression
+        header("Location: /DashValideAvis/liste");
+        exit();
     }
+}
 
     //validation des avis avec le bouton
     public function validerAvis()

@@ -23,6 +23,7 @@ class DashSaladeController extends Controller
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
+            $alias= "Nos_Salades";
             $data = [
                 'nom' => $_POST['nom'] ??  null,
                 'prix' => $_POST['prix'] ??  null,
@@ -31,7 +32,7 @@ class DashSaladeController extends Controller
 
             // Utilisation du repository
             $SaladesRepository = new SaladesRepository();
-            $result = $SaladesRepository->create($data);
+            $result = $SaladesRepository->create($alias,$data);
 
             if ($result) {
                 $_SESSION['success_message'] = "Salade ajouté avec succès.";
@@ -51,21 +52,28 @@ class DashSaladeController extends Controller
             $id = $_POST['id'] ?? null;
 
             if ($id) {
-                $SaladesRepository = new SaladesRepository();
+                try{
+                    $SaladesRepository = new SaladesRepository();
+                    $alias ="Nos_Salades";
 
-                $result =  $SaladesRepository->delete($id);
-
-                if ($result) {
-                    $_SESSION['success_message'] = "La salade a été supprimé avec succès.";
-                } else {
-                    $_SESSION['error_message'] = "Erreur lors de la suppression de la salade.";
+                    $deletedCount = $SaladesRepository->delete(
+                        $alias,
+                        ['_id' => new \MongoDB\BSON\ObjectId($id)]
+                    );
+                    if ($deletedCount > 0) {
+                        $_SESSION['success_message'] = "La salade a été supprimée avec succès.";
+                    } else {
+                        $_SESSION['error_message'] = "Aucune salade n'a été trouvée avec cet ID.";
+                    }
+                }catch (\Exception $e) {
+                    $_SESSION['error_message'] = "Erreur lors de la suppression : " . $e->getMessage();
                 }
             } else {
                 $_SESSION['error_message'] = "ID salade invalide.";
             }
 
             // Redirection vers la dashboard
-            header("Location: /Dashboard");
+            header("Location: /DashSalade/liste");
             exit();
         }
     }
@@ -73,9 +81,9 @@ class DashSaladeController extends Controller
     public function updateSalade($id)
     {
         $SaladesRepository = new SaladesRepository();
-
+        $alias= "Nos_Salades";
         // Récupérer la viande à modifier
-        $salade =  $SaladesRepository->find($id);
+        $salade =  $SaladesRepository->find($alias, $id);
 
         if (!$salade) {
             $_SESSION['error_message'] = "La salade avec l'ID $id n'existe pas.";
@@ -87,17 +95,26 @@ class DashSaladeController extends Controller
 
             // Préparer de la requete
             $data = [
-                'nom' => $_POST['nom'] ??  $salade->nom,
-                'prix' => $_POST['prix'] ??  $salade->prix,
-                'description' => $_POST['description'] ??  $salade->desription
-
+                'nom' => $_POST['nom'] ??  $salade['nom'],
+                'prix' => $_POST['prix'] ??  $salade['prix'],
+                'description' => $_POST['description'] ??  $salade['desription']
             ];
 
-            // Mise à jour dans la base
-            if ($SaladesRepository->update($id, $data)) {
-                $_SESSION['success_message'] = "salade modifié avec succès.";
-            } else {
-                $_SESSION['error_message'] = "Erreur lors de la modification de la salade.";
+            try {
+                // Mise à jour dans la base
+                $updatedCount = $SaladesRepository->update(
+                    $alias,
+                    ['_id' => new \MongoDB\BSON\ObjectId($id)],
+                    $data
+                );
+
+                if ($updatedCount > 0) {
+                    $_SESSION['success_message'] = "La salade a été modifiée avec succès.";
+                } else {
+                    $_SESSION['error_message'] = "Aucune modification n'a été apportée.";
+                }
+            } catch (\Exception $e) {
+                $_SESSION['error_message'] = "Erreur lors de la mise à jour : " . $e->getMessage();
             }
 
             // Redirection après la modification
@@ -117,8 +134,8 @@ class DashSaladeController extends Controller
         $title = "Liste Salades";
 
         $SaladesRepository = new SaladesRepository();
-
-        $salades = $SaladesRepository->findAll();
+        $alias = 'Nos_Salades';
+        $salades = $SaladesRepository->findAll($alias);
 
         if (isset($_SESSION['id_User'])) {
 

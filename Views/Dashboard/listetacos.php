@@ -24,14 +24,14 @@ echo '<link rel="stylesheet" href="/Asset/css/food.css">';
                         <td><?= $taco->menu ?></td>
                         <td class="table-description" title="<?= $taco->description ?>"><?= $taco->description ?></td>
                         <td>
-                            <img src="/Asset/Images/<?= $taco->img ?>" class="img-thumbnail" alt="image de <?= $taco->nom ?>" />
+                            <img src="<?= $taco->img ?>" class="img-thumbnail" alt="image de <?= $taco->nom ?>" />
                         </td>
                         <td class="table-actions">
                             <div class="d-flex">
-                                <a href="/DashTacos/updateTacos/<?= $taco->id ?>" class="btn btn-warning btn-sm me-1">Modifier</a>
+                                <a href="/DashTacos/updateTacos/<?= $taco->_id ?>" class="btn btn-warning btn-sm me-1">Modifier</a>
                                 <form action="/DashTacos/deleteTacos" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce tacos ?');">
                                     <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
-                                    <input type="hidden" name="id" value="<?= $taco->id ?>">
+                                    <input type="hidden" name="id" value="<?= $taco->_id ?>">
                                     <button class="btn btn-danger btn-sm">Supprimer</button>
                                 </form>
                             </div>

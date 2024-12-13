@@ -23,13 +23,14 @@ class DashSoftsController extends Controller
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST'){
 
+            $alias = "Nos_Soft";
             $data = [
             'nom' =>$_POST['nom'] ??  null,
             'prix' =>$_POST['prix'] ??  null
             ];
 
             $SoftRepository = new SoftRepository;
-            $result = $SoftRepository->create($data);
+            $result = $SoftRepository->create($alias, $data);
 
             if ($result) {
                 $_SESSION['success_message'] = "La boisson a été ajouté avec succès.";
@@ -45,25 +46,32 @@ class DashSoftsController extends Controller
     public function deleteSoft()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
             $id = $_POST['id'] ?? null;
 
             if ($id) {
-                $SoftRepository = new SoftRepository;
+                try {
+                    $SoftRepository = new SoftRepository;
+                    $alias ="Nos_Soft";
 
-                $result =  $SoftRepository->delete($id);
+                    $deletedCount = $SoftRepository->delete(
+                        $alias,
+                        ['_id' => new \MongoDB\BSON\ObjectId($id)]
+                    );
 
-                if ($result) {
-                    $_SESSION['success_message'] = "La boisson a été supprimé avec succès.";
-                } else {
-                    $_SESSION['error_message'] = "Erreur lors de la suppression de la boisson.";
+                    if ($deletedCount > 0) {
+                        $_SESSION['success_message'] = "La boisson a été supprimé avec succès.";
+                    } else {
+                        $_SESSION['error_message'] = "Aucune boisson n'a été trouvée avec cet ID.";
+                    }
+                }catch(\Exception $e) {
+                    $_SESSION['error_message'] = "Erreur lors de la suppression : " . $e->getMessage();
                 }
             } else {
                 $_SESSION['error_message'] = "ID boisson invalide.";
             }
 
             // Redirection vers la dashboard
-            header("Location: /Dashboard");
+            header("Location: /DashSofts/liste");
             exit();
         }
     }
@@ -71,8 +79,8 @@ class DashSoftsController extends Controller
     public function updateSoft($id)
     {
         $SoftRepository = new SoftRepository;
-
-        $soft = $SoftRepository->find($id);
+        $alias = "Nos_Soft";
+        $soft = $SoftRepository->find($alias, $id);
 
         if (!$soft) {
             $_SESSION['error_message'] = "le soft avec l'id $id n'existe pas.";
@@ -84,15 +92,25 @@ class DashSoftsController extends Controller
 
             //preparae la requete
             $data = [
-                'nom' => $_POST['nom']?? $soft->nom,
-                'prix' => $_POST['prix']?? $soft->prix
+                'nom' => $_POST['nom']?? $soft['nom'],
+                'prix' => $_POST['prix']?? $soft['prix']
             ];
 
-            //Mis a jour dans la base
-            if ($SoftRepository->update($id, $data)) {
-                $_SESSION['success_message'] = "le soft a été modifié avec succès.";
-            } else {
-                $_SESSION['error_message'] = "Erreur lors de la modification du soft.";
+            try {
+                $updatedCount = $SoftRepository->update(
+                    $alias,
+                    ['_id' => new \MongoDB\BSON\ObjectId($id)],
+                    $data
+                );
+
+                //Mis a jour dans la base
+                if ($updatedCount > 0) {
+                    $_SESSION['success_message'] = "le soft a été modifié avec succès.";
+                } else {
+                    $_SESSION['error_message'] = "Erreur lors de la modification du soft.";
+                }
+            }catch(\Exception $e){
+                $_SESSION['error_message'] = "Erreur lors de la mise à jour : ". $e->getMessage();
             }
 
              // Redirection après la modification
@@ -115,8 +133,8 @@ class DashSoftsController extends Controller
     $title = "Liste Softs";
 
     $SoftRepository = new SoftRepository;
-
-    $softs =  $SoftRepository->findAll();
+    $alias = "Nos_Soft";
+    $softs =  $SoftRepository->findAll($alias);
 
     if (isset($_SESSION['id_User'])) {
 

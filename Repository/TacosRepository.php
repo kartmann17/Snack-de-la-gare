@@ -2,12 +2,12 @@
 
 namespace App\Repository;
 
-class TacosRepository extends Repository
+class TacosRepository extends MongoRepository
 {
 
-    public function __construct()
+    public function table($data)
     {
-        $this->table = "Tacos";
+       return $this->create("Tacos", $data);
     }
 
 }

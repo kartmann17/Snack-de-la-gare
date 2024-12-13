@@ -18,10 +18,10 @@ echo '<link rel="stylesheet" href="/Asset/css/food.css">';
                         <td class="table-nom" title="<?= $viande->nom ?>"><?= $viande->nom ?></td>
                         <td class="table-actions">
                             <div class="d-flex">
-                                <a href="/DashViande/updateViande/<?= $viande->id ?>" class="btn btn-warning btn-sm me-1">Modifier</a>
+                                <a href="/DashViande/updateViande/<?= $viande->_id ?>" class="btn btn-warning btn-sm me-1">Modifier</a>
                                 <form action="/DashViande/deleteViande" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette viande ?');" style="display: inline;">
                                     <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
-                                    <input type="hidden" name="id" value="<?= $viande->id ?>">
+                                    <input type="hidden" name="id" value="<?= $viande->_id ?>">
                                     <button class="btn btn-danger btn-sm">Supprimer</button>
                                 </form>
                             </div>

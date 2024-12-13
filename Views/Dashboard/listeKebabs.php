@@ -30,14 +30,14 @@ echo '<link rel="stylesheet" href="/Asset/css/food.css">';
                             <?= $kebab->description ?>
                         </td>
                         <td>
-                            <img src="/Asset/Images/<?= $kebab->img ?>" class="img-thumbnail" alt="image de <?= $kebab->nom ?>" />
+                            <img src="<?= $kebab->img ?>" class="img-thumbnail" alt="image de <?= $kebab->nom ?>" />
                         </td>
                         <td class="table-actions">
                             <div class="d-flex">
-                                <a href="/DashKebabs/updateKebab/<?= $kebab->id ?>" class="btn btn-warning btn-sm me-1">Modifier</a>
+                                <a href="/DashKebabs/updateKebab/<?= $kebab->_id ?>" class="btn btn-warning btn-sm me-1">Modifier</a>
                                 <form action="/DashKebabs/deleteKebab" method="POST" style="display: inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce kebab ?');">
                                     <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
-                                    <input type="hidden" name="id" value="<?= $kebab->id ?>">
+                                    <input type="hidden" name="id" value="<?= $kebab->_id ?>">
                                     <button class="btn btn-danger btn-sm">Supprimer</button>
                                 </form>
                             </div>

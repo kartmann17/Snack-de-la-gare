@@ -29,14 +29,14 @@ echo '<link rel="stylesheet" href="/Asset/css/food.css">';
                             <?= $burger->description ?>
                         </td>
                         <td>
-                            <img src="/Asset/Images/<?= $burger->img ?>" class="img-thumbnail" alt="image de <?= $burger->nom ?>"/>
+                            <img src="<?= $burger->img ?>" class="img-thumbnail" alt="image de <?= $burger->nom ?>"/>
                         </td>
                         <td class="table-actions">
                             <div class="d-flex">
-                                <a href="/DashBurgers/updateBurger/<?= $burger->id ?>" class="btn btn-warning btn-sm me-1">Modifier</a>
+                                <a href="/DashBurgers/updateBurger/<?= $burger->_id ?>" class="btn btn-warning btn-sm me-1">Modifier</a>
                                 <form action="/DashBurgers/deleteBurger" method="POST" style="display: inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce burger ?');">
                                     <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
-                                    <input type="hidden" name="id" value="<?= $burger->id ?>">
+                                    <input type="hidden" name="id" value="<?= $burger->_id ?>">
                                     <button class="btn btn-danger btn-sm">Supprimer</button>
                                 </form>
                             </div>

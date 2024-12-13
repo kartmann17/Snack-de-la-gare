@@ -7,10 +7,13 @@ use MongoDB\Client;
 class MongoConnection
 {
     protected $client;
+    private \MongoDB\Database $db;
+    private static ?MongoConnection $instance = null;
 
     public function __construct()
     {
         $this->client = $this->connect();
+        $this->db = $this->client->selectDatabase($_ENV['MONGODB_DB']);
     }
 
     /**
@@ -29,15 +32,25 @@ class MongoConnection
         }
     }
 
-    /**
-     * Retrieves a collection from the specified database.
-     *
-     * @param string $database The name of the database.
-     * @param string $collection The name of the collection.
-     * @return Collection The specified collection.
+     /**
+     * Retourne l'instance unique de Mongo.
+     * @return MongoConnection
      */
-    public function getCollection(string $database, string $collection)
+    public static function getInstance(): MongoConnection
     {
-        return $this->client->$database->$collection;
+        if (self::$instance === null) {
+            self::$instance = new MongoConnection();
+        }
+        return self::$instance;
     }
+
+    /**
+     * Retourne la base de données MongoDB.
+     * @return \MongoDB\Database
+     */
+    public function getDatabase(): \MongoDB\Database
+    {
+        return $this->db;
+    }
+
 }

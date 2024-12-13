@@ -24,13 +24,14 @@ class DashViandeController extends Controller
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // Hydratation des données
+            $alias = 'Viandes';
             $data = [
-                'nom' => $_POST['nom'] ?? null,
+                'nom' => $_POST['nom'] ?? null
             ];
 
             // Utilisation du repository
             $ViandeRepository = new ViandeRepository();
-            $result = $ViandeRepository->create($data);
+            $result = $ViandeRepository->create($alias, $data);
 
             if ($result) {
                 $_SESSION['success_message'] = "Viande ajouté avec succès.";
@@ -44,22 +45,30 @@ class DashViandeController extends Controller
     public function deleteViande()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
             $id = $_POST['id'] ?? null;
 
             if ($id) {
-                $ViandeRepository = new ViandeRepository();
+                try {
+                    $ViandeRepository = new ViandeRepository();
+                    $alias = "Viandes";
 
-                $result =  $ViandeRepository->delete($id);
+                    // Suppression de la bière par ID
+                $deletedCount = $ViandeRepository->delete(
+                    $alias,
+                    ['_id' => new \MongoDB\BSON\ObjectId($id)]
+                );
 
-                if ($result) {
-                    $_SESSION['success_message'] = "La viande a été supprimé avec succès.";
+                if ($deletedCount > 0) {
+                    $_SESSION['success_message'] = "La viande a été supprimée avec succès.";
                 } else {
-                    $_SESSION['error_message'] = "Erreur lors de la suppression de la viande.";
+                    $_SESSION['error_message'] = "Aucune viande n'a été trouvée avec cet ID.";
                 }
-            } else {
-                $_SESSION['error_message'] = "ID viande invalide.";
+            } catch (\Exception $e) {
+                $_SESSION['error_message'] = "Erreur lors de la suppression : " . $e->getMessage();
             }
+        } else {
+            $_SESSION['error_message'] = "ID viande invalide.";
+        }
 
             // Redirection vers la dashboard
             header("Location: /Dashboard");
@@ -70,9 +79,9 @@ class DashViandeController extends Controller
     public function updateViande($id)
     {
         $ViandeRepository = new ViandeRepository();
-
+        $alias = "Viandes";
         // Récupérer la viande à modifier
-        $viande =  $ViandeRepository->find($id);
+        $viande =  $ViandeRepository->find($alias, $id);
 
         if (!$viande) {
             $_SESSION['error_message'] = "La viande avec l'ID $id n'existe pas.";
@@ -84,14 +93,24 @@ class DashViandeController extends Controller
 
             // Préparer de la requete
             $data = [
-                'nom' => $_POST['nom'] ?? $viande->nom,
+                'nom' => $_POST['nom'] ?? $viande['nom'],
             ];
 
-            // Mise à jour dans la base
-            if ($ViandeRepository->update($id, $data)) {
-                $_SESSION['success_message'] = "viande modifié avec succès.";
-            } else {
-                $_SESSION['error_message'] = "Erreur lors de la modification de la viande.";
+            try {
+                // Mise à jour dans la base
+                $updatedCount = $ViandeRepository->update(
+                    $alias,
+                    ['_id' => new \MongoDB\BSON\ObjectId($id)],
+                    $data
+                );
+
+                if ($updatedCount > 0) {
+                    $_SESSION['success_message'] = "La viande a été mise à jour avec succès.";
+                } else {
+                    $_SESSION['error_message'] = "Aucune viande n'a été trouvée avec cet ID.";
+                }
+            }catch (\Exception $e){
+                $_SESSION['error_message'] = "Erreur lors de la mise à jour : ". $e->getMessage();
             }
 
             // Redirection après la modification
@@ -111,8 +130,8 @@ class DashViandeController extends Controller
         $title = "Liste Viandes";
 
         $ViandeRepository = new ViandeRepository();
-
-        $viandes =  $ViandeRepository->findAll();
+        $alias = "Viandes";
+        $viandes =  $ViandeRepository->findAll($alias);
 
         if (isset($_SESSION['id_User'])) {
 

@@ -22,7 +22,7 @@ class DashSnackController extends Controller
     {
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
+            $alias = "Nos_Snacks";
             $data = [
                 'nom' => $_POST['nom'] ??  null,
                 'prix' => $_POST['prix'] ??  null,
@@ -31,7 +31,7 @@ class DashSnackController extends Controller
 
             // Utilisation du repository
             $SnackRepository = new SnackRepository();
-            $result = $SnackRepository->create($data);
+            $result = $SnackRepository->create($alias, $data);
 
             if ($result) {
                 $_SESSION['success_message'] = "Snack ajouté avec succès.";
@@ -48,18 +48,25 @@ class DashSnackController extends Controller
     public function deleteSnack()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
             $id = $_POST['id'] ?? null;
 
             if ($id) {
-                $SnackRepository = new SnackRepository();
+                try{
+                    $SnackRepository = new SnackRepository();
+                    $alias = "Nos_Snacks";
 
-                $result = $SnackRepository->delete($id);
+                    $deletedCount = $SnackRepository->delete(
+                        $alias,
+                        ['_id' => new \MongoDB\BSON\ObjectId($id)]
+                    );
 
-                if ($result) {
-                    $_SESSION['success_message'] = "Le snack a été supprimé avec succès.";
-                } else {
-                    $_SESSION['error_message'] = "Erreur lors de la suppression du snack.";
+                    if ($deletedCount > 0) {
+                        $_SESSION['success_message'] = "Le snack a été supprimée avec succès.";
+                    } else {
+                        $_SESSION['error_message'] = "Aucun snack n'a été trouvée avec cet ID.";
+                    }
+                } catch (\Exception $e) {
+                    $_SESSION['error_message'] = "Erreur lors de la suppression : " . $e->getMessage();
                 }
             } else {
                 $_SESSION['error_message'] = "ID snack invalide.";
@@ -75,9 +82,10 @@ class DashSnackController extends Controller
     public function updateSnack($id)
     {
         $SnackRepository = new SnackRepository();
+        $alias = "Nos_Snacks";
 
         // Récupérer la viande à modifier
-        $snack =  $SnackRepository->find($id);
+        $snack =  $SnackRepository->find($alias, $id);
 
         if (!$snack) {
             $_SESSION['error_message'] = "Le snack avec l'ID $id n'existe pas.";
@@ -87,19 +95,29 @@ class DashSnackController extends Controller
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-            // Préparer de la requete
+            // Préparer les données pour la base 
             $data = [
-                'nom' => $_POST['nom'] ??  $snack->nom,
-                'prix' => $_POST['prix'] ??  $snack->prix,
-                'description' => $_POST['description'] ??  $snack->description
+                'nom' => $_POST['nom'] ??  $snack['nom'],
+                'prix' => $_POST['prix'] ??  $snack['prix'],
+                'description' => $_POST['description'] ??  $snack['description']
 
             ];
 
-            // Mise à jour dans la base
-            if ($SnackRepository->update($id, $data)) {
-                $_SESSION['success_message'] = "Snack modifié avec succès.";
-            } else {
-                $_SESSION['error_message'] = "Erreur lors de la modification du snack.";
+            try {
+                // Mise à jour dans la base
+                $updatedCount = $SnackRepository->update(
+                    $alias,
+                    ['_id' => new \MongoDB\BSON\ObjectId($id)],
+                    $data
+                );
+
+                if ($updatedCount > 0) {
+                    $_SESSION['success_message'] = "Le snack a été modifiée avec succès.";
+                } else {
+                    $_SESSION['error_message'] = "Aucune modification n'a été apportée.";
+                }
+            } catch (\Exception $e) {
+                $_SESSION['error_message'] = "Erreur lors de la mise à jour : " . $e->getMessage();
             }
 
             // Redirection après la modification
@@ -120,8 +138,8 @@ class DashSnackController extends Controller
         $title = "Liste Snack";
 
         $SnackRepository = new SnackRepository();
-
-        $snacks = $SnackRepository->findAll();
+        $alias = "Nos_Snacks";
+        $snacks = $SnackRepository->findAll($alias);
 
         if (isset($_SESSION['id_User'])) {
 

@@ -2,11 +2,11 @@
 
 namespace App\Repository;
 
-class PizzaRepository extends Repository
+class PizzaRepository extends MongoRepository
 {
-    public function __construct()
+    public function table($data): string
     {
-        $this->table = "Pizza";
+        return $this->create("Pizza", $data);
     }
 }
 

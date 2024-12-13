@@ -2,11 +2,11 @@
 
 namespace App\Repository;
 
-class SoftRepository extends Repository
+class SoftRepository extends MongoRepository
 {
-    public function __construct()
+    public function table($data): string
     {
-        $this->table = "Nos_Soft";
+       return $this->create("Nos_Soft", $data);
     }
 
 }

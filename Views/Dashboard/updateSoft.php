@@ -5,24 +5,24 @@
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-header bg-primary text-white">
-                        <h2 class="text-center">Mise à jour <?= $soft->nom ?></h2>
+                        <h2 class="text-center">Mise à jour <?= $soft['nom'] ?></h2>
                     </div>
                     <div class="card-body">
 
-                        <form action="/DashSofts/updateSoft/<?= $soft->id ?>" method="POST">
+                        <form action="/DashSofts/updateSoft/<?= $soft['_id'] ?>" method="POST">
                         <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
-                            <input type="hidden" name="id" value="<?= $soft->id ?>" />
+                            <input type="hidden" name="id" value="<?= $soft['_id'] ?>" />
 
                             <!-- Nom du soft -->
                             <div class="mb-3">
                                 <label for="nom" class="form-label">Nom du soft</label>
-                                <input type="text" class="form-control" id="nom" name="nom" value="<?= $soft->nom ?>" placeholder="Nom du soft" required>
+                                <input type="text" class="form-control" id="nom" name="nom" value="<?= $soft['nom'] ?>" placeholder="Nom du soft" required>
                             </div>
 
                             <!-- prix du soft -->
                             <div class="mb-3">
                                 <label for="nom" class="form-label">Prix du soft</label>
-                                <input type="text" class="form-control" id="prix" name="prix" value="<?= $soft->prix ?>" placeholder="prix du soft" required>
+                                <input type="text" class="form-control" id="prix" name="prix" value="<?= $soft['prix'] ?>" placeholder="prix du soft" required>
                             </div>
 
                             <!-- Boutons de soumission -->

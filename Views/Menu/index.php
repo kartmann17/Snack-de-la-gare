@@ -8,11 +8,11 @@ echo '<link rel="stylesheet" href="/Asset/css/menu.css">';
     <div class="burgers">
         <?php foreach ($burgers as $burger): ?>
             <div class="burger-item">
-                <h3><?= htmlspecialchars($burger->nom); ?></h3>
+                <h3><?= htmlspecialchars($burger['nom']); ?></h3>
                 <h4 class="price">
-                    Solo: <?= htmlspecialchars($burger->solo); ?>€ | Menu: <?= htmlspecialchars($burger->menu); ?>€
+                    Solo: <?= htmlspecialchars($burger['solo']); ?>€ | Menu: <?= htmlspecialchars($burger['menu']); ?>€
                 </h4>
-                <p><?= htmlspecialchars($burger->description); ?></p>
+                <p><?= htmlspecialchars($burger['description']); ?></p>
             </div>
         <?php endforeach; ?>
     </div>
@@ -27,8 +27,8 @@ echo '<link rel="stylesheet" href="/Asset/css/menu.css">';
     <div class="pizza mt-5">
         <?php foreach ($pizzas as $pizza): ?>
             <div class="pizza-item">
-                <h3><?= htmlspecialchars($pizza->nom); ?> <?= htmlspecialchars($pizza->prix); ?> €</h3>
-                <p><?= htmlspecialchars($pizza->description); ?></p>
+                <h3><?= htmlspecialchars($pizza['nom']); ?> <?= htmlspecialchars($pizza['prix']); ?> €</h3>
+                <p><?= htmlspecialchars($pizza['description']); ?></p>
             </div>
         <?php endforeach; ?>
         <div class="space"></div>
@@ -43,8 +43,8 @@ echo '<link rel="stylesheet" href="/Asset/css/menu.css">';
             <?php foreach ($tacos as $taco): ?>
                 <div class="tacos-item">
                     <h3>
-                        <?= htmlspecialchars($taco->nom); ?>
-                        Solo: <?= htmlspecialchars($taco->solo); ?>€ | Menu: <?= htmlspecialchars($taco->menu); ?>€
+                        <?= htmlspecialchars($taco['nom']); ?>
+                        Solo: <?= htmlspecialchars($taco['solo']); ?>€ | Menu: <?= htmlspecialchars($taco['menu']); ?>€
                     </h3>
                 </div>
             <?php endforeach; ?>
@@ -57,7 +57,7 @@ echo '<link rel="stylesheet" href="/Asset/css/menu.css">';
                         <?php foreach ($viande as $index => $viand): ?>
                             <?php if ($index % 2 == 0): ?>
                                 <div class="viande-item">
-                                    <h3><?= htmlspecialchars($viand->nom); ?></h3>
+                                    <h3><?= htmlspecialchars($viand['nom']); ?></h3>
                                 </div>
                             <?php endif; ?>
                         <?php endforeach; ?>
@@ -67,7 +67,7 @@ echo '<link rel="stylesheet" href="/Asset/css/menu.css">';
                         <?php foreach ($viande as $index => $viand): ?>
                             <?php if ($index % 2 != 0): ?>
                                 <div class="viande-item">
-                                    <h3><?= htmlspecialchars($viand->nom); ?></h3>
+                                    <h3><?= htmlspecialchars($viand['nom']); ?></h3>
                                 </div>
                             <?php endif; ?>
                         <?php endforeach; ?>
@@ -80,7 +80,7 @@ echo '<link rel="stylesheet" href="/Asset/css/menu.css">';
         <div class="container text-center w-75">
             <h4 class="mb-5">
                 <?php foreach ($sauce as $sauc): ?>
-                    <span class="sauce-item"><?= htmlspecialchars($sauc->nom); ?>,</span>
+                    <span class="sauce-item"><?= htmlspecialchars($sauc['nom']); ?>,</span>
                 <?php endforeach; ?>
             </h4>
         </div>
@@ -89,7 +89,7 @@ echo '<link rel="stylesheet" href="/Asset/css/menu.css">';
         <div class="container text-center w-75">
             <h4 class="mb-5">
                 <?php foreach ($supplements as $supplement): ?>
-                    <span class="sauce-item"><?= htmlspecialchars($supplement->nom); ?>,</span>
+                    <span class="sauce-item"><?= htmlspecialchars($supplement['nom']); ?>,</span>
                 <?php endforeach; ?>
             </h4>
         </div>
@@ -102,11 +102,11 @@ echo '<link rel="stylesheet" href="/Asset/css/menu.css">';
     <div class="menu-container mt-5 text-center">
         <?php if (!empty($kebabs) && count($kebabs) >= 3): ?>
             <div class="kebab-item mt-5">
-                <h3><?= htmlspecialchars($kebabs[0]->nom); ?> : <?= htmlspecialchars($kebabs[0]->solo); ?>€</h3>
-                <h3><?= htmlspecialchars($kebabs[1]->nom); ?> : <?= htmlspecialchars($kebabs[1]->menu); ?>€</h3>
-                <h3><?= htmlspecialchars($kebabs[2]->nom); ?> : <?= htmlspecialchars($kebabs[2]->assiette); ?>€</h3>
+                <h3><?= htmlspecialchars($kebabs[0]['nom']); ?> : <?= htmlspecialchars($kebabs[0]['solo']); ?>€</h3>
+                <h3><?= htmlspecialchars($kebabs[1]['nom']); ?> : <?= htmlspecialchars($kebabs[1]['menu']); ?>€</h3>
+                <h3><?= htmlspecialchars($kebabs[2]['nom']); ?> : <?= htmlspecialchars($kebabs[2]['assiette']); ?>€</h3>
                 <p class="description">
-                    Servi <span class="highlight"><?= htmlspecialchars($kebabs[3]->description); ?></span>
+                    Servi <span class="highlight"><?= htmlspecialchars($kebabs[3]['description']); ?></span>
                 </p>
             </div>
         <?php else: ?>
@@ -119,7 +119,7 @@ echo '<link rel="stylesheet" href="/Asset/css/menu.css">';
         <div class="container text-center w-75">
             <h4 class="mt-5">
                 <?php foreach ($sauce as $sauc): ?>
-                    <span class="sauce-item"><?= htmlspecialchars($sauc->nom); ?>,</span>
+                    <span class="sauce-item"><?= htmlspecialchars($sauc['nom']); ?>,</span>
                 <?php endforeach; ?>
             </h4>
         </div>
@@ -139,8 +139,8 @@ echo '<link rel="stylesheet" href="/Asset/css/menu.css">';
                 <?php foreach ($soft as $index => $sof): ?>
                     <?php if ($index % 2 == 0): ?>
                         <div class="soft-item">
-                            <h3><?= htmlspecialchars($sof->nom); ?></h3>
-                            <p class="price"><?= htmlspecialchars($sof->prix); ?></p>
+                            <h3><?= htmlspecialchars($sof['nom']); ?></h3>
+                            <p class="price"><?= htmlspecialchars($sof['prix']); ?></p>
                         </div>
                     <?php endif; ?>
                 <?php endforeach; ?>
@@ -149,8 +149,8 @@ echo '<link rel="stylesheet" href="/Asset/css/menu.css">';
                 <?php foreach ($soft as $index => $sof): ?>
                     <?php if ($index % 2 != 0): ?>
                         <div class="soft-item">
-                            <h3><?= htmlspecialchars($sof->nom); ?></h3>
-                            <p class="price"><?= htmlspecialchars($sof->prix); ?></p>
+                            <h3><?= htmlspecialchars($sof['nom']); ?></h3>
+                            <p class="price"><?= htmlspecialchars($sof['prix']); ?></p>
                         </div>
                     <?php endif; ?>
                 <?php endforeach; ?>
@@ -163,8 +163,8 @@ echo '<link rel="stylesheet" href="/Asset/css/menu.css">';
         </div>
         <?php foreach ($vins as $vin): ?>
             <div class="vins-item text-center">
-                <h3><?= htmlspecialchars($vin->nom); ?></h3>
-                <h4 class="price">Prix: <?= htmlspecialchars($vin->prix); ?>€</h4>
+                <h3><?= htmlspecialchars($vin['nom']); ?></h3>
+                <h4 class="price">Prix: <?= htmlspecialchars($vin['prix']); ?>€</h4>
             </div>
         <?php endforeach; ?>
 
@@ -174,8 +174,8 @@ echo '<link rel="stylesheet" href="/Asset/css/menu.css">';
         </div>
         <?php foreach ($bieres as $biere): ?>
             <div class="biere-item text-center mb-5">
-                <h3><?= htmlspecialchars($biere->nom); ?></h3>
-                <h4 class="price">Prix: <?= htmlspecialchars($biere->prix); ?>€</h4>
+                <h3><?= htmlspecialchars($biere['nom']); ?></h3>
+                <h4 class="price">Prix: <?= htmlspecialchars($biere['prix']); ?>€</h4>
             </div>
         <?php endforeach; ?>
     </div>

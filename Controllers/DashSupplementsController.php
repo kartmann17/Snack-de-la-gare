@@ -24,13 +24,14 @@ class DashSupplementsController extends Controller
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // Hydratation des données
+            $alias = "Supplements";
             $data = [
                 'nom' => $_POST['nom'] ?? null,
             ];
 
             // Utilisation du repository
             $SupplementsRepository = new SupplementsRepository();
-            $result = $SupplementsRepository->create($data);
+            $result = $SupplementsRepository->create($alias, $data);
 
             if ($result) {
                 $_SESSION['success_message'] = "Supplement ajouté avec succès.";
@@ -48,71 +49,88 @@ class DashSupplementsController extends Controller
             $id = $_POST['id'] ?? null;
 
             if ($id) {
-                $SupplementsRepository = new SupplementsRepository();
+                try {
+                    $SupplementsRepository = new SupplementsRepository();
+                    $alias = "Supplements";
 
-                $result = $SupplementsRepository->delete($id);
+                    $deletedCount = $SupplementsRepository->delete(
+                        $alias,
+                        ['_id' => new \MongoDB\BSON\ObjectId($id)]
+                    );
 
-                if ($result) {
-                    $_SESSION['success_message'] = "Le supplement a été supprimé avec succès.";
-                } else {
-                    $_SESSION['error_message'] = "Erreur lors de la suppression du supplement";
+                    if ($deletedCount > 0) {
+                        $_SESSION['success_message'] = "Le supplement a été supprimé avec succès.";
+                    } else {
+                        $_SESSION['error_message'] = "Aucune bière n'a été trouvée avec cet ID.";
+                    }
+                } catch (\Exception $e) {
+                    $_SESSION['error_message'] = "Erreur lors de la suppresion : " . $e->getMessage();
                 }
             } else {
                 $_SESSION['error_message'] = "ID supplement invalide.";
             }
 
+
             // Redirection vers la dashboard
-            header("Location: /Dashboard");
+            header("Location: /DashSupplements/liste");
             exit();
         }
     }
 
     public function updateSupplement($id)
-    {
-        $SupplementsRepository = new SupplementsRepository();
+{
+    $SupplementsRepository = new SupplementsRepository();
+    $alias = 'Supplements';
 
-        // Récupérer la viande à modifier
-        $Supplement =   $SupplementsRepository->find($id);
+    // Récupérer le supplément à modifier
+    $supplement = $SupplementsRepository->find($alias, $id);
 
-        if (!$Supplement) {
-            $_SESSION['error_message'] = "Le supplement avec l'ID $id n'existe pas.";
-            header("Location: /Dashboard");
-            exit;
-        }
-
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-            // Préparer de la requete
-            $data = [
-                'nom' => $_POST['nom'] ?? $Supplement->nom,
-            ];
-
-            // Mise à jour dans la base
-            if ($SupplementsRepository->update($id, $data)) {
-                $_SESSION['success_message'] = "Supplements modifié avec succès.";
-            } else {
-                $_SESSION['error_message'] = "Erreur lors de la modification du Supplement.";
-            }
-
-            // Redirection après la modification
-            header("Location: /DashSupplement/liste");
-            exit;
-        }
-
-        $title = "Modifier Supplements";
-        $this->render('Dashboard/updateSupplement', [
-            'Supplement' => $Supplement,
-            'title' => $title
-        ]);
+    if (!$supplement) {
+        $_SESSION['error_message'] = "Le supplément avec l'ID $id n'existe pas.";
+        header("Location: /DashSupplements/liste");
+        exit;
     }
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        // Préparer les données pour la mise à jour
+        $data = [
+            'nom' => $_POST['nom'] ?? $supplement['nom']
+        ];
+
+        try {
+            // Mise à jour dans la base
+            $updatedCount = $SupplementsRepository->update(
+                $alias,
+                ['_id' => new \MongoDB\BSON\ObjectId($id)],
+                $data
+            );
+
+            if ($updatedCount > 0) {
+                $_SESSION['success_message'] = "Supplément modifié avec succès.";
+            } else {
+                $_SESSION['error_message'] = "Aucune modification n'a été apportée.";
+            }
+        } catch (\Exception $e) {
+            $_SESSION['error_message'] = "Erreur lors de la mise à jour : " . $e->getMessage();
+        }
+
+        // Redirection après la modification
+        header("Location: /DashSupplements/liste");
+        exit;
+    }
+
+    $title = "Modifier Supplément";
+    $this->render('Dashboard/updateSupplement', compact('supplement', 'title'));
+}
+
 
     public function liste()
     {
         $title = "Liste Viandes";
 
         $SupplementsRepository = new  SupplementsRepository();
-
-        $supplements =  $SupplementsRepository->findAll();
+        $alias = "Supplements";
+        $supplements =  $SupplementsRepository->findAll($alias);
 
         if (isset($_SESSION['id_User'])) {
 

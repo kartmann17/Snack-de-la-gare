@@ -3,7 +3,7 @@
 namespace App\Controllers;
 
 use App\Repository\BurgersRepository;
-
+use App\Services\CloudinaryService;
 
 class DashBurgersController extends Controller
 {
@@ -22,21 +22,25 @@ class DashBurgersController extends Controller
     public function ajoutBurger()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
             $imgPath = null;
-            if (isset($_FILES['img']) && $_FILES['img']['error'] === UPLOAD_ERR_OK) {
-                $uploadDir = __DIR__ . '/../public/Asset/images/';
-                $tmpName = $_FILES['img']['tmp_name'];
-                $fileName = pathinfo($_FILES['img']['name'], PATHINFO_FILENAME);
-                $fileExtension = pathinfo($_FILES['img']['name'], PATHINFO_EXTENSION);
-                $img = $uploadDir . $fileName . '.' . $fileExtension;
 
-                if (move_uploaded_file($tmpName, $img)) {
-                    $imgPath = $fileName . '.' . $fileExtension;
+            // Téléversement de l'image sur Cloudinary
+            if (isset($_FILES['img']) && $_FILES['img']['error'] === UPLOAD_ERR_OK) {
+                $tmpName = $_FILES['img']['tmp_name'];
+
+                // Appeler la méthode uploadFile pour téléverser l'image sur Cloudinary
+                $cloudinaryService = new CloudinaryService();
+                $imgPath = $cloudinaryService->uploadFile($tmpName);
+
+                if (!$imgPath) {
+                    $_SESSION['error_message'] = "Erreur lors du téléversement de l'image.";
+                    header("Location: /Dashboard");
+                    exit;
                 }
             }
 
             // Hydratation des données
+            $alias = 'burgers';
             $data = [
                 'nom' => $_POST['nom'] ?? null,
                 'solo' => $_POST['solo'] ?? null,
@@ -45,9 +49,8 @@ class DashBurgersController extends Controller
                 'img' => $imgPath,
             ];
 
-            // Utilisation du repository
             $BurgersRepository = new BurgersRepository();
-            $result = $BurgersRepository->create($data);
+            $result = $BurgersRepository->create($alias, $data);
 
             if ($result) {
                 $_SESSION['success_message'] = "Burger ajouté avec succès.";
@@ -63,24 +66,47 @@ class DashBurgersController extends Controller
     public function deleteBurger()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
             $id = $_POST['id'] ?? null;
 
             if ($id) {
-                $BurgersRepository = new BurgersRepository();
+                try {
+                    $BurgersRepository = new BurgersRepository();
+                    $cloudinaryService = new CloudinaryService();
+                    $alias = 'burgers';
 
-                $result = $BurgersRepository->delete($id);
+                    // Récupérer le burger pour supprimer l'image associée
+                    $burger = $BurgersRepository->find($alias, $id);
 
-                if ($result) {
-                    $_SESSION['success_message'] = "Le Burger a été supprimé avec succès.";
-                } else {
-                    $_SESSION['error_message'] = "Erreur lors de la suppression du burger.";
+                    if (!$burger) {
+                        $_SESSION['error_message'] = "Le burger avec l'ID $id n'existe pas.";
+                        header("Location: /DashBurgers/liste");
+                        exit();
+                    }
+
+                    // Supprimer le document dans la base de données
+                    $deletedCount = $BurgersRepository->delete(
+                        $alias,
+                        ['_id' => new \MongoDB\BSON\ObjectId($id)]
+                    );
+
+                    if ($deletedCount > 0) {
+                        // Supprimer l'image associée sur Cloudinary
+                        $publicId = pathinfo($burger['img'], PATHINFO_FILENAME);
+                        if (!$cloudinaryService->deleteFile($publicId)) {
+                            $_SESSION['error_message'] = "Le burger a été supprimé, mais l'image sur Cloudinary n'a pas pu être supprimée.";
+                        } else {
+                            $_SESSION['success_message'] = "Le burger et son image ont été supprimés avec succès.";
+                        }
+                    } else {
+                        $_SESSION['error_message'] = "Erreur lors de la suppression du burger.";
+                    }
+                } catch (\Exception $e) {
+                    $_SESSION['error_message'] = "Erreur lors de la suppression : " . $e->getMessage();
                 }
             } else {
                 $_SESSION['error_message'] = "ID burger invalide.";
             }
 
-            // Redirection vers la dashboard
             header("Location: /DashBurgers/liste");
             exit();
         }
@@ -89,57 +115,77 @@ class DashBurgersController extends Controller
     public function updateBurger($id)
     {
         $BurgersRepository = new BurgersRepository();
+        $cloudinaryService = new CloudinaryService();
+        $alias = 'burgers';
 
         // Récupérer le burger à modifier
-        $burger = $BurgersRepository->find($id);
+        $burger = $BurgersRepository->find($alias, $id);
 
         if (!$burger) {
             $_SESSION['error_message'] = "Le burger avec l'ID $id n'existe pas.";
-            header("Location: /Dashboard");
+            header("Location: /DashBurgers/liste");
             exit;
         }
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // Gestion de l'image
-            $imgPath = $burger->img; // Conservation de l'image
-            if (isset($_FILES['img']) && $_FILES['img']['error'] === UPLOAD_ERR_OK) {
-                $uploadDir = __DIR__ . '/../public/Asset/images/';
-                $tmpName = $_FILES['img']['tmp_name'];
-                $fileName = pathinfo($_FILES['img']['name'], PATHINFO_FILENAME);
-                $fileExtension = pathinfo($_FILES['img']['name'], PATHINFO_EXTENSION);
-                $img = $uploadDir . $fileName . '.' . $fileExtension;
+            $imgPath = $burger['img'];
 
-                if (move_uploaded_file($tmpName, $img)) {
-                    $imgPath = $fileName . '.' . $fileExtension;
+            // Gestion de l'image
+            if (isset($_FILES['img']) && $_FILES['img']['error'] === UPLOAD_ERR_OK) {
+                // Supprimer l'image existante sur Cloudinary
+                $publicId = pathinfo($burger['img'], PATHINFO_FILENAME);
+                if (!$cloudinaryService->deleteFile($publicId)) {
+                    $_SESSION['error_message'] = "Erreur lors de la suppression de l'ancienne image sur Cloudinary.";
+                    header("Location: /DashBurgers/liste");
+                    exit;
+                }
+
+                // Téléverser la nouvelle image sur Cloudinary
+                $tmpName = $_FILES['img']['tmp_name'];
+                $newImgPath = $cloudinaryService->uploadFile($tmpName);
+
+                if ($newImgPath) {
+                    $imgPath = $newImgPath;
+                } else {
+                    $_SESSION['error_message'] = "Erreur lors du téléversement de la nouvelle image.";
+                    header("Location: /DashBurgers/liste");
+                    exit;
                 }
             }
 
-            // Préparer de la requete
+            // Préparer les données pour la mise à jour
             $data = [
-                'nom' => $_POST['nom'] ?? $burger->nom,
-                'solo' => $_POST['solo'] ?? $burger->solo,
-                'menu' => $_POST['menu'] ?? $burger->menu,
-                'description' => $_POST['description'] ?? $burger->description,
+                'nom' => $_POST['nom'] ?? $burger['nom'],
+                'solo' => $_POST['solo'] ?? $burger['solo'],
+                'menu' => $_POST['menu'] ?? $burger['menu'],
+                'description' => $_POST['description'] ?? $burger['description'],
                 'img' => $imgPath,
             ];
 
-            // Mise à jour dans la base
-            if ($BurgersRepository->update($id, $data)) {
-                $_SESSION['success_message'] = "Burger modifié avec succès.";
-            } else {
-                $_SESSION['error_message'] = "Erreur lors de la modification du burger.";
+            try {
+                // Mise à jour dans la base
+                $updatedCount = $BurgersRepository->update(
+                    $alias,
+                    ['_id' => new \MongoDB\BSON\ObjectId($id)],
+                    $data
+                );
+
+                if ($updatedCount > 0) {
+                    $_SESSION['success_message'] = "Burger modifié avec succès.";
+                } else {
+                    $_SESSION['error_message'] = "Aucune modification n'a été apportée.";
+                }
+            } catch (\Exception $e) {
+                $_SESSION['error_message'] = "Erreur lors de la mise à jour : " . $e->getMessage();
             }
 
-            // Redirection après la modification
+
             header("Location: /DashBurgers/liste");
             exit;
         }
 
         $title = "Modifier Burger";
-        $this->render('Dashboard/updateBurger', [
-            'burger' => $burger,
-            'title' => $title
-        ]);
+        $this->render('Dashboard/updateBurger', compact('burger', 'title'));
     }
 
     public function liste()
@@ -147,8 +193,8 @@ class DashBurgersController extends Controller
         $title = "Liste Burgers";
 
         $BurgersRepository = new BurgersRepository();
-
-        $burgers = $BurgersRepository->findAll();
+        $alias = 'burgers';
+        $burgers = $BurgersRepository->findAll($alias);
 
         if (isset($_SESSION['id_User'])) {
 

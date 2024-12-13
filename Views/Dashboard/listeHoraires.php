@@ -3,7 +3,7 @@ echo '<link rel="stylesheet" href="/Asset/css/food.css">';
 ?>
 
 <div class="container mt-5 mb-5 horaires-container">
-    <h2 class="mb-4">Gestion des Horaires</h2>
+    <h2 class="mb-4 text-center">Gestion des Horaires</h2>
 
     <div class="table-responsive">
         <table class="table table-bordered table-striped">

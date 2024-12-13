@@ -43,7 +43,7 @@
         <div class="carousel-inner">
             <?php foreach ($encemoments as $index => $encemoment): ?>
                 <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
-                    <img src="<?= htmlspecialchars($encemoment->img) ?>" class="d-block w-100" alt="en ce moment">
+                    <img src="<?= htmlspecialchars($encemoment['img']) ?>" class="d-block w-100" alt="en ce moment">
                 </div>
             <?php endforeach; ?>
         </div>

@@ -23,6 +23,7 @@ class DashPizzaController extends Controller
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
+            $alias = "Pizza";
             $data = [
                 'nom' => $_POST['nom'] ??  null,
                 'prix' => $_POST['prix'] ??  null,
@@ -31,7 +32,7 @@ class DashPizzaController extends Controller
 
             // Utilisation du repository
             $PizzaRepository = new PizzaRepository();
-            $result = $PizzaRepository->create($data);
+            $result = $PizzaRepository->create($alias, $data);
 
             if ($result) {
                 $_SESSION['success_message'] = "Pizza ajouté avec succès.";
@@ -47,24 +48,32 @@ class DashPizzaController extends Controller
     public function deletePizza()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
             $id = $_POST['id'] ?? null;
 
             if ($id) {
-                $PizzaRepository = new PizzaRepository();
+                try {
+                    $PizzaRepository = new PizzaRepository();
+                    $alias = 'Pizza';
 
-                $result =  $PizzaRepository->delete($id);
+                    // Supprimer le document dans MongoDB
+                    $deletedCount = $PizzaRepository->delete(
+                        $alias,
+                        ['_id' => new \MongoDB\BSON\ObjectId($id)]
+                    );
 
-                if ($result) {
-                    $_SESSION['success_message'] = "La pizza a été supprimé avec succès.";
-                } else {
-                    $_SESSION['error_message'] = "Erreur lors de la suppression de la pizza.";
+                    if ($deletedCount > 0) {
+                        $_SESSION['success_message'] = "La pizza a été supprimée avec succès.";
+                    } else {
+                        $_SESSION['error_message'] = "Erreur lors de la suppression de la pizza.";
+                    }
+                } catch (\Exception $e) {
+                    $_SESSION['error_message'] = "Erreur lors de la suppression : " . $e->getMessage();
                 }
             } else {
                 $_SESSION['error_message'] = "ID pizza invalide.";
             }
 
-            // Redirection vers la dashboard
+            // Redirection après tentative de suppression
             header("Location: /Dashboard");
             exit();
         }
@@ -73,9 +82,10 @@ class DashPizzaController extends Controller
     public function updatePizza($id)
     {
         $PizzaRepository = new PizzaRepository();
+        $alias = "Pizza";
 
         // Récupérer la viande à modifier
-        $pizza =  $PizzaRepository->find($id);
+        $pizza =  $PizzaRepository->find($alias, $id);
 
         if (!$pizza) {
             $_SESSION['error_message'] = "La pizza avec l'ID $id n'existe pas.";
@@ -87,17 +97,24 @@ class DashPizzaController extends Controller
 
             // Préparer de la requete
             $data = [
-                'nom' => $_POST['nom'] ??  $pizza->nom,
-                'prix' => $_POST['prix'] ??  $pizza->prix,
-                'description' => $_POST['description'] ??  $pizza->desription
-
+                'nom' => $_POST['nom'] ??  $pizza['nom'],
+                'prix' => $_POST['prix'] ??  $pizza['prix'],
+                'description' => $_POST['description'] ??  $pizza['desription']
             ];
 
-            // Mise à jour dans la base
-            if ($PizzaRepository->update($id, $data)) {
-                $_SESSION['success_message'] = "pizza modifié avec succès.";
-            } else {
-                $_SESSION['error_message'] = "Erreur lors de la modification de la pizza.";
+            try {
+                $updateCount = $PizzaRepository->update(
+                    $alias,
+                    ['_id' => new \MongoDB\BSON\ObjectId($id)],
+                    $data
+                );
+                if ($updateCount > 0) {
+                    $_SESSION['success_message'] = "La pizza a été modifiée avec succès.";
+                } else {
+                    $_SESSION['error_message'] = "Aucune modification n'a été apportée.";
+                }
+            } catch (\Exception $e) {
+                $_SESSION['success_message'] = "Erreur lors de la mise a jour." . $e->getMessage();
             }
 
             // Redirection après la modification
@@ -117,8 +134,8 @@ class DashPizzaController extends Controller
         $title = "Liste Pizza";
 
         $PizzaRepository = new PizzaRepository();
-
-        $pizzas = $PizzaRepository->findAll();
+        $alias = "Pizza";
+        $pizzas = $PizzaRepository->findAll($alias);
 
         if (isset($_SESSION['id_User'])) {
 

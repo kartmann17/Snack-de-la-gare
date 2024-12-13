@@ -2,9 +2,10 @@
 
 namespace App\Repository;
 
-class SupplementsRepository extends Repository{
+class SupplementsRepository extends MongoRepository{
 
-    public function __construct(){
-        $this->table = "Supplements";
+    public function table($data)
+    {
+       return $this->create("Supplements", $data);
     }
 }

@@ -2,11 +2,10 @@
 
 namespace App\Repository;
 
-class VinsRepository extends Repository
+class VinsRepository extends MongoRepository
 {
-    public function __construct()
+    public function table($data)
     {
-        $this->table = "Nos_Vins";
+        return $this->create("Nos_Vins", $data);
     }
-
 }

@@ -5,18 +5,18 @@
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-header bg-primary text-white">
-                        <h2 class="text-center">Mise à jour <?= $sauce->nom ?></h2>
+                        <h2 class="text-center">Mise à jour <?= $sauce['nom'] ?></h2>
                     </div>
                     <div class="card-body">
 
-                        <form action="/DashSauce/updateSauce/<?= $sauce->id ?>" method="POST">
+                        <form action="/DashSauce/updateSauce/<?= $sauce['_id'] ?>" method="POST">
                         <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
-                            <input type="hidden" name="id" value="<?= $sauce->id ?>" />
+                            <input type="hidden" name="id" value="<?= $sauce['_id'] ?>" />
 
                             <!-- Nom de la sauce -->
                             <div class="mb-3">
                                 <label for="nom" class="form-label">Nom de la sauce</label>
-                                <input type="text" class="form-control" id="nom" name="nom" value="<?= $sauce->nom ?>" placeholder="Nom de la sauce" required>
+                                <input type="text" class="form-control" id="nom" name="nom" value="<?= $sauce['nom'] ?>" placeholder="Nom de la sauce" required>
                             </div>
 
                             <!-- Boutons de soumission -->
