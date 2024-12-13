@@ -2,50 +2,65 @@
 
 namespace App\Repository;
 
-class AvisRepository extends Repository
+class AvisRepository extends MongoRepository
 {
-    public function __construct()
+    public function table($data)
     {
-        $this->table = 'avis';
+       return $this->create('avis', $data);
     }
 
     public function afficheAvis()
     {
-        // Requête SQL pour récupérer tous les avis
-        $sql = "SELECT * FROM  {$this->table}";
-        $result = $this->req($sql)->fetchAll();
-        return $result;
+       $AvisRepository = new AvisRepository();
+       $alias = "avis";
+       $Avis = $AvisRepository->findAll($alias);
     }
 
     public function saveAvis($etoiles, $nom, $commentaire)
-    {
-        // Préparation et exécution de la requête
-        return $this->req(
-            "INSERT INTO {$this->table} (etoiles, nom, commentaire) VALUES (:etoiles, :nom, :commentaire)",
-             [
-                'etoiles' => $etoiles,
-                'nom' => $nom,
-                'commentaire' => $commentaire
-            ]
-        );
-    }
+{
+    $alias = 'avis'; // Nom de la collection MongoDB
 
-    public function DashValiderAvis($id)
-    {
-        return $this->req("UPDATE {$this->table} SET valide = 1 WHERE id = ?", [$id]);
-    }
+    // Préparation des données à insérer
+    $data = [
+        'etoiles' => $etoiles,
+        'nom' => $nom,
+        'commentaire' => $commentaire,
+        'valide' => 0
+    ];
+
+    // Utilisation de la méthode `create` pour insérer dans MongoDB
+    return $this->create($alias, $data);
+}
+
+public function DashValiderAvis($id)
+{
+    $alias = 'avis';
+
+    // Critère pour sélectionner l'avis à valider
+    $criteria = ['_id' => new \MongoDB\BSON\ObjectId($id)];
+
+    // Mise à jour pour définir `valide` à 1
+    $update = ['valide' => 1];
+
+    // Mise à jour dans MongoDB
+    return $this->update($alias, $criteria, $update);
+}
 
 
     // Récupérer tous les avis non validés
     public function findNonValides()
     {
-        $sql = "SELECT * FROM {$this->table} WHERE valide = 0";
-        return $this->req($sql);
+        $alias = 'avis';
+
+        // Récupérer tous les avis non validés
+        return $this->findBy($alias, ['valide' => 0]);
     }
 
     public function valideAvis($valide)
-    {
-        $sql = "SELECT * FROM {$this->table} WHERE valide = ?"; //permet d'afficher les avis sur la page d'accueil
-        return $this->req($sql, [$valide])->fetchAll();
-    }
+{
+    $alias = 'avis';
+
+    // Récupérer les avis validés ou non validés en fonction de la valeur de `$valide`
+    return $this->findBy($alias, ['valide' => (int)$valide]);
+}
 }

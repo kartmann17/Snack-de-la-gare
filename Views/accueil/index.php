@@ -90,7 +90,7 @@
                 <?php
                 // Filtrer les avis qui ont un champ 'valide' égal à 1
                 $avisValides = array_filter($Avis, function ($avis) {
-                    return $avis->valide == 1;
+                    return $avis['valide'] == 1;
                 });
 
                 // Vérifier s'il y a des avis valides après filtrage
@@ -107,15 +107,15 @@
                                             <div class="card-header d-flex justify-content-center column-gap-4">
                                                 <?php
                                                 for ($i = 1; $i <= 5; $i++) {
-                                                    if ($i <= $valide->etoiles) {
+                                                    if ($i <= $valide['etoiles']) {
                                                         echo '<span class="star-filled">&#9733;</span>';
                                                     }
                                                 }
                                                 ?>
                                             </div>
                                             <div class="card-body text-center overflow-auto">
-                                                <h5 class="card-title"><?= $valide->nom ?></h5>
-                                                <p class="card-text"><?= $valide->commentaire ?></p>
+                                                <h5 class="card-title"><?= $valide['nom'] ?></h5>
+                                                <p class="card-text"><?= $valide['commentaire'] ?></p>
                                             </div>
                                         </div>
                                     </div>

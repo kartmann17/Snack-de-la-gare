@@ -14,7 +14,8 @@ class AccueilController extends Controller
 
         // Récupérer les données de la table avis validé
         $AvisRepository = new AvisRepository();
-        $Avis = $AvisRepository->findAll();
+        $alias = "avis";
+        $Avis = $AvisRepository->findAll($alias);
 
         $EnCeMomentRepository = new EnCeMomentRepository();
         $alias = "En_ce_moments";

@@ -25,7 +25,7 @@ echo '<link rel="stylesheet" href="/Asset/css/food.css">';
                                 <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
                                     <form action="/DashValideAvis/deleteAvis" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet avis ?');">
                                         <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
-                                        <input type="hidden" name="id" value="<?= $avis->id ?>">
+                                        <input type="hidden" name="id" value="<?= $avis->_id ?>">
                                         <button class="btn btn-danger btn-sm me-1">Supprimer</button>
                                     </form>
                                 <?php endif; ?>
