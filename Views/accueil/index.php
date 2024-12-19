@@ -1,4 +1,6 @@
-<link rel="stylesheet" href="/Asset/css/accueil.css">
+<?php
+$css = 'accueil';
+?>
 <section class="container-fluid ">
     <h2 class=" produit text-center mt-5">Produits de qualité</h2>
     <div class="pres text-center m-auto mt-5 w-75">

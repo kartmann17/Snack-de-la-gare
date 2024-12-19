@@ -1,5 +1,5 @@
 <?php
-echo '<link rel="stylesheet" href="/Asset/css/cguRgpdMention.css">';
+$css = 'cguRgpdMention';
 ?>
 <div class="vide"></div>
 <div class="container">

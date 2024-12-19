@@ -1,4 +1,6 @@
-<link rel="stylesheet" href="Asset/css/dashboard.css">
+<?php
+$css = 'dashboard';
+?>
 <div class="container-fluid admin-container">
     <div class="admin-space">
         <h2 class="mb-4 text-center">Dashboard Admin</h2>

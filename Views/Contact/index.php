@@ -1,4 +1,6 @@
-<link rel="stylesheet" href="/Asset/css/contact.css">
+<?php
+$css = 'contact';
+?>
 <div>
     <div class="image-container">
         <img src="https://res.cloudinary.com/dr7jxgr70/image/upload/v1733222366/Pasted_Graphic_1_ecmuft.png" alt="Image" class="img-fluid">

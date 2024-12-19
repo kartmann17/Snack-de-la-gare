@@ -12,6 +12,12 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/Asset/icones/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/Asset/icones/favicon-16x16.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/Asset/icones/favicon-32x32.png">
+    <?php if(isset($css)): ?>
+    <link href="/Asset/css/<?= $css ?>.css" rel="stylesheet">
+    <?php endif; ?>
+    <?php if(isset($style)): ?>
+    <link href="/Asset/css/<?= $style ?>.css" rel="stylesheet">
+    <?php endif; ?>
     <link rel="manifest" href="/Asset/icones/site.webmanifest">
 </head>
 

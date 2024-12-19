@@ -1,5 +1,5 @@
 <?php
-echo '<link rel="stylesheet" href="/Asset/css/menu.css">';
+$css = 'menu';
 ?>
 
 <!-- Section Burgers -->
