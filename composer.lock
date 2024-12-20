@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "49ee258c5a064d6e8c4e48c00577a4b1",
+    "content-hash": "e0a3112d2053f65c55535a30bd6c2652",
     "packages": [
         {
             "name": "cloudinary/cloudinary_php",
@@ -3273,5 +3273,8 @@
         "ext-pdo": "*"
     },
     "platform-dev": {},
+    "platform-overrides": {
+        "php": "8.2.0"
+    },
     "plugin-api-version": "2.6.0"
 }
