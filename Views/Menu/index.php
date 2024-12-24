@@ -121,7 +121,7 @@ usort($kebabs, function ($a, $b) {
 
             <?php if (!empty($kebabs[3])): ?>
                 <p class="description">
-                    <?= htmlspecialchars($kebabs[3]['nom'] ?? 'Nom non disponible'); ?> :<?= htmlspecialchars($kebabs[3]['description'] ?? 'Description non disponible'); ?>
+                    <?= htmlspecialchars($kebabs[3]['nom'] ?? 'Nom non disponibles'); ?> :<?= htmlspecialchars($kebabs[3]['description'] ?? 'Description non disponible'); ?>
                 </p>
             <?php endif; ?>
         </div>
