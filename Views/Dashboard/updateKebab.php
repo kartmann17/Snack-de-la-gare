@@ -21,25 +21,25 @@
                             <!-- prix solo -->
                             <div class="mb-3">
                                 <label for="age" class="form-label">Prix solo</label>
-                                <input type="number" class="form-control" id="solo" name="solo" value="<?= $kebab['solo'] ?>" placeholder="Prix solo" required>
+                                <input type="number" class="form-control" id="solo" name="solo" value="<?= $kebab['solo'] ?>" placeholder="Prix solo" >
                             </div>
 
                             <!-- Prix Menu -->
                             <div class="mb-3">
                                 <label for="age" class="form-label">Prix Menu</label>
-                                <input type="number" class="form-control" id="menu" name="menu" value="<?= $kebab['menu'] ?>" placeholder="Prix Menu" required>
+                                <input type="number" class="form-control" id="menu" name="menu" value="<?= $kebab['menu'] ?>" placeholder="Prix Menu" >
                             </div>
 
                             <!-- Prix Assiette -->
                             <div class="mb-3">
                                 <label for="age" class="form-label">Prix Assiette</label>
-                                <input type="number" class="form-control" id="assiette" name="assiette" value="<?= $kebab['assiette'] ?>" placeholder="Prix Assiette" required>
+                                <input type="number" class="form-control" id="assiette" name="assiette" value="<?= $kebab['assiette'] ?>" placeholder="Prix Assiette" >
                             </div>
 
                             <!-- Description -->
                             <div class="mb-3">
                                 <label for="description" class="form-label">Description</label>
-                                <textarea class="form-control" id="description" name="description" value="<?= $kebab['description']?>" rows="4" placeholder="Description du kebab" required><?= $kebab['description'] ?></textarea>
+                                <textarea class="form-control" id="description" name="description" value="<?= $kebab['description']?>" rows="4" placeholder="Description du kebab" ><?= $kebab['description'] ?></textarea>
                             </div>
 
                             <!-- image actuelle -->
