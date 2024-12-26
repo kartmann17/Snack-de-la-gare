@@ -108,6 +108,5 @@ class Main
     {
         http_response_code(404); // Envoi du code HTTP 404
         require_once __DIR__ . '/../Views/404.php';
-        exit($message); // Affiche le message d'erreur et termine le script
     }
 }

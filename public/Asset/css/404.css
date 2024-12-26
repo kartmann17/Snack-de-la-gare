@@ -1,0 +1,129 @@
+/* Reset global */
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    list-style: none;
+    text-decoration: none;
+    font-family: 'Roboto', sans-serif;
+}
+
+/* Fontes personnalisées */
+@font-face {
+    font-family: 'JejuHallasan-Regular';
+    src: url(/Asset/font/jejuhallasan/JejuHallasan-Regular.ttf);
+}
+
+html body {
+    background-color: #0F2C33;
+}
+
+/* Navbar */
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    background-color: #0F2C33;
+}
+.navbar-toggler {
+    background-color: #EFA00F;
+    border: none;
+}
+.nav-item .nav-link {
+    color: #E6D1B4;
+    font-size: 1.3rem;
+    margin: 0 10px;
+    font-family: 'JejuHallasan-Regular';
+}
+.nav-item .nav-link:hover {
+    color: #EFA00F;
+}
+
+/* Logo */
+.logo img {
+    width: 15rem;
+    height: auto;
+
+}
+
+
+/* Conteneur du jeu */
+.game-container {
+    text-align: center;
+    padding: 2rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.game-container h1 {
+    font-weight: 400;
+    font-size: 3rem;
+    color: #E6D1B4;
+    font-family: 'JejuHallasan-Regular';
+    margin-bottom: 50px;
+}
+
+.game-container p {
+    font-size:(1rem, 3vw, 1.2rem);
+    color: #EFA00F;
+    margin-bottom: 2rem;
+    animation: fadeIn 2s ease-in-out 1s;
+    max-width: 600px;
+    line-height: 1.5;
+}
+
+
+#gameCanvas {
+    border: 2px solid #EFA00F;
+    background-image: url(https://res.cloudinary.com/dr7jxgr70/image/upload/v1733239254/burger_page_acceuil_emtvkb.webp);
+    background-position: center;
+    background-size: cover;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(239, 160, 15, 0.3);
+    max-width: 100%;
+    height: auto;
+}
+
+/* Conteneur du score */
+#score-container {
+    font-size: 1.5rem;
+    color: #E6D1B4;
+    margin-bottom: 1rem;
+    animation: fadeIn 1s ease-in-out;
+}
+
+#score {
+    font-weight: bold;
+    color: #EFA00F;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+@media (max-width: 768px) {
+    .navbar {
+        padding: 0.5rem 1rem;
+    }
+
+    .logo img {
+        width: 10rem;
+    }
+
+    .game-container {
+        padding: 1rem;
+    }
+}
