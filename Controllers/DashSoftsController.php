@@ -19,39 +19,43 @@ class DashSoftsController extends Controller
     }
 
     public function ajoutSoft()
-    {
-
-        if ($_SERVER['REQUEST_METHOD'] === 'POST'){
-
+{
+    if (isset($_SESSION['id_User'])) { // Vérifie si l'utilisateur est connecté
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $alias = "Nos_Soft";
             $data = [
-            'nom' =>$_POST['nom'] ??  null,
-            'prix' =>$_POST['prix'] ??  null
+                'nom' => $_POST['nom'] ?? null,
+                'prix' => $_POST['prix'] ?? null
             ];
 
-            $SoftRepository = new SoftRepository;
+            $SoftRepository = new SoftRepository();
             $result = $SoftRepository->create($alias, $data);
 
             if ($result) {
-                $_SESSION['success_message'] = "La boisson a été ajouté avec succès.";
+                $_SESSION['success_message'] = "La boisson a été ajoutée avec succès.";
             } else {
                 $_SESSION['error_message'] = "Erreur lors de l'ajout de la boisson.";
             }
+
             header("Location: /Dashboard");
             exit;
-
         }
+    } else {
+        http_response_code(404);
+        exit();
     }
+}
 
-    public function deleteSoft()
-    {
+public function deleteSoft()
+{
+    if (isset($_SESSION['id_User'])) { // Vérifie si l'utilisateur est connecté
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id = $_POST['id'] ?? null;
 
             if ($id) {
                 try {
-                    $SoftRepository = new SoftRepository;
-                    $alias ="Nos_Soft";
+                    $SoftRepository = new SoftRepository();
+                    $alias = "Nos_Soft";
 
                     $deletedCount = $SoftRepository->delete(
                         $alias,
@@ -59,11 +63,11 @@ class DashSoftsController extends Controller
                     );
 
                     if ($deletedCount > 0) {
-                        $_SESSION['success_message'] = "La boisson a été supprimé avec succès.";
+                        $_SESSION['success_message'] = "La boisson a été supprimée avec succès.";
                     } else {
                         $_SESSION['error_message'] = "Aucune boisson n'a été trouvée avec cet ID.";
                     }
-                }catch(\Exception $e) {
+                } catch (\Exception $e) {
                     $_SESSION['error_message'] = "Erreur lors de la suppression : " . $e->getMessage();
                 }
             } else {
@@ -74,26 +78,30 @@ class DashSoftsController extends Controller
             header("Location: /DashSofts/liste");
             exit();
         }
+    } else {
+        http_response_code(404);
+        exit();
     }
+}
 
-    public function updateSoft($id)
-    {
-        $SoftRepository = new SoftRepository;
+public function updateSoft($id)
+{
+    if (isset($_SESSION['id_User'])) { // Vérifie si l'utilisateur est connecté
+        $SoftRepository = new SoftRepository();
         $alias = "Nos_Soft";
         $soft = $SoftRepository->find($alias, $id);
 
         if (!$soft) {
-            $_SESSION['error_message'] = "le soft avec l'id $id n'existe pas.";
+            $_SESSION['error_message'] = "Le soft avec l'ID $id n'existe pas.";
             header("Location: /Dashboard");
-            exit;
+            exit();
         }
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-            //preparae la requete
+            // Préparer la requête
             $data = [
-                'nom' => $_POST['nom']?? $soft['nom'],
-                'prix' => $_POST['prix']?? $soft['prix']
+                'nom' => $_POST['nom'] ?? $soft['nom'],
+                'prix' => $_POST['prix'] ?? $soft['prix']
             ];
 
             try {
@@ -103,27 +111,26 @@ class DashSoftsController extends Controller
                     $data
                 );
 
-                //Mis a jour dans la base
                 if ($updatedCount > 0) {
-                    $_SESSION['success_message'] = "le soft a été modifié avec succès.";
+                    $_SESSION['success_message'] = "Le soft a été modifié avec succès.";
                 } else {
                     $_SESSION['error_message'] = "Erreur lors de la modification du soft.";
                 }
-            }catch(\Exception $e){
-                $_SESSION['error_message'] = "Erreur lors de la mise à jour : ". $e->getMessage();
+            } catch (\Exception $e) {
+                $_SESSION['error_message'] = "Erreur lors de la mise à jour : " . $e->getMessage();
             }
 
-             // Redirection après la modification
+            // Redirection après la modification
             header("Location: /DashSofts/liste");
-            exit;
+            exit();
+        }
 
+        $title = "Modifier le soft";
+        $this->render('Dashboard/updateSoft', compact('soft', 'title'));
+    } else {
+        http_response_code(404);
+        exit();
     }
-
-    $title = "Modifier le soft";
-    $this->render('Dashboard/updateSoft', [
-        'soft' => $soft,
-        'title' => $title
-    ]);
 }
 
 

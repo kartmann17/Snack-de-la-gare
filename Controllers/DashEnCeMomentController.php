@@ -19,7 +19,8 @@ class DashEnCeMomentController extends Controller
     }
 
     public function ajoutEnCeMoment()
-    {
+{
+    if (isset($_SESSION['id_User'])) {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $cloudinaryService = new CloudinaryService();
             $EnCeMomentRepository = new EnCeMomentRepository();
@@ -58,10 +59,15 @@ class DashEnCeMomentController extends Controller
             header("Location: /Dashboard");
             exit;
         }
+    } else {
+        http_response_code(404);
+        exit;
     }
+}
 
-    public function deleteEnCeMoment()
-    {
+public function deleteEnCeMoment()
+{
+    if (isset($_SESSION['id_User'])) { 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id = $_POST['id'] ?? null;
 
@@ -110,8 +116,12 @@ class DashEnCeMomentController extends Controller
             header("Location: /DashEnCeMoment/liste");
             exit();
         }
+    } else {
+        http_response_code(404);
+        exit();
     }
-    
+}
+
     public function liste()
     {
         $title = "Liste En ce moment";

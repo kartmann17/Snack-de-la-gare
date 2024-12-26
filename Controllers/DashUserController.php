@@ -20,14 +20,14 @@ class DashUserController extends Controller
 
     //Ajout des users
     public function ajoutUser()
-    {
+{
+    if (isset($_SESSION['id_User'])) { 
         $userRepository = new UserRepository();
         $roleRepository = new RoleRepository();
         $users = $userRepository->findAll();
         $roles = $roleRepository->findAll();
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
             $nom = $_POST['nom'] ?? '';
             $prenom = $_POST['prenom'] ?? '';
             $email = $_POST['email'] ?? '';
@@ -35,11 +35,10 @@ class DashUserController extends Controller
             $role = $_POST['role'] ?? '';
 
             if (!empty($nom) && !empty($prenom) && !empty($email) && !empty($pass) && !empty($role)) {
-
                 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                    $_SESSION['error_message'] = "L'email est invalide";
+                    $_SESSION['error_message'] = "L'email est invalide.";
                     header("Location: /addUser");
-                    exit;
+                    exit();
                 }
 
                 // Hashage du mot de passe
@@ -56,28 +55,41 @@ class DashUserController extends Controller
             } else {
                 $_SESSION['error_message'] = "Tous les champs sont requis.";
             }
+
             header("Location: /Dashboard");
-            exit;
+            exit();
         }
+
+        // Rendu de la vue pour ajouter un utilisateur
+        $title = "Ajouter un utilisateur";
+        $this->render('Dashboard/addUser', compact('users', 'roles', 'title'));
+    } else {
+        http_response_code(404);
+        exit();
     }
+}
 
 
     //supression des utilisateurs
     public function deleteUser()
-    {
+{
+    if (isset($_SESSION['id_User'])) {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
             $id = $_POST['id'] ?? null;
 
             if ($id) {
                 $userRepository = new UserRepository();
 
-                $result = $userRepository->deleteById($id);
+                try {
+                    $result = $userRepository->deleteById($id);
 
-                if ($result) {
-                    $_SESSION['success_message'] = "L'utilisateur a été supprimé avec succès.";
-                } else {
-                    $_SESSION['error_message'] = "Erreur lors de la suppression de l'utilisateur.";
+                    if ($result) {
+                        $_SESSION['success_message'] = "L'utilisateur a été supprimé avec succès.";
+                    } else {
+                        $_SESSION['error_message'] = "Erreur lors de la suppression de l'utilisateur.";
+                    }
+                } catch (\Exception $e) {
+                    $_SESSION['error_message'] = "Erreur lors de la suppression : " . $e->getMessage();
                 }
             } else {
                 $_SESSION['error_message'] = "ID utilisateur invalide.";
@@ -87,7 +99,11 @@ class DashUserController extends Controller
             header("Location: /Dashboard");
             exit();
         }
+    } else {
+        http_response_code(404);
+        exit();
     }
+}
 
     //Liste des utilisateurs
     public function liste()

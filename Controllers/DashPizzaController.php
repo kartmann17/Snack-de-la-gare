@@ -20,33 +20,37 @@ class DashPizzaController extends Controller
 
     public function ajoutPizza()
     {
+        if (isset($_SESSION['id_User'])) { 
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                $alias = "Pizza";
+                $data = [
+                    'nom' => $_POST['nom'] ?? null,
+                    'prix' => $_POST['prix'] ?? null,
+                    'description' => $_POST['description'] ?? null
+                ];
 
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                // Utilisation du repository
+                $PizzaRepository = new PizzaRepository();
+                $result = $PizzaRepository->create($alias, $data);
 
-            $alias = "Pizza";
-            $data = [
-                'nom' => $_POST['nom'] ??  null,
-                'prix' => $_POST['prix'] ??  null,
-                'description' => $_POST['description'] ??  null
-            ];
+                if ($result) {
+                    $_SESSION['success_message'] = "Pizza ajoutée avec succès.";
+                } else {
+                    $_SESSION['error_message'] = "Erreur lors de l'ajout de la pizza.";
+                }
 
-            // Utilisation du repository
-            $PizzaRepository = new PizzaRepository();
-            $result = $PizzaRepository->create($alias, $data);
-
-            if ($result) {
-                $_SESSION['success_message'] = "Pizza ajouté avec succès.";
-            } else {
-                $_SESSION['error_message'] = "Erreur lors de l'ajout de la pizza.";
+                header("Location: /Dashboard");
+                exit;
             }
-
-            header("Location: /Dashboard");
+        } else {
+            http_response_code(404);
             exit;
         }
     }
 
     public function deletePizza()
-    {
+{
+    if (isset($_SESSION['id_User'])) {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id = $_POST['id'] ?? null;
 
@@ -77,15 +81,20 @@ class DashPizzaController extends Controller
             header("Location: /Dashboard");
             exit();
         }
+    } else {
+        http_response_code(404);
+        exit();
     }
+}
 
-    public function updatePizza($id)
-    {
+public function updatePizza($id)
+{
+    if (isset($_SESSION['id_User'])) {
         $PizzaRepository = new PizzaRepository();
         $alias = "Pizza";
 
-        // Récupérer la viande à modifier
-        $pizza =  $PizzaRepository->find($alias, $id);
+        // Récupérer la pizza à modifier
+        $pizza = $PizzaRepository->find($alias, $id);
 
         if (!$pizza) {
             $_SESSION['error_message'] = "La pizza avec l'ID $id n'existe pas.";
@@ -94,12 +103,11 @@ class DashPizzaController extends Controller
         }
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-            // Préparer de la requete
+            // Préparer la requête
             $data = [
-                'nom' => $_POST['nom'] ??  $pizza['nom'],
-                'prix' => $_POST['prix'] ??  $pizza['prix'],
-                'description' => $_POST['description'] ??  $pizza['desription']
+                'nom' => $_POST['nom'] ?? $pizza['nom'],
+                'prix' => $_POST['prix'] ?? $pizza['prix'],
+                'description' => $_POST['description'] ?? $pizza['description']
             ];
 
             try {
@@ -114,7 +122,7 @@ class DashPizzaController extends Controller
                     $_SESSION['error_message'] = "Aucune modification n'a été apportée.";
                 }
             } catch (\Exception $e) {
-                $_SESSION['success_message'] = "Erreur lors de la mise a jour." . $e->getMessage();
+                $_SESSION['error_message'] = "Erreur lors de la mise à jour : " . $e->getMessage();
             }
 
             // Redirection après la modification
@@ -123,11 +131,12 @@ class DashPizzaController extends Controller
         }
 
         $title = "Modifier la pizza";
-        $this->render('Dashboard/updatePizza', [
-            'pizza' => $pizza,
-            'title' => $title
-        ]);
+        $this->render('Dashboard/updatePizza', compact('pizza', 'title'));
+    } else {
+        http_response_code(404);
+        exit;
     }
+}
 
     public function liste()
     {

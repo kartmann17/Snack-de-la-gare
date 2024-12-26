@@ -19,21 +19,21 @@ class DashBieresController extends Controller
     }
 
     public function ajoutBiere()
-    {
-
+{
+    if (isset($_SESSION['id_User'])) {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $alias = 'Nos_Bieres';
             $data = [
-                'nom' => $_POST['nom'] ??  null,
-                'prix' => $_POST['prix'] ??  null
+                'nom' => $_POST['nom'] ?? null,
+                'prix' => $_POST['prix'] ?? null
             ];
 
             $BieresRepository = new BieresRepository();
             $result = $BieresRepository->create($alias, $data);
 
             if ($result) {
-                $_SESSION['success_message'] = "La bière a été ajouté avec succès.";
+                $_SESSION['success_message'] = "La bière a été ajoutée avec succès.";
             } else {
                 $_SESSION['error_message'] = "Erreur lors de l'ajout de la bière.";
             }
@@ -41,11 +41,16 @@ class DashBieresController extends Controller
             header("Location: /Dashboard");
             exit;
         }
+    } else {
+        http_response_code(404);
+        exit;
     }
+}
 
 
-    public function updateBiere($id)
-    {
+public function updateBiere($id)
+{
+    if (isset($_SESSION['id_User'])) {
         $BieresRepository = new BieresRepository();
         $alias = 'Nos_Bieres';
 
@@ -87,15 +92,20 @@ class DashBieresController extends Controller
             exit;
         }
 
-        // Rendu du formulaire avec les données actuelles
+
         $title = "Modifier la bière";
         $this->render('Dashboard/updateBiere', compact('biere', 'title'));
+    } else {
+        http_response_code(404);
+        exit;
     }
+}
 
 
 
-    public function deleteBiere()
-    {
+public function deleteBiere()
+{
+    if (isset($_SESSION['id_User'])) {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id = $_POST['id'] ?? null;
 
@@ -126,7 +136,11 @@ class DashBieresController extends Controller
             header("Location: /DashBieres/liste");
             exit();
         }
+    } else {
+        http_response_code(404); 
+        exit();
     }
+}
 
 
     public function liste()

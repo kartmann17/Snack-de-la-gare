@@ -19,10 +19,9 @@ class DashViandeController extends Controller
     }
 
     public function ajoutViande()
-    {
-
+{
+    if (isset($_SESSION['id_User'])) { 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
             // Hydratation des données
             $alias = 'Viandes';
             $data = [
@@ -34,16 +33,23 @@ class DashViandeController extends Controller
             $result = $ViandeRepository->create($alias, $data);
 
             if ($result) {
-                $_SESSION['success_message'] = "Viande ajouté avec succès.";
+                $_SESSION['success_message'] = "Viande ajoutée avec succès.";
             } else {
                 $_SESSION['error_message'] = "Erreur lors de l'ajout de la viande.";
             }
-            header("Location: /Dashboard");
-        }
-    }
 
-    public function deleteViande()
-    {
+            header("Location: /Dashboard");
+            exit();
+        }
+    } else {
+        http_response_code(404);
+        exit();
+    }
+}
+
+public function deleteViande()
+{
+    if (isset($_SESSION['id_User'])) {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id = $_POST['id'] ?? null;
 
@@ -52,46 +58,51 @@ class DashViandeController extends Controller
                     $ViandeRepository = new ViandeRepository();
                     $alias = "Viandes";
 
-                    // Suppression de la bière par ID
-                $deletedCount = $ViandeRepository->delete(
-                    $alias,
-                    ['_id' => new \MongoDB\BSON\ObjectId($id)]
-                );
+                    // Suppression de la viande par ID
+                    $deletedCount = $ViandeRepository->delete(
+                        $alias,
+                        ['_id' => new \MongoDB\BSON\ObjectId($id)]
+                    );
 
-                if ($deletedCount > 0) {
-                    $_SESSION['success_message'] = "La viande a été supprimée avec succès.";
-                } else {
-                    $_SESSION['error_message'] = "Aucune viande n'a été trouvée avec cet ID.";
+                    if ($deletedCount > 0) {
+                        $_SESSION['success_message'] = "La viande a été supprimée avec succès.";
+                    } else {
+                        $_SESSION['error_message'] = "Aucune viande n'a été trouvée avec cet ID.";
+                    }
+                } catch (\Exception $e) {
+                    $_SESSION['error_message'] = "Erreur lors de la suppression : " . $e->getMessage();
                 }
-            } catch (\Exception $e) {
-                $_SESSION['error_message'] = "Erreur lors de la suppression : " . $e->getMessage();
+            } else {
+                $_SESSION['error_message'] = "ID viande invalide.";
             }
-        } else {
-            $_SESSION['error_message'] = "ID viande invalide.";
-        }
 
             // Redirection vers la dashboard
-            header("Location: /Dashboard");
+            header("Location: /DashViande/liste");
             exit();
         }
+    } else {
+        http_response_code(404);
+        exit();
     }
+}
 
-    public function updateViande($id)
-    {
+public function updateViande($id)
+{
+    if (isset($_SESSION['id_User'])) {
         $ViandeRepository = new ViandeRepository();
         $alias = "Viandes";
+
         // Récupérer la viande à modifier
-        $viande =  $ViandeRepository->find($alias, $id);
+        $viande = $ViandeRepository->find($alias, $id);
 
         if (!$viande) {
             $_SESSION['error_message'] = "La viande avec l'ID $id n'existe pas.";
-            header("Location: /Dashboard");
-            exit;
+            header("Location: /DashViande/liste");
+            exit();
         }
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-            // Préparer de la requete
+            // Préparer de la requête
             $data = [
                 'nom' => $_POST['nom'] ?? $viande['nom'],
             ];
@@ -107,15 +118,15 @@ class DashViandeController extends Controller
                 if ($updatedCount > 0) {
                     $_SESSION['success_message'] = "La viande a été mise à jour avec succès.";
                 } else {
-                    $_SESSION['error_message'] = "Aucune viande n'a été trouvée avec cet ID.";
+                    $_SESSION['error_message'] = "Aucune modification n'a été apportée.";
                 }
-            }catch (\Exception $e){
-                $_SESSION['error_message'] = "Erreur lors de la mise à jour : ". $e->getMessage();
+            } catch (\Exception $e) {
+                $_SESSION['error_message'] = "Erreur lors de la mise à jour : " . $e->getMessage();
             }
 
             // Redirection après la modification
             header("Location: /DashViande/liste");
-            exit;
+            exit();
         }
 
         $title = "Modifier viande";
@@ -123,7 +134,11 @@ class DashViandeController extends Controller
             'viande' => $viande,
             'title' => $title
         ]);
+    } else {
+        http_response_code(404);
+        exit();
     }
+}
 
     public function liste()
     {

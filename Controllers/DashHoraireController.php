@@ -20,8 +20,9 @@ class DashHoraireController extends Controller
 
 
     public function addHoraire()
-    {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SESSION['id_User'])) {
+{
+    if (isset($_SESSION['id_User'])) { 
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $alias = 'horaire';
 
             // Récupérer les données du formulaire
@@ -53,97 +54,110 @@ class DashHoraireController extends Controller
 
         $title = "Ajouter un Horaire";
         $this->render('Dashboard/addHoraire', ['title' => $title]);
-    }
-
-
-   public function updateHoraire($id)
-{
-    $HoraireRepository = new HoraireRepository();
-    $alias = 'horaire';
-
-    // Récupérer l'horaire à modifier
-    $horaire = $HoraireRepository->find($alias, $id);
-
-    if (!$horaire) {
-        $_SESSION['error_message'] = "L'horaire avec l'ID $id n'existe pas.";
-        header("Location: /Dashboard");
+    } else {
+        http_response_code(404);
         exit;
     }
+}
 
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        // Récupérer les données envoyées
-        $data = [
-            'jour' => $_POST['jour'] ?? $horaire['jour'],
-            'ouverture_M' => $_POST['ouverture_M'] ?? $horaire['ouverture_M'],
-            'ouverture_S' => $_POST['ouverture_S'] ?? $horaire['ouverture_S']
-        ];
 
-        try {
-            // Mise à jour dans la base
-            $updatedCount = $HoraireRepository->update(
-                $alias,
-                ['_id' => new \MongoDB\BSON\ObjectId($id)],
-                $data
-            );
+public function updateHoraire($id)
+{
+    if (isset($_SESSION['id_User'])) {
+        $HoraireRepository = new HoraireRepository();
+        $alias = 'horaire';
 
-            if ($updatedCount > 0) {
-                $_SESSION['success_message'] = "L'horaire a été mis à jour avec succès.";
-            } else {
-                $_SESSION['error_message'] = "Aucune modification n'a été apportée.";
-            }
+        // Récupérer l'horaire à modifier
+        $horaire = $HoraireRepository->find($alias, $id);
 
+        if (!$horaire) {
+            $_SESSION['error_message'] = "L'horaire avec l'ID $id n'existe pas.";
             header("Location: /Dashboard");
             exit;
-        } catch (\Exception $e) {
-            $_SESSION['error_message'] = "Erreur lors de la mise à jour : " . $e->getMessage();
         }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // Récupérer les données envoyées
+            $data = [
+                'jour' => $_POST['jour'] ?? $horaire['jour'],
+                'ouverture_M' => $_POST['ouverture_M'] ?? $horaire['ouverture_M'],
+                'ouverture_S' => $_POST['ouverture_S'] ?? $horaire['ouverture_S']
+            ];
+
+            try {
+                // Mise à jour dans la base
+                $updatedCount = $HoraireRepository->update(
+                    $alias,
+                    ['_id' => new \MongoDB\BSON\ObjectId($id)],
+                    $data
+                );
+
+                if ($updatedCount > 0) {
+                    $_SESSION['success_message'] = "L'horaire a été mis à jour avec succès.";
+                } else {
+                    $_SESSION['error_message'] = "Aucune modification n'a été apportée.";
+                }
+
+                header("Location: /Dashboard");
+                exit;
+            } catch (\Exception $e) {
+                $_SESSION['error_message'] = "Erreur lors de la mise à jour : " . $e->getMessage();
+            }
+        }
+
+        $title = "Modifier un Horaire";
+        $this->render('Dashboard/updateHoraires', compact('horaire', 'title'));
+    } else {
+        http_response_code(404);
+        exit;
     }
-
-
-    $title = "Modifier un Horaire";
-    $this->render('Dashboard/updateHoraires', compact('horaire', 'title'));
 }
 
 
 public function deleteHoraire($id)
 {
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $id = $_POST['id'] ?? null;
+    if (isset($_SESSION['id_User'])) {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $id = $_POST['id'] ?? null;
 
-    if ($id) {
-        try {
-            $HoraireRepository = new HoraireRepository();
-            $alias = 'horaire';
+            if ($id) {
+                try {
+                    $HoraireRepository = new HoraireRepository();
+                    $alias = 'horaire';
 
-            // Vérifier l'existence de l'horaire avant suppression
-            $horaire = $HoraireRepository->find($alias, $id);
+                    // Vérifier l'existence de l'horaire avant suppression
+                    $horaire = $HoraireRepository->find($alias, $id);
 
-            if (!$horaire) {
-                $_SESSION['error_message'] = "L'horaire avec l'ID $id n'existe pas.";
+                    if (!$horaire) {
+                        $_SESSION['error_message'] = "L'horaire avec l'ID $id n'existe pas.";
+                        header("Location: /DashHoraire/liste");
+                        exit;
+                    }
+
+                    // Supprimer l'horaire dans MongoDB
+                    $deletedCount = $HoraireRepository->delete(
+                        $alias,
+                        ['_id' => new \MongoDB\BSON\ObjectId($id)]
+                    );
+
+                    if ($deletedCount > 0) {
+                        $_SESSION['success_message'] = "L'horaire a été supprimé avec succès.";
+                    } else {
+                        $_SESSION['error_message'] = "Erreur lors de la suppression de l'horaire.";
+                    }
+                } catch (\Exception $e) {
+                    $_SESSION['error_message'] = "Erreur lors de la suppression : " . $e->getMessage();
+                }
+
+                // Redirection après suppression
                 header("Location: /DashHoraire/liste");
                 exit;
             }
-
-            // Supprimer l'horaire dans MongoDB
-            $deletedCount = $HoraireRepository->delete(
-                $alias,
-                ['_id' => new \MongoDB\BSON\ObjectId($id)]
-            );
-
-            if ($deletedCount > 0) {
-                $_SESSION['success_message'] = "L'horaire a été supprimé avec succès.";
-            } else {
-                $_SESSION['error_message'] = "Erreur lors de la suppression de l'horaire.";
-            }
-        } catch (\Exception $e) {
-            $_SESSION['error_message'] = "Erreur lors de la suppression : " . $e->getMessage();
         }
-
-        // Redirection après suppression
-        header("Location: /DashHoraire/liste");
+    } else {
+        http_response_code(404);
         exit;
     }
-}
 }
 
 

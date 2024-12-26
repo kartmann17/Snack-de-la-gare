@@ -21,11 +21,13 @@ $css = 'food';
                         </td>
                         <td class="table-actions">
                             <div class="d-flex">
+                            <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
                                 <form action="/DashEnCeMoment/deleteEnCeMoment" method="POST" style="display: inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette image ?');">
                                     <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
                                     <input type="hidden" name="id" value="<?= $encemoment->_id ?>">
                                     <button class="btn btn-danger btn-sm">Supprimer</button>
                                 </form>
+                                <?php endif;?>
                             </div>
                         </td>
                     </tr>

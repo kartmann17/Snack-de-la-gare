@@ -21,73 +21,82 @@ class DashVinsController extends Controller
 
     public function ajoutVins()
     {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if (isset($_SESSION['id_User'])) { 
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                $alias = "Nos_Vins";
+                $data = [
+                    'nom' => $_POST['nom'] ?? null,
+                    'prix' => $_POST['prix'] ?? null
+                ];
 
-            $alias = "Nos_Vins";
-            $data = [
-                'nom' => $_POST['nom'] ??  null,
-                'prix' => $_POST['prix'] ??  null
-            ];
+                $VinsRepository = new VinsRepository();
+                $result = $VinsRepository->create($alias, $data);
 
-            $VinsRepository = new VinsRepository;
-            $result = $VinsRepository->create($alias, $data);
+                if ($result) {
+                    $_SESSION['success_message'] = "Le vin a été ajouté avec succès.";
+                } else {
+                    $_SESSION['error_message'] = "Erreur lors de l'ajout du vin.";
+                }
 
-            if ($result) {
-                $_SESSION['success_message'] = "Le vin a été ajouté avec succès.";
-            } else {
-                $_SESSION['error_message'] = "Erreur lors de l'ajout du vin.";
+                header("Location: /Dashboard");
+                exit();
             }
-
-            header("Location: /Dashboard");
-            exit;
+        } else {
+            http_response_code(404);
+            exit();
         }
     }
 
     public function deleteVins()
     {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $id = $_POST['id'] ?? null;
+        if (isset($_SESSION['id_User'])) {
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                $id = $_POST['id'] ?? null;
 
-            if ($id) {
-                try {
-                    $VinsRepository = new VinsRepository();
-                    $alias = 'Nos_Vins';
+                if ($id) {
+                    try {
+                        $VinsRepository = new VinsRepository();
+                        $alias = 'Nos_Vins';
 
-                    // Vérifier l'existence du document avant suppression
-                    $vin = $VinsRepository->find($alias, $id);
-                    if (!$vin) {
-                        $_SESSION['error_message'] = "Le vin avec l'ID $id n'existe pas.";
-                        header("Location: /Dashboard");
-                        exit();
+                        // Vérifier l'existence du document avant suppression
+                        $vin = $VinsRepository->find($alias, $id);
+                        if (!$vin) {
+                            $_SESSION['error_message'] = "Le vin avec l'ID $id n'existe pas.";
+                            header("Location: /DashVins/liste");
+                            exit();
+                        }
+
+                        // Supprimer le document dans MongoDB
+                        $deletedCount = $VinsRepository->delete(
+                            $alias,
+                            ['_id' => new \MongoDB\BSON\ObjectId($id)]
+                        );
+
+                        if ($deletedCount > 0) {
+                            $_SESSION['success_message'] = "Le vin a été supprimé avec succès.";
+                        } else {
+                            $_SESSION['error_message'] = "Erreur lors de la suppression du vin.";
+                        }
+                    } catch (\Exception $e) {
+                        $_SESSION['error_message'] = "Erreur lors de la suppression : " . $e->getMessage();
                     }
-
-                    // Supprimer le document dans MongoDB
-                    $deletedCount = $VinsRepository->delete(
-                        $alias,
-                        ['_id' => new \MongoDB\BSON\ObjectId($id)]
-                    );
-
-                    if ($deletedCount > 0) {
-                        $_SESSION['success_message'] = "Le vin a été supprimé avec succès.";
-                    } else {
-                        $_SESSION['error_message'] = "Erreur lors de la suppression du vin.";
-                    }
-                } catch (\Exception $e) {
-                    $_SESSION['error_message'] = "Erreur lors de la suppression : " . $e->getMessage();
+                } else {
+                    $_SESSION['error_message'] = "ID vin invalide.";
                 }
-            } else {
-                $_SESSION['error_message'] = "ID vin invalide.";
-            }
 
-            // Redirection après tentative de suppression
-            header("Location: /DashVins/liste");
+                header("Location: /DashVins/liste");
+                exit();
+            }
+        } else {
+            http_response_code(404);
             exit();
         }
     }
 
 
     public function updateVins($id)
-    {
+{
+    if (isset($_SESSION['id_User'])) {
         $VinsRepository = new VinsRepository();
         $alias = 'Nos_Vins';
 
@@ -97,7 +106,7 @@ class DashVinsController extends Controller
         if (!$vins) {
             $_SESSION['error_message'] = "Le vin avec l'ID $id n'existe pas.";
             header("Location: /DashVins/liste");
-            exit;
+            exit();
         }
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -125,13 +134,16 @@ class DashVinsController extends Controller
             }
 
             header("Location: /DashVins/liste");
-            exit;
+            exit();
         }
 
         $title = "Modifier le vin";
         $this->render('Dashboard/updateVins', compact('vins', 'title'));
+    } else {
+        http_response_code(404);
+        exit();
     }
-
+}
 
     public function liste()
     {

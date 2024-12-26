@@ -27,11 +27,13 @@ $css = 'food';
                         <td class="table-actions">
                             <div class="d-flex">
                                 <a href="/DashSnack/updateSnack/<?= $snack->_id ?>" class="btn btn-warning btn-sm me-1">Modifier</a>
-                                <form action="/DashSnack/deleteSnack" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce snack ?');" style="display: inline;">
-                                    <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
-                                    <input type="hidden" name="id" value="<?= $snack->_id ?>">
-                                    <button class="btn btn-danger btn-sm">Supprimer</button>
-                                </form>
+                                <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
+                                    <form action="/DashSnack/deleteSnack" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce snack ?');" style="display: inline;">
+                                        <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+                                        <input type="hidden" name="id" value="<?= $snack->_id ?>">
+                                        <button class="btn btn-danger btn-sm">Supprimer</button>
+                                    </form>
+                                    <?php endif;?>
                             </div>
                         </td>
                     </tr>

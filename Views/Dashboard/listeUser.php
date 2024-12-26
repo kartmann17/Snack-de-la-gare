@@ -2,7 +2,7 @@
 $css = 'food';
 ?>
 <div class="container mt-5 mb-5 users-container">
-    <h2 class="mb-4">Gestion des Utilisateurs</h2>
+    <h2 class="mb-4 text-center">Gestion des Utilisateurs</h2>
 
 
     <div class="table-responsive">
@@ -25,11 +25,13 @@ $css = 'food';
                         <td><?= $user->role ?></td>
                         <td>
                             <div class="d-flex justify-content-between">
+                            <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
                                 <form action="/DashUser/deleteUser" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?');">
                                 <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
                                     <input type="hidden" name="id" value="<?= $user->id ?>">
                                     <button class="btn btn-danger btn-sm">Supprimer</button>
                                 </form>
+                                <?php endif;?>
                             </div>
                         </td>
                     </tr>
