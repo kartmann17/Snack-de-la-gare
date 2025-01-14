@@ -1,4 +1,4 @@
-# 🍔 Snack de la Gare
+ # 🍔 Snack de la Gare
 
 **Snack de la Gare** est un projet de site web pour la gestion d'un snack. Ce projet inclut des fonctionnalités pour gérer les menus, les informations générales sur le snack.
 
@@ -34,7 +34,7 @@ Le projet **Snack de la Gare** vise à fournir une plateforme simple et intuitiv
 
 ### Pré-requis
 
-- Installez **Docker** et **Docker Compose** sur votre machine.  
+- Installez **Docker Desktop** sur votre machine.  
   - [Télécharger Docker](https://www.docker.com/products/docker-desktop)
 
 ### Étapes d'installation
