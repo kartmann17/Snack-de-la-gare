@@ -48,7 +48,7 @@ class DashSoftsController extends Controller
 
 public function deleteSoft()
 {
-    if (isset($_SESSION['id_User'])) { // Vérifie si l'utilisateur est connecté
+    if (isset($_SESSION['id_User'])) {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id = $_POST['id'] ?? null;
 
@@ -86,7 +86,7 @@ public function deleteSoft()
 
 public function updateSoft($id)
 {
-    if (isset($_SESSION['id_User'])) { // Vérifie si l'utilisateur est connecté
+    if (isset($_SESSION['id_User'])) { 
         $SoftRepository = new SoftRepository();
         $alias = "Nos_Soft";
         $soft = $SoftRepository->find($alias, $id);

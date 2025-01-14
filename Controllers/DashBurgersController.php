@@ -87,17 +87,23 @@ class DashBurgersController extends Controller
                             exit();
                         }
 
+                        // Supprimer le burger dans la base de données
                         $deletedCount = $BurgersRepository->delete(
                             $alias,
                             ['_id' => new \MongoDB\BSON\ObjectId($id)]
                         );
 
                         if ($deletedCount > 0) {
-                            $publicId = pathinfo($burger['img'], PATHINFO_FILENAME);
-                            if (!$cloudinaryService->deleteFile($publicId)) {
-                                $_SESSION['error_message'] = "Le burger a été supprimé, mais l'image sur Cloudinary n'a pas pu être supprimée.";
+                            // Supprimer l'image associée, si elle existe
+                            if (!empty($burger['img'])) {
+                                $publicId = pathinfo($burger['img'], PATHINFO_FILENAME);
+                                if (!$cloudinaryService->deleteFile($publicId)) {
+                                    $_SESSION['error_message'] = "Le burger a été supprimé, mais l'image sur Cloudinary n'a pas pu être supprimée.";
+                                } else {
+                                    $_SESSION['success_message'] = "Le burger et son image ont été supprimés avec succès.";
+                                }
                             } else {
-                                $_SESSION['success_message'] = "Le burger et son image ont été supprimés avec succès.";
+                                $_SESSION['success_message'] = "Le burger a été supprimé, mais aucune image associée n'a été trouvée.";
                             }
                         } else {
                             $_SESSION['error_message'] = "Erreur lors de la suppression du burger.";

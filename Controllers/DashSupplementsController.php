@@ -20,107 +20,110 @@ class DashSupplementsController extends Controller
 
     public function ajoutSupplement()
     {
-        if (isset($_SESSION['id_User'])) { // Vérifie si l'utilisateur est connecté
-            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                // Hydratation des données
-                $alias = "Supplements";
-                $data = [
-                    'nom' => $_POST['nom'] ?? null,
-                ];
-
-                // Utilisation du repository
-                $SupplementsRepository = new SupplementsRepository();
-                $result = $SupplementsRepository->create($alias, $data);
-
-                if ($result) {
-                    $_SESSION['success_message'] = "Supplément ajouté avec succès.";
-                } else {
-                    $_SESSION['error_message'] = "Erreur lors de l'ajout du supplément.";
-                }
-                header("Location: /Dashboard");
-                exit();
+        if (isset($_SESSION['id_User'])) {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // Hydratation des données
+            $alias = "Supplements";
+            $data = [
+                'nom' => $_POST['nom'] ?? null,
+            ];
+            // Utilisation du repository
+            $SupplementsRepository = new SupplementsRepository();
+            $result = $SupplementsRepository->create($alias, $data);
+            if ($result) {
+                $_SESSION['success_message'] = "Supplement ajouté avec succès.";
+            } else {
+                $_SESSION['error_message'] = "Erreur lors de l'ajout du supplement.";
             }
-        } else {
-            http_response_code(404);
-            exit();
+            header("Location: /Dashboard");
+            exit;
         }
+    }else {
+        http_response_code(404);
+        exit();
     }
+}
 
     public function deleteSupplement()
     {
-        if (isset($_SESSION['id_User'])) { // Vérifie si l'utilisateur est connecté
-            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                $id = $_POST['id'] ?? null;
-
-                if ($id) {
-                    try {
-                        $SupplementsRepository = new SupplementsRepository();
-                        $alias = "Supplements";
-
-                        $deletedCount = $SupplementsRepository->delete(
-                            $alias,
-                            ['_id' => new \MongoDB\BSON\ObjectId($id)]
-                        );
-
-                        if ($deletedCount > 0) {
-                            $_SESSION['success_message'] = "Le supplément a été supprimé avec succès.";
-                        } else {
-                            $_SESSION['error_message'] = "Aucun supplément n'a été trouvé avec cet ID.";
-                        }
-                    } catch (\Exception $e) {
-                        $_SESSION['error_message'] = "Erreur lors de la suppression : " . $e->getMessage();
+        if (isset($_SESSION['id_User'])) {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $id = $_POST['id'] ?? null;
+            if ($id) {
+                try {
+                    $SupplementsRepository = new SupplementsRepository();
+                    $alias = "Supplements";
+                    $deletedCount = $SupplementsRepository->delete(
+                        $alias,
+                        ['_id' => new \MongoDB\BSON\ObjectId($id)]
+                    );
+                    if ($deletedCount > 0) {
+                        $_SESSION['success_message'] = "Le supplement a été supprimé avec succès.";
+                    } else {
+                        $_SESSION['error_message'] = "Aucune bière n'a été trouvée avec cet ID.";
                     }
-                } else {
-                    $_SESSION['error_message'] = "ID supplément invalide.";
+                } catch (\Exception $e) {
+                    $_SESSION['error_message'] = "Erreur lors de la suppresion : " . $e->getMessage();
                 }
-
-                // Redirection vers la dashboard
-                header("Location: /DashSupplements/liste");
-                exit();
+            } else {
+                $_SESSION['error_message'] = "ID supplement invalide.";
             }
-        } else {
-            http_response_code(404);
+
+            // Redirection vers la dashboard
+            header("Location: /DashSupplements/liste");
             exit();
         }
+    }else {
+        http_response_code(404);
+        exit();
     }
+}
 
-    public function deleteSupplement()
+    public function updateSupplement($id)
     {
-        if (isset($_SESSION['id_User'])) { // Vérifie si l'utilisateur est connecté
-            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                $id = $_POST['id'] ?? null;
-
-                if ($id) {
-                    try {
-                        $SupplementsRepository = new SupplementsRepository();
-                        $alias = "Supplements";
-
-                        $deletedCount = $SupplementsRepository->delete(
-                            $alias,
-                            ['_id' => new \MongoDB\BSON\ObjectId($id)]
-                        );
-
-                        if ($deletedCount > 0) {
-                            $_SESSION['success_message'] = "Le supplément a été supprimé avec succès.";
-                        } else {
-                            $_SESSION['error_message'] = "Aucun supplément n'a été trouvé avec cet ID.";
-                        }
-                    } catch (\Exception $e) {
-                        $_SESSION['error_message'] = "Erreur lors de la suppression : " . $e->getMessage();
-                    }
-                } else {
-                    $_SESSION['error_message'] = "ID supplément invalide.";
-                }
-
-                // Redirection vers la dashboard
-                header("Location: /DashSupplements/liste");
-                exit();
-            }
-        } else {
-            http_response_code(404);
-            exit();
+        if (isset($_SESSION['id_User'])) {
+        $SupplementsRepository = new SupplementsRepository();
+        $alias = 'Supplements';
+        // Récupérer le supplément à modifier
+        $supplement = $SupplementsRepository->find($alias, $id);
+        if (!$supplement) {
+            $_SESSION['error_message'] = "Le supplément avec l'ID $id n'existe pas.";
+            header("Location: /DashSupplements/liste");
+            exit;
         }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // Préparer les données pour la mise à jour
+            $data = [
+                'nom' => $_POST['nom'] ?? $supplement['nom']
+            ];
+            try {
+                // Mise à jour dans la base
+                $updatedCount = $SupplementsRepository->update(
+                    $alias,
+                    ['_id' => new \MongoDB\BSON\ObjectId($id)],
+                    $data
+                );
+                if ($updatedCount > 0) {
+                    $_SESSION['success_message'] = "Supplément modifié avec succès.";
+                } else {
+                    $_SESSION['error_message'] = "Aucune modification n'a été apportée.";
+                }
+            } catch (\Exception $e) {
+                $_SESSION['error_message'] = "Erreur lors de la mise à jour : " . $e->getMessage();
+            }
+            // Redirection après la modification
+            header("Location: /DashSupplements/liste");
+            exit;
+        }
+
+        $title = "Modifier Supplément";
+        $this->render('Dashboard/updateSupplement', compact('supplement', 'title'));
+    } else {
+        http_response_code(404);
+        exit();
     }
+}
 
 
     public function liste()
