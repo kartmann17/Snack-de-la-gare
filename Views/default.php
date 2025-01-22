@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Bienvenue au Snack de la Gare ! Découvrez nos délicieux burgers, pizzas, kebabs et bien plus, préparés avec des ingrédients frais. Profitez d'un moment gourmand dans une ambiance conviviale.">
     <title>Snack de la Gare</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="/Asset/css/navbar.css">
@@ -19,6 +20,7 @@
     <link href="/Asset/css/<?= $style ?>.css" rel="stylesheet">
     <?php endif; ?>
     <link rel="manifest" href="/Asset/icones/site.webmanifest">
+    <link rel="preload" as="image" href="https://res.cloudinary.com/dr7jxgr70/image/upload/v1733239254/burger_page_acceuil_emtvkb.webp" imagesrcset="https://res.cloudinary.com/dr7jxgr70/image/upload/v1733239254/burger_page_acceuil_emtvkb.webp" type="image/webp">
 </head>
 
 <body>
@@ -67,7 +69,7 @@
 </nav>
 
     <div class="burger">
-        <img class="burgeur" src="https://res.cloudinary.com/dr7jxgr70/image/upload/v1733239254/burger_page_acceuil_emtvkb.webp" width="600" height="400" loading="lazy" alt="un burgeur délicieux">
+        <img class="burgeur" src="https://res.cloudinary.com/dr7jxgr70/image/upload/v1733239254/burger_page_acceuil_emtvkb.webp" width="600" height="400" alt="un burgeur délicieux">
     </div>
     <div class="bloc_num d-flex align-items-center justify-content-center mt-5">
         <div class="text-center">
