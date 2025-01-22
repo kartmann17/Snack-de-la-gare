@@ -21,6 +21,7 @@
     <?php endif; ?>
     <link rel="manifest" href="/Asset/icones/site.webmanifest">
     <link rel="preload" as="image" href="https://res.cloudinary.com/dr7jxgr70/image/upload/v1733239254/burger_page_acceuil_emtvkb.webp" imagesrcset="https://res.cloudinary.com/dr7jxgr70/image/upload/v1733239254/burger_page_acceuil_emtvkb.webp" type="image/webp">
+    <link rel="preload" href="/Asset/font/JejuHallasan-Regular.ttf" as="font" type="font/ttf" crossorigin="anonymous">
 </head>
 
 <body>
