@@ -1,7 +1,7 @@
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
-
+// Définir les variables du jeu
 let paddleWidth = 100;
 let paddleHeight = 10;
 let paddleX = (canvas.width - paddleWidth) / 2;
@@ -12,10 +12,18 @@ let x = canvas.width / 2;
 let y = canvas.height - 30;
 let dx = 2;
 let dy = -2;
+let score = 0;
+let gameOver = false; // Variable pour indiquer si le jeu est terminé
 
-
+// Ajout des écouteurs pour les touches
 document.addEventListener("keydown", keyDownHandler);
 document.addEventListener("keyup", keyUpHandler);
+
+// Mise à jour du score dans le DOM
+function updateScore() {
+    let scoreDisplay = document.getElementById("score");
+    scoreDisplay.textContent = score;
+}
 
 function keyDownHandler(e) {
     if (e.key === "Right" || e.key === "ArrowRight") {
@@ -50,6 +58,8 @@ function drawPaddle() {
 }
 
 function draw() {
+    if (gameOver) return; // Si le jeu est terminé, arrêter la boucle
+
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawBall();
     drawPaddle();
@@ -63,9 +73,12 @@ function draw() {
     } else if (y + dy > canvas.height - ballRadius - paddleHeight - 10) {
         if (x > paddleX && x < paddleX + paddleWidth) {
             dy = -dy;
+            score++; // Incrémentation du score
+            updateScore(); // Mise à jour de l'affichage du score
         } else {
             // Fin de partie
-            document.location.reload();
+            gameOver = true; // Marquer la fin du jeu
+            alert("Game Over! Score : " + score); // Afficher le score final
         }
     }
 
@@ -81,4 +94,8 @@ function draw() {
     }
 }
 
+// Initialisation de l'affichage du score
+updateScore();
+
+// Boucle principale du jeu
 setInterval(draw, 10);

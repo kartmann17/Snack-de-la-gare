@@ -39,42 +39,47 @@ class DashValideAvisController extends Controller
     //suppression des avis
     public function deleteAvis()
 {
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $id = $_POST['id'] ?? null;
+    if (isset($_SESSION['id_User'])) {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $id = $_POST['id'] ?? null;
 
-        if ($id) {
-            try {
-                $AvisRepository = new AvisRepository();
-                $alias = 'avis';
+            if ($id) {
+                try {
+                    $AvisRepository = new AvisRepository();
+                    $alias = 'avis';
 
-                // Vérifier l'existence de l'avis avant suppression
-                $avis = $AvisRepository->find($alias, $id);
-                if (!$avis) {
-                    $_SESSION['error_message'] = "L'avis avec l'ID $id n'existe pas.";
-                    header("Location: /DashValideAvis/liste");
-                    exit();
+                    // Vérifier l'existence de l'avis avant suppression
+                    $avis = $AvisRepository->find($alias, $id);
+                    if (!$avis) {
+                        $_SESSION['error_message'] = "L'avis avec l'ID $id n'existe pas.";
+                        header("Location: /DashValideAvis/liste");
+                        exit();
+                    }
+
+                    // Supprimer l'avis dans MongoDB
+                    $deletedCount = $AvisRepository->delete(
+                        $alias,
+                        ['_id' => new \MongoDB\BSON\ObjectId($id)]
+                    );
+
+                    if ($deletedCount > 0) {
+                        $_SESSION['success_message'] = "L'avis a été supprimé avec succès.";
+                    } else {
+                        $_SESSION['error_message'] = "Erreur lors de la suppression de l'avis.";
+                    }
+                } catch (\Exception $e) {
+                    $_SESSION['error_message'] = "Erreur lors de la suppression : " . $e->getMessage();
                 }
-
-                // Supprimer l'avis dans MongoDB
-                $deletedCount = $AvisRepository->delete(
-                    $alias,
-                    ['_id' => new \MongoDB\BSON\ObjectId($id)]
-                );
-
-                if ($deletedCount > 0) {
-                    $_SESSION['success_message'] = "L'avis a été supprimé avec succès.";
-                } else {
-                    $_SESSION['error_message'] = "Erreur lors de la suppression de l'avis.";
-                }
-            } catch (\Exception $e) {
-                $_SESSION['error_message'] = "Erreur lors de la suppression : " . $e->getMessage();
+            } else {
+                $_SESSION['error_message'] = "ID invalide.";
             }
-        } else {
-            $_SESSION['error_message'] = "ID invalide.";
-        }
 
-        // Redirection après tentative de suppression
-        header("Location: /DashValideAvis/liste");
+            // Redirection après  suppression
+            header("Location: /DashValideAvis/liste");
+            exit();
+        }
+    } else {
+        http_response_code(404);
         exit();
     }
 }

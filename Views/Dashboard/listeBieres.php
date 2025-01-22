@@ -1,5 +1,5 @@
 <?php
-echo '<link rel="stylesheet" href="/Asset/css/food.css">';
+$css = 'food';
 ?>
 <div class="container mt-5 mb-5 service-container">
     <h2 class="mb-4 text-center">Gestion des Bières</h2>
@@ -23,11 +23,13 @@ echo '<link rel="stylesheet" href="/Asset/css/food.css">';
                         <td class="table-actions">
                             <div class="d-flex">
                                 <a href="/DashBieres/updateBiere/<?= $biere->_id ?>" class="btn btn-warning btn-sm me-1">Modifier</a>
+                                <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
                                 <form action="/DashBieres/deleteBiere" method="POST" style="display: inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette boisson ?');">
                                     <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
                                     <input type="hidden" name="id" value="<?= $biere->_id ?>">
                                     <button class="btn btn-danger btn-sm">Supprimer</button>
                                 </form>
+                                <?php endif;?>
                             </div>
                         </td>
                     </tr>

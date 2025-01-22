@@ -21,7 +21,7 @@ class MongoConnection
      *
      * @return Client Returns the MongoDB client instance.
      */
-    protected function connect(): Client
+    protected function connect()
     {
         try {
             // Connect to MongoDB Atlas via the URI

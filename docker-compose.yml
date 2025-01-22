@@ -11,16 +11,16 @@ services:
       - .env       # Charger les variables d'environnement
     depends_on:
       - db
-      - mongo
+      - mongo     #Dépendances MongoDB
     volumes:
       - .:/var/www/html  # Montre le dossier local dans le conteneur
     networks:
-      - app-network
+      - app-network       #utiliser le reseau app-Network
 
 
   db:
-    image: mariadb:10.11
-    container_name: my-db-container-snack-de-la-gare
+    image: mariadb:10.11      #image MariaDb
+    container_name: my-db-container-snack-de-la-gare   #Nom du COnteneur
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}

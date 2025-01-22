@@ -22,6 +22,7 @@ class DashBurgersController extends Controller
             http_response_code(404);
         }
     }
+
     public function ajoutBurger()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -112,32 +113,26 @@ class DashBurgersController extends Controller
     }
 
     public function deleteBurger()
-{
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $id = $_POST['id'] ?? null;
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $id = $_POST['id'] ?? null;
 
-        if ($id) {
-            try {
-                // Appel du service pour supprimer le burger
+            if ($id) {
                 $result = $this->burgersService->deleteBurger($id);
 
                 if ($result) {
                     $_SESSION['success_message'] = "Burger et son image supprimés avec succès.";
                 } else {
-                    $_SESSION['error_message'] = "Le burger avec l'ID $id n'a pas été trouvé.";
+                    $_SESSION['error_message'] = "Erreur lors de la suppression du burger.";
                 }
-            } catch (\Exception $e) {
-                $_SESSION['error_message'] = "Erreur lors de la suppression : " . $e->getMessage();
+            } else {
+                $_SESSION['error_message'] = "ID burger invalide.";
             }
-        } else {
-            $_SESSION['error_message'] = "ID burger invalide.";
-        }
 
-        // Redirection vers la liste des burgers
-        header("Location: /DashBurgers/liste");
-        exit();
+            header("Location: /DashBurgers/liste");
+            exit();
+        }
     }
-}
 
     public function liste()
     {

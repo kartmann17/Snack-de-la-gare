@@ -1,5 +1,5 @@
 <?php
-echo '<link rel="stylesheet" href="/Asset/css/menu.css">';
+$css = 'menu';
 ?>
 
 <!-- Section Burgers -->
@@ -99,19 +99,36 @@ echo '<link rel="stylesheet" href="/Asset/css/menu.css">';
 <!-- Section Kebabs -->
 <section>
     <h2>Nos Kebabs</h2>
-    <div class="menu-container mt-5 text-center">
-        <?php if (!empty($kebabs) && count($kebabs) >= 3): ?>
-            <div class="kebab-item mt-5">
-                <h3><?= htmlspecialchars($kebabs[0]['nom']); ?> : <?= htmlspecialchars($kebabs[0]['solo']); ?>€</h3>
-                <h3><?= htmlspecialchars($kebabs[1]['nom']); ?> : <?= htmlspecialchars($kebabs[1]['menu']); ?>€</h3>
-                <h3><?= htmlspecialchars($kebabs[2]['nom']); ?> : <?= htmlspecialchars($kebabs[2]['assiette']); ?>€</h3>
+    <?php
+// Tri des données par ID
+usort($kebabs, function ($a, $b) {
+    return strcmp((string)$a['_id'], (string)$b['_id']); // Comparaison lexicographique des IDs
+});
+?>
+
+<div class="menu-container mt-5 text-center">
+    <?php if (!empty($kebabs) && count($kebabs) >= 3): ?>
+        <div class="kebab-item mt-5">
+            <h3>
+                <?= htmlspecialchars($kebabs[0]['nom'] ?? 'Nom non disponible'); ?> :<?= htmlspecialchars($kebabs[0]['solo'] ?? 'Prix non disponible'); ?>€
+            </h3>
+            <h3>
+                <?= htmlspecialchars($kebabs[1]['nom'] ?? 'Nom non disponible'); ?> :<?= htmlspecialchars($kebabs[1]['menu'] ?? 'Prix non disponible'); ?>€
+            </h3>
+            <h3>
+                <?= htmlspecialchars($kebabs[2]['nom'] ?? 'Nom non disponible'); ?> :<?= htmlspecialchars($kebabs[2]['assiette'] ?? 'Prix non disponible'); ?>€
+            </h3>
+
+            <?php if (!empty($kebabs[3])): ?>
                 <p class="description">
-                    Servi <span class="highlight"><?= htmlspecialchars($kebabs[3]['description']); ?></span>
+                    <?= htmlspecialchars($kebabs[3]['nom'] ?? 'Nom non disponible'); ?> :<?= htmlspecialchars($kebabs[3]['description'] ?? 'Description non disponible'); ?>
                 </p>
-            </div>
-        <?php else: ?>
-            <p>Aucune donnée à afficher.</p>
-        <?php endif; ?>
+            <?php endif; ?>
+        </div>
+    <?php else: ?>
+        <p>Aucune donnée à afficher.</p>
+    <?php endif; ?>
+
 
         <div class="vide"></div>
 

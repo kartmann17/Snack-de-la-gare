@@ -1,5 +1,5 @@
 <?php
-echo '<link rel="stylesheet" href="/Asset/css/food.css">';
+$css = 'food';
 ?>
 <div class="container mt-5 mb-5 avis-container">
     <h2 class="mb-4 text-center">Liste des Avis</h2>

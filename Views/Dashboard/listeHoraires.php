@@ -1,5 +1,5 @@
 <?php
-echo '<link rel="stylesheet" href="/Asset/css/food.css">';
+$css = 'food';
 ?>
 
 <div class="container mt-5 mb-5 horaires-container">
@@ -25,11 +25,13 @@ echo '<link rel="stylesheet" href="/Asset/css/food.css">';
                         <td>
                             <div class="d-flex justify-content-between">
                                 <a href="/DashHoraire/updateHoraire/<?= $horaire->_id ?>" class="btn btn-warning">Modifier</a>
-                                <form action="/DashHoraire/deleteHoraire/<?= $horaire->_id ?>" method="POST" onsubmit="return confirm('êtes-vous sûr de vouloir supprimer cet horaire ?');">
-                                    <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
-                                    <input type="hidden" name="id" value="<?= $horaire->_id ?>">
-                                    <button class="btn btn-danger btn-sm">Supprimer</button>
-                                </form>
+                                <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
+                                    <form action="/DashHoraire/deleteHoraire/<?= $horaire->_id ?>" method="POST" onsubmit="return confirm('êtes-vous sûr de vouloir supprimer cet horaire ?');">
+                                        <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+                                        <input type="hidden" name="id" value="<?= $horaire->_id ?>">
+                                        <button class="btn btn-danger btn-sm">Supprimer</button>
+                                    </form>
+                                    <?php endif;?>
                             </div>
                         </td>
                     </tr>
