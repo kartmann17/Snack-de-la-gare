@@ -7,11 +7,17 @@
     background-color: #00a0a0;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     height: auto !important;
-    aspect-ratio: 16 / 9;
     clip-path: polygon(0 5%, 75% 0%, 100% 8%, 100% 99%, 23% 95%, 0 100%);
     display: block;
+    overflow: hidden;
 }
 
+/* Compatibilité pour Safari */
+@supports (-webkit-clip-path: polygon(0 5%, 75% 0%, 100% 8%, 100% 99%, 23% 95%, 0 100%)) {
+    .menu-container {
+        -webkit-clip-path: polygon(0 5%, 75% 0%, 100% 8%, 100% 99%, 23% 95%, 0 100%);
+    }
+}
 
 /* Titres */
 h2 {
@@ -20,7 +26,7 @@ h2 {
     text-transform: uppercase;
     margin-bottom: 20px;
     color: #E6D1B4;
-    font-family: 'JejuHallasan-Regular';
+    font-family: 'JejuHallasan-Regular', Arial, sans-serif;
     font-size: 2rem;
 }
 
@@ -30,7 +36,7 @@ h2 {
 
 h3 {
     color: #022e33;
-    font-family: 'JejuHallasan-Regular';
+    font-family: 'JejuHallasan-Regular', Arial, sans-serif;
     font-size: 2em;
 }
 
@@ -38,11 +44,13 @@ h3 {
 .burgers {
     display: flex;
     flex-direction: column;
+    gap: 1rem; 
 }
 
 .burger-item {
     padding: 1rem;
     margin-top: 2rem;
+    text-align: center;
 }
 
 .burger-item:last-child {
@@ -52,14 +60,12 @@ h3 {
 .burger-item h3 {
     margin: 0;
     font-size: 1.8em;
-    text-align: center;
     color: #022e33;
 }
 
 .burger-item h4 {
     margin: 5px 0;
     font-size: 1.2em;
-    text-align: center;
     margin-bottom: 1rem;
     color: #022e33;
 }
@@ -67,7 +73,6 @@ h3 {
 .burger-item p {
     margin: 5px 0;
     font-size: 1.2em;
-    text-align: center;
     margin-bottom: 1rem;
     color: #ddcbae;
 }
@@ -106,16 +111,16 @@ h3 {
     }
 }
 
-/* section pizza  */
-
+/* Section Pizza */
 .pizza {
     display: flex;
     flex-direction: column;
+    gap: 1rem;
 }
 
 .pizza-item {
     padding: 1rem;
-
+    text-align: center;
 }
 
 .pizza-item:last-child {
@@ -125,24 +130,24 @@ h3 {
 .pizza-item h3 {
     margin: 0;
     font-size: 1.8em;
-    text-align: center;
     color: #022e33;
 }
 
 .pizza-item p {
     margin: 5px 0;
     font-size: 1.2em;
-    text-align: center;
     margin-bottom: 1rem;
     color: #ddcbae;
 }
-.space{
+
+.space {
     margin-top: 8rem;
 }
 
 /* Section Tacos */
 .tacos-item {
     margin-top: 4rem;
+    text-align: center;
 }
 
 .tacos-item:last-child {
@@ -151,7 +156,6 @@ h3 {
 
 .tacos-item h3 {
     font-size: 1.8em;
-    text-align: center;
     color: #ddcbae;
 }
 
@@ -169,7 +173,7 @@ h3 {
     margin-right: 10px;
     font-weight: bold;
     color: #ddcbae;
-    font-family: 'JejuHallasan-Regular';
+    font-family: 'JejuHallasan-Regular', Arial, sans-serif;
 }
 
 /* Section Kebabs */
@@ -200,13 +204,15 @@ h3 {
 /* Section Softs */
 .soft-item h3 {
     color: #ddcbae;
-    font-family: 'JejuHallasan-Regular';
+    font-family: 'JejuHallasan-Regular', Arial, sans-serif;
+    text-align: center;
 }
 
 /* Section Vins */
 .vins-item h3 {
     font-size: 1.8em;
     color: #022e33;
+    text-align: center;
 }
 
 .vins-item h4 {
@@ -220,6 +226,7 @@ h3 {
 .biere-item h3 {
     font-size: 1.8em;
     color: #022e33;
+    text-align: center;
 }
 
 .biere-item h4 {
@@ -227,12 +234,16 @@ h3 {
     font-size: 1.2em;
     margin-bottom: 1rem;
     color: #022e33;
+    text-align: center;
 }
-/* Bandes explicatives nos soft */
+
+/* Bandes explicatives pour les Softs */
 .bands {
     background-color: #E6D1B4;
     margin-top: 100px;
 }
+
 .bands h2 {
     color: black;
+    text-align: center;
 }
