@@ -31,21 +31,28 @@ class KebabsService
     }
 
     public function deleteKebab(string $id): bool
-    {
-        $alias = 'kebabs';
-        $kebab = $this->kebabsRepository->find($alias, $id);
+{
+    $alias = 'kebabs';
 
-        if ($kebab) {
-            // Supprimer l'image associée sur Cloudinary
+    // Rechercher le kebab dans la base de données
+    $kebab = $this->kebabsRepository->find($alias, $id);
+
+    if ($kebab) {
+        // Vérifier si l'image est définie
+        if (!empty($kebab['img'])) {
             $publicId = pathinfo($kebab['img'], PATHINFO_FILENAME);
-            $this->cloudinaryService->deleteFile($publicId);
-
-            // Supprimer l'enregistrement de la base
-            return $this->kebabsRepository->delete($alias, ['_id' => new \MongoDB\BSON\ObjectId($id)]) > 0;
+            if (!$this->cloudinaryService->deleteFile($publicId)) {
+                return false;
+            }
         }
+        $result = $this->kebabsRepository->delete($alias, ['_id' => new \MongoDB\BSON\ObjectId($id)]);
 
-        return false;
+        return $result > 0;
     }
+
+    // Retourner `false` si le kebab n'existe pas
+    return false;
+}
 
     public function getKebabById(string $id): ?array
     {
