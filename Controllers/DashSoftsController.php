@@ -2,16 +2,21 @@
 
 namespace App\Controllers;
 
-use App\Repository\SoftRepository;
+use App\Services\SoftService;
 
 class DashSoftsController extends Controller
 {
+    private $softService;
+
+    public function __construct()
+    {
+        $this->softService = new SoftService();
+    }
 
     public function index()
     {
         $title = "Ajout Soft";
         if (isset($_SESSION['id_User'])) {
-            // Affichage de la vue
             $this->render("Dashboard/addSofts", compact('title'));
         } else {
             http_response_code(404);
@@ -20,27 +25,55 @@ class DashSoftsController extends Controller
 
     public function ajoutSoft()
     {
-
-        if ($_SERVER['REQUEST_METHOD'] === 'POST'){
-
-            $alias = "Nos_Soft";
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $data = [
-            'nom' =>$_POST['nom'] ??  null,
-            'prix' =>$_POST['prix'] ??  null
+                'nom' => $_POST['nom'] ?? null,
+                'prix' => $_POST['prix'] ?? null,
             ];
 
-            $SoftRepository = new SoftRepository;
-            $result = $SoftRepository->create($alias, $data);
+            $result = $this->softService->addSoft($data);
 
             if ($result) {
-                $_SESSION['success_message'] = "La boisson a été ajouté avec succès.";
+                $_SESSION['success_message'] = "La boisson a été ajoutée avec succès.";
             } else {
                 $_SESSION['error_message'] = "Erreur lors de l'ajout de la boisson.";
             }
+
             header("Location: /Dashboard");
             exit;
-
         }
+    }
+
+    public function updateSoft($id)
+    {
+        $soft = $this->softService->getSoftById($id);
+
+        if (!$soft) {
+            $_SESSION['error_message'] = "Le soft avec l'ID $id n'existe pas.";
+            header("Location: /DashSofts/liste");
+            exit;
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $data = [
+                'nom' => $_POST['nom'] ?? $soft['nom'],
+                'prix' => $_POST['prix'] ?? $soft['prix'],
+            ];
+
+            $result = $this->softService->updateSoft($id, $data);
+
+            if ($result) {
+                $_SESSION['success_message'] = "Le soft a été modifié avec succès.";
+            } else {
+                $_SESSION['error_message'] = "Aucune modification n'a été apportée.";
+            }
+
+            header("Location: /DashSofts/liste");
+            exit;
+        }
+
+        $title = "Modifier le soft";
+        $this->render('Dashboard/updateSoft', compact('soft', 'title'));
     }
 
     public function deleteSoft()
@@ -49,101 +82,32 @@ class DashSoftsController extends Controller
             $id = $_POST['id'] ?? null;
 
             if ($id) {
-                try {
-                    $SoftRepository = new SoftRepository;
-                    $alias ="Nos_Soft";
+                $result = $this->softService->deleteSoft($id);
 
-                    $deletedCount = $SoftRepository->delete(
-                        $alias,
-                        ['_id' => new \MongoDB\BSON\ObjectId($id)]
-                    );
-
-                    if ($deletedCount > 0) {
-                        $_SESSION['success_message'] = "La boisson a été supprimé avec succès.";
-                    } else {
-                        $_SESSION['error_message'] = "Aucune boisson n'a été trouvée avec cet ID.";
-                    }
-                }catch(\Exception $e) {
-                    $_SESSION['error_message'] = "Erreur lors de la suppression : " . $e->getMessage();
+                if ($result) {
+                    $_SESSION['success_message'] = "Le soft a été supprimé avec succès.";
+                } else {
+                    $_SESSION['error_message'] = "Erreur lors de la suppression du soft.";
                 }
             } else {
-                $_SESSION['error_message'] = "ID boisson invalide.";
+                $_SESSION['error_message'] = "ID soft invalide.";
             }
 
-            // Redirection vers la dashboard
             header("Location: /DashSofts/liste");
             exit();
         }
     }
 
-    public function updateSoft($id)
-    {
-        $SoftRepository = new SoftRepository;
-        $alias = "Nos_Soft";
-        $soft = $SoftRepository->find($alias, $id);
-
-        if (!$soft) {
-            $_SESSION['error_message'] = "le soft avec l'id $id n'existe pas.";
-            header("Location: /Dashboard");
-            exit;
-        }
-
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-            //preparae la requete
-            $data = [
-                'nom' => $_POST['nom']?? $soft['nom'],
-                'prix' => $_POST['prix']?? $soft['prix']
-            ];
-
-            try {
-                $updatedCount = $SoftRepository->update(
-                    $alias,
-                    ['_id' => new \MongoDB\BSON\ObjectId($id)],
-                    $data
-                );
-
-                //Mis a jour dans la base
-                if ($updatedCount > 0) {
-                    $_SESSION['success_message'] = "le soft a été modifié avec succès.";
-                } else {
-                    $_SESSION['error_message'] = "Erreur lors de la modification du soft.";
-                }
-            }catch(\Exception $e){
-                $_SESSION['error_message'] = "Erreur lors de la mise à jour : ". $e->getMessage();
-            }
-
-             // Redirection après la modification
-            header("Location: /DashSofts/liste");
-            exit;
-
-    }
-
-    $title = "Modifier le soft";
-    $this->render('Dashboard/updateSoft', [
-        'soft' => $soft,
-        'title' => $title
-    ]);
-}
-
-
-
     public function liste()
-{
-    $title = "Liste Softs";
+    {
+        $title = "Liste Softs";
+        $softs = $this->softService->getAllSofts();
 
-    $SoftRepository = new SoftRepository;
-    $alias = "Nos_Soft";
-    $softs =  $SoftRepository->findAll($alias);
-
-    if (isset($_SESSION['id_User'])) {
-
-        $this->render("Dashboard/listeSofts", compact('title', 'softs'));
-    } else {
-
-        http_response_code(404);
-        echo "Page non trouvée.";
+        if (isset($_SESSION['id_User'])) {
+            $this->render("Dashboard/listeSofts", compact('title', 'softs'));
+        } else {
+            http_response_code(404);
+            echo "Page non trouvée.";
+        }
     }
-}
-
 }

@@ -2,18 +2,21 @@
 
 namespace App\Controllers;
 
-use App\Repository\KebabsRepository;
-use App\Services\CloudinaryService;
+use App\Services\KebabsService;
 
 class DashKebabsController extends Controller
-
 {
+    private $kebabsService;
+
+    public function __construct()
+    {
+        $this->kebabsService = new KebabsService();
+    }
 
     public function index()
     {
         $title = "Ajout Kebab";
         if (isset($_SESSION['id_User'])) {
-            // Affichage de la vue
             $this->render("Dashboard/addKebab", compact('title'));
         } else {
             http_response_code(404);
@@ -22,17 +25,13 @@ class DashKebabsController extends Controller
 
     public function ajoutKebab()
     {
-
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
             $imgPath = null;
+
             // Téléversement de l'image sur Cloudinary
             if (isset($_FILES['img']) && $_FILES['img']['error'] === UPLOAD_ERR_OK) {
                 $tmpName = $_FILES['img']['tmp_name'];
-
-                // Appeler la méthode uploadFile pour téléverser l'image sur Cloudinary
-                $cloudinaryService = new CloudinaryService();
-                $imgPath = $cloudinaryService->uploadFile($tmpName);
+                $imgPath = $this->kebabsService->getCloudinaryService()->uploadFile($tmpName);
 
                 if (!$imgPath) {
                     $_SESSION['error_message'] = "Erreur lors du téléversement de l'image.";
@@ -41,91 +40,30 @@ class DashKebabsController extends Controller
                 }
             }
 
-            // Hydratation des données
-            $alias = 'kebabs';
             $data = [
-                'nom' => $_POST['nom'] ??  null,
-                'solo' => $_POST['solo'] ??  null,
+                'nom' => $_POST['nom'] ?? null,
+                'solo' => $_POST['solo'] ?? null,
                 'menu' => $_POST['menu'] ?? null,
                 'assiette' => $_POST['assiette'] ?? null,
                 'description' => $_POST['description'] ?? null,
-                'img' => $imgPath
             ];
 
-            // Utilisation du repository
-            $KebabsRepository = new KebabsRepository();
-            $result = $KebabsRepository->create($alias, $data);
+            $result = $this->kebabsService->addKebab($data, $imgPath);
 
             if ($result) {
                 $_SESSION['success_message'] = "Kebab ajouté avec succès.";
             } else {
-                $_SESSION['error_message'] = "Erreur lors de l'ajout du Kebab.";
+                $_SESSION['error_message'] = "Erreur lors de l'ajout du kebab.";
             }
+
             header("Location: /Dashboard");
             exit;
         }
     }
 
-    public function deleteKebab()
-    {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $id = $_POST['id'] ?? null;
-
-            if ($id) {
-                try {
-                    $KebabsRepository = new KebabsRepository();
-                    $cloudinaryService = new CloudinaryService();
-                    $alias = 'kebabs';
-
-                    // Récupérer le document pour supprimer l'image associée
-                    $kebab = $KebabsRepository->find($alias, $id);
-
-                    if (!$kebab) {
-                        $_SESSION['error_message'] = "Le kebab avec l'ID $id n'existe pas.";
-                        header("Location: /DashKebabs/liste");
-                        exit();
-                    }
-
-                    // Supprimer l'image sur Cloudinary
-                    $publicId = pathinfo($kebab['img'], PATHINFO_FILENAME);
-                    if (!$cloudinaryService->deleteFile($publicId)) {
-                        $_SESSION['error_message'] = "Erreur lors de la suppression de l'image sur Cloudinary.";
-                        header("Location: /DashKebabs/liste");
-                        exit();
-                    }
-
-                    // Supprimer le document dans MongoDB
-                    $deletedCount = $KebabsRepository->delete(
-                        $alias,
-                        ['_id' => new \MongoDB\BSON\ObjectId($id)]
-                    );
-
-                    if ($deletedCount > 0) {
-                        $_SESSION['success_message'] = "Le kebab et son image ont été supprimés avec succès.";
-                    } else {
-                        $_SESSION['error_message'] = "Erreur lors de la suppression du kebab.";
-                    }
-                } catch (\Exception $e) {
-                    $_SESSION['error_message'] = "Erreur lors de la suppression : " . $e->getMessage();
-                }
-            } else {
-                $_SESSION['error_message'] = "ID kebab invalide.";
-            }
-
-            // Redirection après tentative de suppression
-            header("Location: /DashKebabs/liste");
-            exit();
-        }
-    }
-
     public function updateKebab($id)
     {
-        $KebabsRepository = new KebabsRepository();
-        $cloudinaryService = new CloudinaryService();
-        $alias = 'kebabs';
-
-        // Récupérer le kebab à modifier
-        $kebab = $KebabsRepository->find($alias, $id);
+        $kebab = $this->kebabsService->getKebabById($id);
 
         if (!$kebab) {
             $_SESSION['error_message'] = "Le kebab avec l'ID $id n'existe pas.";
@@ -134,59 +72,38 @@ class DashKebabsController extends Controller
         }
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // Gestion de l'image
-            $imgPath = $kebab['img']; // Conservation de l'image actuelle
+            $imgPath = $kebab['img'];
 
             if (isset($_FILES['img']) && $_FILES['img']['error'] === UPLOAD_ERR_OK) {
-                // Supprimer l'ancienne image sur Cloudinary
                 $publicId = pathinfo($kebab['img'], PATHINFO_FILENAME);
-                if (!$cloudinaryService->deleteFile($publicId)) {
-                    $_SESSION['error_message'] = "Erreur lors de la suppression de l'ancienne image sur Cloudinary.";
-                    header("Location: /DashKebabs/liste");
-                    exit;
-                }
+                $this->kebabsService->getCloudinaryService()->deleteFile($publicId);
 
-                // Téléverser la nouvelle image sur Cloudinary
                 $tmpName = $_FILES['img']['tmp_name'];
-                $newImgPath = $cloudinaryService->uploadFile($tmpName);
+                $imgPath = $this->kebabsService->getCloudinaryService()->uploadFile($tmpName);
 
-                if ($newImgPath) {
-                    $imgPath = $newImgPath; // Met à jour le chemin de l'image
-                } else {
-                    $_SESSION['error_message'] = "Erreur lors du téléversement de la nouvelle image.";
+                if (!$imgPath) {
+                    $_SESSION['error_message'] = "Erreur lors du téléversement de l'image.";
                     header("Location: /DashKebabs/liste");
                     exit;
                 }
             }
 
-            // Préparer les données pour la mise à jour
             $data = [
                 'nom' => $_POST['nom'] ?? $kebab['nom'],
                 'solo' => $_POST['solo'] ?? $kebab['solo'],
                 'menu' => $_POST['menu'] ?? $kebab['menu'],
                 'assiette' => $_POST['assiette'] ?? $kebab['assiette'],
                 'description' => $_POST['description'] ?? $kebab['description'],
-                'img' => $imgPath,
             ];
 
-            try {
-                // Mise à jour dans la base
-                $updatedCount = $KebabsRepository->update(
-                    $alias,
-                    ['_id' => new \MongoDB\BSON\ObjectId($id)],
-                    $data
-                );
+            $result = $this->kebabsService->updateKebab($id, $data, $imgPath);
 
-                if ($updatedCount > 0) {
-                    $_SESSION['success_message'] = "Kebab modifié avec succès.";
-                } else {
-                    $_SESSION['error_message'] = "Aucune modification n'a été apportée.";
-                }
-            } catch (\Exception $e) {
-                $_SESSION['error_message'] = "Erreur lors de la mise à jour : " . $e->getMessage();
+            if ($result) {
+                $_SESSION['success_message'] = "Kebab modifié avec succès.";
+            } else {
+                $_SESSION['error_message'] = "Aucune modification n'a été apportée.";
             }
 
-            // Redirection après la modification
             header("Location: /DashKebabs/liste");
             exit;
         }
@@ -195,20 +112,36 @@ class DashKebabsController extends Controller
         $this->render('Dashboard/updateKebab', compact('kebab', 'title'));
     }
 
+    public function deleteKebab()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $id = $_POST['id'] ?? null;
+
+            if ($id) {
+                $result = $this->kebabsService->deleteKebab($id);
+
+                if ($result) {
+                    $_SESSION['success_message'] = "Le kebab et son image ont été supprimés avec succès.";
+                } else {
+                    $_SESSION['error_message'] = "Erreur lors de la suppression du kebab.";
+                }
+            } else {
+                $_SESSION['error_message'] = "ID kebab invalide.";
+            }
+
+            header("Location: /DashKebabs/liste");
+            exit();
+        }
+    }
 
     public function liste()
     {
         $title = "Liste Kebabs";
-
-        $KebabsRepository = new KebabsRepository();
-        $alias = 'kebabs';
-        $kebabs = $KebabsRepository->findAll($alias);
+        $kebabs = $this->kebabsService->getAllKebabs();
 
         if (isset($_SESSION['id_User'])) {
-
             $this->render("Dashboard/listeKebabs", compact('title', 'kebabs'));
         } else {
-
             http_response_code(404);
             echo "Page non trouvée.";
         }

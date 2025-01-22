@@ -2,16 +2,21 @@
 
 namespace App\Controllers;
 
-use App\Repository\SaladesRepository;
+use App\Services\SaladeService;
 
 class DashSaladeController extends Controller
 {
+    private $saladeService;
+
+    public function __construct()
+    {
+        $this->saladeService = new SaladeService();
+    }
 
     public function index()
     {
         $title = "Ajout Salade";
         if (isset($_SESSION['id_User'])) {
-            // Affichage de la vue
             $this->render("Dashboard/addSalades", compact('title'));
         } else {
             http_response_code(404);
@@ -20,22 +25,17 @@ class DashSaladeController extends Controller
 
     public function ajoutSalade()
     {
-
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-            $alias= "Nos_Salades";
             $data = [
-                'nom' => $_POST['nom'] ??  null,
-                'prix' => $_POST['prix'] ??  null,
-                'description' => $_POST['description'] ??  null
+                'nom' => $_POST['nom'] ?? null,
+                'prix' => $_POST['prix'] ?? null,
+                'description' => $_POST['description'] ?? null,
             ];
 
-            // Utilisation du repository
-            $SaladesRepository = new SaladesRepository();
-            $result = $SaladesRepository->create($alias,$data);
+            $result = $this->saladeService->addSalade($data);
 
             if ($result) {
-                $_SESSION['success_message'] = "Salade ajouté avec succès.";
+                $_SESSION['success_message'] = "Salade ajoutée avec succès.";
             } else {
                 $_SESSION['error_message'] = "Erreur lors de l'ajout de la salade.";
             }
@@ -45,103 +45,69 @@ class DashSaladeController extends Controller
         }
     }
 
+    public function updateSalade($id)
+    {
+        $salade = $this->saladeService->getSaladeById($id);
+
+        if (!$salade) {
+            $_SESSION['error_message'] = "La salade avec l'ID $id n'existe pas.";
+            header("Location: /DashSalade/liste");
+            exit;
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $data = [
+                'nom' => $_POST['nom'] ?? $salade['nom'],
+                'prix' => $_POST['prix'] ?? $salade['prix'],
+                'description' => $_POST['description'] ?? $salade['description'],
+            ];
+
+            $result = $this->saladeService->updateSalade($id, $data);
+
+            if ($result) {
+                $_SESSION['success_message'] = "Salade modifiée avec succès.";
+            } else {
+                $_SESSION['error_message'] = "Aucune modification n'a été apportée.";
+            }
+
+            header("Location: /DashSalade/liste");
+            exit;
+        }
+
+        $title = "Modifier Salade";
+        $this->render('Dashboard/updateSalade', compact('salade', 'title'));
+    }
+
     public function deleteSalade()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
             $id = $_POST['id'] ?? null;
 
             if ($id) {
-                try{
-                    $SaladesRepository = new SaladesRepository();
-                    $alias ="Nos_Salades";
+                $result = $this->saladeService->deleteSalade($id);
 
-                    $deletedCount = $SaladesRepository->delete(
-                        $alias,
-                        ['_id' => new \MongoDB\BSON\ObjectId($id)]
-                    );
-                    if ($deletedCount > 0) {
-                        $_SESSION['success_message'] = "La salade a été supprimée avec succès.";
-                    } else {
-                        $_SESSION['error_message'] = "Aucune salade n'a été trouvée avec cet ID.";
-                    }
-                }catch (\Exception $e) {
-                    $_SESSION['error_message'] = "Erreur lors de la suppression : " . $e->getMessage();
+                if ($result) {
+                    $_SESSION['success_message'] = "Salade supprimée avec succès.";
+                } else {
+                    $_SESSION['error_message'] = "Erreur lors de la suppression de la salade.";
                 }
             } else {
                 $_SESSION['error_message'] = "ID salade invalide.";
             }
 
-            // Redirection vers la dashboard
             header("Location: /DashSalade/liste");
             exit();
         }
     }
 
-    public function updateSalade($id)
-    {
-        $SaladesRepository = new SaladesRepository();
-        $alias= "Nos_Salades";
-        // Récupérer la viande à modifier
-        $salade =  $SaladesRepository->find($alias, $id);
-
-        if (!$salade) {
-            $_SESSION['error_message'] = "La salade avec l'ID $id n'existe pas.";
-            header("Location: /Dashboard");
-            exit;
-        }
-
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-            // Préparer de la requete
-            $data = [
-                'nom' => $_POST['nom'] ??  $salade['nom'],
-                'prix' => $_POST['prix'] ??  $salade['prix'],
-                'description' => $_POST['description'] ??  $salade['desription']
-            ];
-
-            try {
-                // Mise à jour dans la base
-                $updatedCount = $SaladesRepository->update(
-                    $alias,
-                    ['_id' => new \MongoDB\BSON\ObjectId($id)],
-                    $data
-                );
-
-                if ($updatedCount > 0) {
-                    $_SESSION['success_message'] = "La salade a été modifiée avec succès.";
-                } else {
-                    $_SESSION['error_message'] = "Aucune modification n'a été apportée.";
-                }
-            } catch (\Exception $e) {
-                $_SESSION['error_message'] = "Erreur lors de la mise à jour : " . $e->getMessage();
-            }
-
-            // Redirection après la modification
-            header("Location: /DashSalade/liste");
-            exit;
-        }
-
-        $title = "Modifier salade";
-        $this->render('Dashboard/updateSalade', [
-            'salade' => $salade,
-            'title' => $title
-        ]);
-    }
-
     public function liste()
     {
         $title = "Liste Salades";
-
-        $SaladesRepository = new SaladesRepository();
-        $alias = 'Nos_Salades';
-        $salades = $SaladesRepository->findAll($alias);
+        $salades = $this->saladeService->getAllSalades();
 
         if (isset($_SESSION['id_User'])) {
-
             $this->render("Dashboard/listeSalades", compact('title', 'salades'));
         } else {
-
             http_response_code(404);
             echo "Page non trouvée.";
         }

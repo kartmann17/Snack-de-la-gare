@@ -37,19 +37,13 @@ class UserRepository extends Repository
         return $this->req($sql)->fetchAll();
     }
 
-    public function createUser($nom, $prenom, $email, $pass, $id_role)
+    public function createUser(array $data)
     {
-        return $this->req(
-            "INSERT INTO " . $this->table . " (nom, prenom, email, pass, id_role)
-            VALUES (:nom, :prenom, :email, :pass, :id_role)",
-            [
-                'nom' => $nom,
-                'prenom' => $prenom,
-                'email' => $email,
-                'pass' => $pass,
-                'id_role' => $id_role
-            ]
-        );
+        $columns = implode(', ', array_keys($data));
+        $placeholders = implode(', ', array_fill(0, count($data), '?'));
+
+        $sql = "INSERT INTO {$this->table} ($columns) VALUES ($placeholders)";
+        return $this->req($sql, array_values($data));
     }
 
     public function listeUser()
@@ -61,8 +55,8 @@ class UserRepository extends Repository
     }
 
     //supression des utilisateurs
-    public function deleteById($id)
+    public function delete(int $id)
     {
-        return $this->delete($id);
+        return $this->req("DELETE FROM {$this->table} WHERE id = ?", [$id]);
     }
 }

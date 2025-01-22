@@ -2,16 +2,21 @@
 
 namespace App\Controllers;
 
-use App\Repository\SupplementsRepository;
+use App\Services\SupplementService;
 
 class DashSupplementsController extends Controller
 {
+    private $supplementService;
+
+    public function __construct()
+    {
+        $this->supplementService = new SupplementService();
+    }
 
     public function index()
     {
         $title = "Ajout supplements";
         if (isset($_SESSION['id_User'])) {
-            // Affichage de la vue
             $this->render("Dashboard/addSupplement", compact('title'));
         } else {
             http_response_code(404);
@@ -20,123 +25,85 @@ class DashSupplementsController extends Controller
 
     public function ajoutSupplement()
     {
-
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-            // Hydratation des données
-            $alias = "Supplements";
             $data = [
                 'nom' => $_POST['nom'] ?? null,
             ];
 
-            // Utilisation du repository
-            $SupplementsRepository = new SupplementsRepository();
-            $result = $SupplementsRepository->create($alias, $data);
+            $result = $this->supplementService->addSupplement($data);
 
             if ($result) {
-                $_SESSION['success_message'] = "Supplement ajouté avec succès.";
+                $_SESSION['success_message'] = "Supplément ajouté avec succès.";
             } else {
-                $_SESSION['error_message'] = "Erreur lors de l'ajout du supplement.";
+                $_SESSION['error_message'] = "Erreur lors de l'ajout du supplément.";
             }
+
             header("Location: /Dashboard");
+            exit;
         }
+    }
+
+    public function updateSupplement($id)
+    {
+        $supplement = $this->supplementService->getSupplementById($id);
+
+        if (!$supplement) {
+            $_SESSION['error_message'] = "Le supplément avec l'ID $id n'existe pas.";
+            header("Location: /DashSupplements/liste");
+            exit;
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $data = [
+                'nom' => $_POST['nom'] ?? $supplement['nom'],
+            ];
+
+            $result = $this->supplementService->updateSupplement($id, $data);
+
+            if ($result) {
+                $_SESSION['success_message'] = "Supplément modifié avec succès.";
+            } else {
+                $_SESSION['error_message'] = "Aucune modification n'a été apportée.";
+            }
+
+            header("Location: /DashSupplements/liste");
+            exit;
+        }
+
+        $title = "Modifier Supplément";
+        $this->render('Dashboard/updateSupplement', compact('supplement', 'title'));
     }
 
     public function deleteSupplement()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
             $id = $_POST['id'] ?? null;
 
             if ($id) {
-                try {
-                    $SupplementsRepository = new SupplementsRepository();
-                    $alias = "Supplements";
+                $result = $this->supplementService->deleteSupplement($id);
 
-                    $deletedCount = $SupplementsRepository->delete(
-                        $alias,
-                        ['_id' => new \MongoDB\BSON\ObjectId($id)]
-                    );
-
-                    if ($deletedCount > 0) {
-                        $_SESSION['success_message'] = "Le supplement a été supprimé avec succès.";
-                    } else {
-                        $_SESSION['error_message'] = "Aucune bière n'a été trouvée avec cet ID.";
-                    }
-                } catch (\Exception $e) {
-                    $_SESSION['error_message'] = "Erreur lors de la suppresion : " . $e->getMessage();
+                if ($result) {
+                    $_SESSION['success_message'] = "Supplément supprimé avec succès.";
+                } else {
+                    $_SESSION['error_message'] = "Erreur lors de la suppression du supplément.";
                 }
             } else {
-                $_SESSION['error_message'] = "ID supplement invalide.";
+                $_SESSION['error_message'] = "ID supplément invalide.";
             }
 
-
-            // Redirection vers la dashboard
             header("Location: /DashSupplements/liste");
             exit();
         }
     }
 
-    public function updateSupplement($id)
-{
-    $SupplementsRepository = new SupplementsRepository();
-    $alias = 'Supplements';
-
-    // Récupérer le supplément à modifier
-    $supplement = $SupplementsRepository->find($alias, $id);
-
-    if (!$supplement) {
-        $_SESSION['error_message'] = "Le supplément avec l'ID $id n'existe pas.";
-        header("Location: /DashSupplements/liste");
-        exit;
-    }
-
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        // Préparer les données pour la mise à jour
-        $data = [
-            'nom' => $_POST['nom'] ?? $supplement['nom']
-        ];
-
-        try {
-            // Mise à jour dans la base
-            $updatedCount = $SupplementsRepository->update(
-                $alias,
-                ['_id' => new \MongoDB\BSON\ObjectId($id)],
-                $data
-            );
-
-            if ($updatedCount > 0) {
-                $_SESSION['success_message'] = "Supplément modifié avec succès.";
-            } else {
-                $_SESSION['error_message'] = "Aucune modification n'a été apportée.";
-            }
-        } catch (\Exception $e) {
-            $_SESSION['error_message'] = "Erreur lors de la mise à jour : " . $e->getMessage();
-        }
-
-        // Redirection après la modification
-        header("Location: /DashSupplements/liste");
-        exit;
-    }
-
-    $title = "Modifier Supplément";
-    $this->render('Dashboard/updateSupplement', compact('supplement', 'title'));
-}
-
-
     public function liste()
     {
-        $title = "Liste Viandes";
-
-        $SupplementsRepository = new  SupplementsRepository();
-        $alias = "Supplements";
-        $supplements =  $SupplementsRepository->findAll($alias);
+        $title = "Liste Suppléments";
+        $supplements = $this->supplementService->getAllSupplements();
 
         if (isset($_SESSION['id_User'])) {
-
             $this->render("Dashboard/listeSupplements", compact('title', 'supplements'));
         } else {
-
             http_response_code(404);
             echo "Page non trouvée.";
         }

@@ -2,16 +2,21 @@
 
 namespace App\Controllers;
 
-use App\Repository\EnCeMomentRepository;
-use App\Services\CloudinaryService;
+use App\Services\EnCeMomentsService;
 
 class DashEnCeMomentController extends Controller
 {
+    private $enCeMomentsService;
+
+    public function __construct()
+    {
+        $this->enCeMomentsService = new EnCeMomentsService();
+    }
+
     public function index()
     {
-        $title = "Ajout offre en cemoments page d'accueil";
+        $title = "Ajout offre En Ce Moment pour la page d'accueil";
         if (isset($_SESSION['id_User'])) {
-            // Affichage de la vue
             $this->render("Dashboard/addEnCeMoment", compact('title'));
         } else {
             http_response_code(404);
@@ -21,40 +26,33 @@ class DashEnCeMomentController extends Controller
     public function ajoutEnCeMoment()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $cloudinaryService = new CloudinaryService();
-            $EnCeMomentRepository = new EnCeMomentRepository();
-            $alias = 'En_ce_moments';
+            $imgPath = null;
 
+            // Téléversement de l'image sur Cloudinary
             if (isset($_FILES['img']) && $_FILES['img']['error'] === UPLOAD_ERR_OK) {
-                // Téléverser l'image sur Cloudinary
-                $imgPath = $cloudinaryService->uploadFile($_FILES['img']['tmp_name']);
+                $tmpName = $_FILES['img']['tmp_name'];
+                $imgPath = $this->enCeMomentsService->getCloudinaryService()->uploadFile($tmpName);
 
-                if ($imgPath) {
-                    // Hydratation des données
-                    $data = [
-                        'img' => $imgPath,
-                    ];
-
-                    // Insertion dans la base de données
-                    try {
-                        $result = $EnCeMomentRepository->create($alias, $data);
-
-                        if ($result) {
-                            $_SESSION['success_message'] = "Image ajoutée avec succès.";
-                        } else {
-                            $_SESSION['error_message'] = "Erreur lors de l'ajout de l'image.";
-                        }
-                    } catch (\Exception $e) {
-                        $_SESSION['error_message'] = "Erreur lors de l'ajout : " . $e->getMessage();
-                    }
-                } else {
-                    $_SESSION['error_message'] = "Erreur lors du téléversement de l'image sur Cloudinary.";
+                if (!$imgPath) {
+                    $_SESSION['error_message'] = "Erreur lors du téléversement de l'image.";
+                    header("Location: /Dashboard");
+                    exit;
                 }
-            } else {
-                $_SESSION['error_message'] = "Aucune image valide n'a été téléchargée.";
             }
 
-            // Redirection après tentative d'ajout
+            // Données du formulaire
+            $data = [
+                'img' => $imgPath,
+            ];
+
+            $result = $this->enCeMomentsService->addEnCeMoment($data, $imgPath);
+
+            if ($result) {
+                $_SESSION['success_message'] = "Image ajoutée avec succès.";
+            } else {
+                $_SESSION['error_message'] = "Erreur lors de l'ajout de l'image.";
+            }
+
             header("Location: /Dashboard");
             exit;
         }
@@ -66,65 +64,30 @@ class DashEnCeMomentController extends Controller
             $id = $_POST['id'] ?? null;
 
             if ($id) {
-                try {
-                    $EnCeMomentRepository = new EnCeMomentRepository();
-                    $cloudinaryService = new CloudinaryService();
-                    $alias = 'En_ce_moments';
+                $result = $this->enCeMomentsService->deleteEnCeMoment($id);
 
-                    // Récupérer le document pour supprimer l'image associée
-                    $imageRecord = $EnCeMomentRepository->find($alias, $id);
-
-                    if (!$imageRecord) {
-                        $_SESSION['error_message'] = "L'image avec l'ID $id n'existe pas.";
-                        header("Location: /DashEnCeMoment/liste");
-                        exit();
-                    }
-
-                    // Supprimer l'image sur Cloudinary
-                    $publicId = pathinfo($imageRecord['img'], PATHINFO_FILENAME);
-                    if (!$cloudinaryService->deleteFile($publicId)) {
-                        $_SESSION['error_message'] = "Erreur lors de la suppression de l'image sur Cloudinary.";
-                        header("Location: /DashEnCeMoment/liste");
-                        exit();
-                    }
-
-                    // Supprimer le document dans MongoDB
-                    $deletedCount = $EnCeMomentRepository->delete(
-                        $alias,
-                        ['_id' => new \MongoDB\BSON\ObjectId($id)]
-                    );
-
-                    if ($deletedCount > 0) {
-                        $_SESSION['success_message'] = "L'image et son enregistrement ont été supprimés avec succès.";
-                    } else {
-                        $_SESSION['error_message'] = "Erreur lors de la suppression de l'enregistrement de l'image.";
-                    }
-                } catch (\Exception $e) {
-                    $_SESSION['error_message'] = "Erreur lors de la suppression : " . $e->getMessage();
+                if ($result) {
+                    $_SESSION['success_message'] = "Image et son enregistrement supprimés avec succès.";
+                } else {
+                    $_SESSION['error_message'] = "Erreur lors de la suppression ou image introuvable.";
                 }
             } else {
-                $_SESSION['error_message'] = "ID image invalide.";
+                $_SESSION['error_message'] = "ID invalide.";
             }
 
-            // Redirection vers la liste
             header("Location: /DashEnCeMoment/liste");
             exit();
         }
     }
-    
+
     public function liste()
     {
-        $title = "Liste En ce moment";
-
-        $EnCeMomentRepository = new EnCeMomentRepository();
-        $alias = 'En_ce_moments';
-        $encemoments = $EnCeMomentRepository->findAll($alias);
+        $title = "Liste En Ce Moment";
+        $encemoments = $this->enCeMomentsService->getAllEnCeMoments();
 
         if (isset($_SESSION['id_User'])) {
-
             $this->render("Dashboard/listeEnCeMoment", compact('title', 'encemoments'));
         } else {
-
             http_response_code(404);
             echo "Page non trouvée.";
         }

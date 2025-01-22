@@ -23,12 +23,10 @@ echo '<link rel="stylesheet" href="/Asset/css/food.css">';
                         <td class="table-nom" title="<?= $kebab->nom ?>">
                             <?= $kebab->nom ?>
                         </td>
-                        <td><?= $kebab->solo ?></td>
-                        <td><?= $kebab->menu ?></td>
-                        <td><?= $kebab->assiette ?></td>
-                        <td class="table-description" title="<?= $kebab->description ?>">
-                            <?= $kebab->description ?>
-                        </td>
+                        <td><?= isset($kebab['solo']) ? htmlspecialchars($kebab['solo']) : ''; ?></td>
+                        <td><?= isset($kebab['menu']) ? htmlspecialchars($kebab['menu']) : ''; ?></td>
+                        <td><?= isset($kebab['assiette']) ? htmlspecialchars($kebab['assiette']) : ''; ?></td>
+                        <td class="table-description" title="<?=isset($kebab['description']) ?>"><?= isset($kebab['description']) ? htmlspecialchars($kebab['description']) : ''; ?></td>
                         <td>
                             <img src="<?= $kebab->img ?>" class="img-thumbnail" alt="image de <?= $kebab->nom ?>" />
                         </td>

@@ -2,7 +2,7 @@
 echo '<link rel="stylesheet" href="/Asset/css/food.css">';
 ?>
 <div class="container mt-5 mb-5 users-container">
-    <h2 class="mb-4">Gestion des Utilisateurs</h2>
+    <h2 class="mb-4 text-center">Gestion des Utilisateurs</h2>
 
 
     <div class="table-responsive">

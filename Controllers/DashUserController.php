@@ -2,105 +2,83 @@
 
 namespace App\Controllers;
 
-use App\Repository\RoleRepository;
-use App\Repository\UserRepository;
-
+use App\Services\UserService;
 
 class DashUserController extends Controller
 {
+    private $userService;
+
+    public function __construct()
+    {
+        $this->userService = new UserService();
+    }
 
     public function index()
     {
         if (isset($_SESSION['id_User'])) {
-            $this->render("Dashboard/addUser");
+            $roles = $this->userService->getAllRoles();
+            $this->render("Dashboard/addUser", compact('roles'));
         } else {
             http_response_code(404);
         }
     }
 
-    //Ajout des users
     public function ajoutUser()
-    {
-        $userRepository = new UserRepository();
-        $roleRepository = new RoleRepository();
-        $users = $userRepository->findAll();
-        $roles = $roleRepository->findAll();
+{
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $data = [
+            'nom' => $_POST['nom'] ?? '',
+            'prenom' => $_POST['prenom'] ?? '',
+            'email' => $_POST['email'] ?? '',
+            'pass' => password_hash($_POST['pass'] ?? '', PASSWORD_DEFAULT),
+            'role' => $_POST['role'] ?? ''
+        ];
 
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if (!empty($data['nom']) && !empty($data['prenom']) && !empty($data['email']) && !empty($data['role'])) {
+            $result = $this->userService->addUser($data);
 
-            $nom = $_POST['nom'] ?? '';
-            $prenom = $_POST['prenom'] ?? '';
-            $email = $_POST['email'] ?? '';
-            $pass = $_POST['pass'] ?? '';
-            $role = $_POST['role'] ?? '';
-
-            if (!empty($nom) && !empty($prenom) && !empty($email) && !empty($pass) && !empty($role)) {
-
-                if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                    $_SESSION['error_message'] = "L'email est invalide";
-                    header("Location: /addUser");
-                    exit;
-                }
-
-                // Hashage du mot de passe
-                $hashedPass = password_hash($pass, PASSWORD_DEFAULT);
-
-                // Appel du modèle pour l'insertion
-                $result = $userRepository->createUser($nom, $prenom, $email, $hashedPass, $role);
-
-                if ($result) {
-                    $_SESSION['success_message'] = "Utilisateur ajouté avec succès.";
-                } else {
-                    $_SESSION['error_message'] = "Erreur lors de l'ajout de l'utilisateur.";
-                }
+            if ($result) {
+                $_SESSION['success_message'] = "Utilisateur ajouté avec succès.";
             } else {
-                $_SESSION['error_message'] = "Tous les champs sont requis.";
+                $_SESSION['error_message'] = "Erreur lors de l'ajout de l'utilisateur.";
             }
-            header("Location: /Dashboard");
-            exit;
+        } else {
+            $_SESSION['error_message'] = "Tous les champs sont requis.";
         }
+
+        header("Location: /DashUser/liste");
+        exit;
     }
+}
 
+public function deleteUser()
+{
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $id = $_POST['id'] ?? null;
 
-    //supression des utilisateurs
-    public function deleteUser()
-    {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if ($id) {
+            $result = $this->userService->deleteUser((int)$id);
 
-            $id = $_POST['id'] ?? null;
-
-            if ($id) {
-                $userRepository = new UserRepository();
-
-                $result = $userRepository->deleteById($id);
-
-                if ($result) {
-                    $_SESSION['success_message'] = "L'utilisateur a été supprimé avec succès.";
-                } else {
-                    $_SESSION['error_message'] = "Erreur lors de la suppression de l'utilisateur.";
-                }
+            if ($result) {
+                $_SESSION['success_message'] = "L'utilisateur a été supprimé avec succès.";
             } else {
-                $_SESSION['error_message'] = "ID utilisateur invalide.";
+                $_SESSION['error_message'] = "Erreur lors de la suppression de l'utilisateur.";
             }
-
-            // Redirection vers le dashboard
-            header("Location: /Dashboard");
-            exit();
+        } else {
+            $_SESSION['error_message'] = "ID utilisateur invalide.";
         }
-    }
 
-    //Liste des utilisateurs
+        // Redirection après suppression
+        header("Location: /DashUser/liste");
+        exit();
+    }
+}
+
     public function liste()
     {
-        $userRepository = new UserRepository();
-        $users =  $userRepository->selectAllRole();
         if (isset($_SESSION['id_User'])) {
-            $this->render(
-                'Dashboard/listeUser',
-                [
-                    'users' => $users
-                ]
-            );
+            $users = $this->userService->getAllUsers();
+            $this->render('Dashboard/listeUser', compact('users'));
         } else {
             http_response_code(404);
         }
