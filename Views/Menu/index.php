@@ -143,6 +143,35 @@ usort($kebabs, function ($a, $b) {
     </div>
 </section>
 
+<!-- Section salades -->
+<h2>Nos Salades</h2>
+<div class="menu-container ">
+    <div class="pizza mt-5">
+        <?php foreach ($salades as $salade): ?>
+            <div class="pizza-item">
+                <h3><?= htmlspecialchars($salade['nom']); ?> <?= htmlspecialchars($salade['prix']); ?> €</h3>
+                <p><?= htmlspecialchars($salade['description']); ?></p>
+            </div>
+        <?php endforeach; ?>
+        <div class="space"></div>
+    </div>
+</div>
+
+
+<!-- Section Nos Snack -->
+<h2>Nos Snacks</h2>
+<div class="menu-container">
+    <div class="pizza mt-5">
+        <?php foreach ($snack as $snac): ?>
+            <div class="pizza-item">
+                <h3><?= htmlspecialchars($snac['nom']); ?> <?= htmlspecialchars($snac['prix']); ?> €</h3>
+                <p><?= htmlspecialchars($snac['description']); ?></p>
+            </div>
+        <?php endforeach; ?>
+        <div class="space"></div>
+    </div>
+</div>
+
 <!-- Section Boissons -->
 <section>
     <h2>Nos Boissons</h2>
