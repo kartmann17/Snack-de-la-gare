@@ -34,28 +34,29 @@ class EnCeMomentsService
     return $enCeMomentRepository->create($alias, $data);
 }
 
-    public function deleteEnCeMoment(string $id): bool
-    {
-        $alias = 'En_ce_moments';
-        $record = $this->enCeMomentRepository->find($alias, $id);
+public function deleteEnCeMoment(string $id): bool
+{
+    $alias = 'En_ce_moments';
+    $record = $this->enCeMomentRepository->find($alias, $id);
 
-        if ($record) {
-            return false;
-        }
-        if (!empty($record['img'])) {
-            $cloudinaryService = new CloudinaryService();
-            $publicId = pathinfo($record['img'], PATHINFO_FILENAME);
-            if (!$cloudinaryService->deleteFile($publicId)) {
-                error_log("Échec de la suppression de l'image sur Cloudinary pour : $id");
-            }
-        }
-        $enCeMomentRepository = new EnCeMomentRepository();
-        return $enCeMomentRepository->delete(
-            $alias,
-            ['_id' => new \MongoDB\BSON\ObjectId($id)]
-        )
-            > 0;
+    if (!$record) {
+        return false;
     }
+
+    if (!empty($record['img'])) {
+        $cloudinaryService = new CloudinaryService();
+        $publicId = pathinfo($record['img'], PATHINFO_FILENAME);
+
+        if (!$cloudinaryService->deleteFile($publicId)) {
+            error_log("Échec de la suppression de l'image sur Cloudinary pour : $id");
+        }
+    }
+    $enCeMomentRepository = new EnCeMomentRepository();
+    return $enCeMomentRepository->delete(
+        $alias,
+        ['_id' => new \MongoDB\BSON\ObjectId($id)]
+    ) > 0;
+}
 
     public function getAllEnCeMoments(): array
     {

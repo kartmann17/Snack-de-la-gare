@@ -26,52 +26,43 @@ class DashUserController extends Controller
     public function ajoutUser()
 {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $data = [
-            'nom' => $_POST['nom'] ?? '',
-            'prenom' => $_POST['prenom'] ?? '',
-            'email' => $_POST['email'] ?? '',
-            'pass' => password_hash($_POST['pass'] ?? '', PASSWORD_DEFAULT),
-            'role' => $_POST['role'] ?? ''
-        ];
+        $data = $_POST;
 
-        if (!empty($data['nom']) && !empty($data['prenom']) && !empty($data['email']) && !empty($data['role'])) {
-            $result = $this->userService->addUser($data);
+        $userService = new UserService();
+        $result = $userService->addUser($data);
 
-            if ($result) {
-                $_SESSION['success_message'] = "Utilisateur ajouté avec succès.";
-            } else {
-                $_SESSION['error_message'] = "Erreur lors de l'ajout de l'utilisateur.";
-            }
+        if ($result) {
+            $_SESSION['success_message'] = "Utilisateur ajouté avec succès.";
         } else {
-            $_SESSION['error_message'] = "Tous les champs sont requis.";
+            $_SESSION['error_message'] = "Erreur lors de l'ajout de l'utilisateur. Vérifiez les champs obligatoires.";
         }
 
         header("Location: /DashUser/liste");
         exit;
     }
+
+    http_response_code(405);
+    echo "Méthode non autorisée.";
+    exit;
 }
 
 public function deleteUser()
 {
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $id = $_POST['id'] ?? null;
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['id'])) {
+        $userService = new UserService();
+        $result = $userService->deleteUser($_POST['id']);
 
-        if ($id) {
-            $result = $this->userService->deleteUser((int)$id);
-
-            if ($result) {
-                $_SESSION['success_message'] = "L'utilisateur a été supprimé avec succès.";
-            } else {
-                $_SESSION['error_message'] = "Erreur lors de la suppression de l'utilisateur.";
-            }
+        if ($result) {
+            $_SESSION['success_message'] = "L'utilisateur a été supprimé avec succès.";
         } else {
-            $_SESSION['error_message'] = "ID utilisateur invalide.";
+            $_SESSION['error_message'] = "Erreur lors de la suppression de l'utilisateur.";
         }
-
-        // Redirection après suppression
-        header("Location: /DashUser/liste");
-        exit();
+    } else {
+        $_SESSION['error_message'] = "ID utilisateur invalide.";
     }
+
+    header("Location: /DashUser/liste");
+    exit();
 }
 
     public function liste()
