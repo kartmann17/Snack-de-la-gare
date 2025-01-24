@@ -26,13 +26,10 @@ class DashSnackController extends Controller
     public function ajoutSnack()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $data = [
-                'nom' => $_POST['nom'] ?? null,
-                'prix' => $_POST['prix'] ?? null,
-                'description' => $_POST['description'] ?? null,
-            ];
+            $data = $_POST;
 
-            $result = $this->snackService->addSnack($data);
+            $snackService = new SnackService();
+            $result = $snackService->addSnack($data);
 
             if ($result) {
                 $_SESSION['success_message'] = "Snack ajouté avec succès.";
@@ -47,22 +44,11 @@ class DashSnackController extends Controller
 
     public function updateSnack($id)
     {
-        $snack = $this->snackService->getSnackById($id);
-
-        if (!$snack) {
-            $_SESSION['error_message'] = "Le snack avec l'ID $id n'existe pas.";
-            header("Location: /DashSnack/liste");
-            exit;
-        }
-
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $data = [
-                'nom' => $_POST['nom'] ?? $snack['nom'],
-                'prix' => $_POST['prix'] ?? $snack['prix'],
-                'description' => $_POST['description'] ?? $snack['description'],
-            ];
+            $data = $_POST;
 
-            $result = $this->snackService->updateSnack($id, $data);
+            $snackService = new SnackService();
+            $result = $snackService->updateSnack($id, $data);
 
             if ($result) {
                 $_SESSION['success_message'] = "Snack modifié avec succès.";
@@ -75,16 +61,15 @@ class DashSnackController extends Controller
         }
 
         $title = "Modifier snack";
+        $snack = $this->snackService->getSnackById($id);
         $this->render('Dashboard/updateSnack', compact('snack', 'title'));
     }
 
     public function deleteSnack()
     {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $id = $_POST['id'] ?? null;
-
-            if ($id) {
-                $result = $this->snackService->deleteSnack($id);
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['id']) {
+            $snackService = new SnackService();
+            $result = $snackService->deleteSnack($_POST['id']);
 
                 if ($result) {
                     $_SESSION['success_message'] = "Snack supprimé avec succès.";
@@ -97,13 +82,13 @@ class DashSnackController extends Controller
 
             header("Location: /DashSnack/liste");
             exit();
-        }
     }
 
     public function liste()
     {
         $title = "Liste Snack";
-        $snacks = $this->snackService->getAllSnacks();
+        $snackService = new SnackService();
+        $snacks = $snackService->getAllSnacks();
 
         if (isset($_SESSION['id_User'])) {
             $this->render("Dashboard/listeSnacks", compact('title', 'snacks'));

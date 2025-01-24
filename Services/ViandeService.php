@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Repository\ViandeRepository;
+use App\Models\ViandeModel;
 
 class ViandeService
 {
@@ -15,14 +16,27 @@ class ViandeService
 
     public function addViande(array $data): bool
     {
+        $data = [
+            'nom' => $data['nom'],
+        ];
+
+        $viandeModel = new ViandeModel();
+        $viandeModel->hydrate($data);
+
         $alias = 'Viandes';
-        return $this->viandeRepository->create($alias, $data);
+        $viandeRepository = new ViandeRepository();
+        return $viandeRepository->create($alias, $data);
     }
 
     public function updateViande(string $id, array $data): bool
     {
+        $data = [
+            'nom' => $data['nom'],
+        ];
+
         $alias = 'Viandes';
-        return $this->viandeRepository->update(
+        $viandeRepository = new ViandeRepository();
+        return $viandeRepository->update(
             $alias,
             ['_id' => new \MongoDB\BSON\ObjectId($id)],
             $data
@@ -32,13 +46,20 @@ class ViandeService
     public function deleteViande(string $id): bool
     {
         $alias = 'Viandes';
-        return $this->viandeRepository->delete(
+        $viande = $this->viandeRepository->find($alias, $id);
+
+        if (!$viande) {
+            return false;
+        }
+
+        $viandeRepository = new ViandeRepository();
+        return $viandeRepository->delete(
             $alias,
             ['_id' => new \MongoDB\BSON\ObjectId($id)]
         ) > 0;
     }
 
-    public function getViandeById(string $id): ?array
+    public function findViandeById(string $id): ?array
     {
         $alias = 'Viandes';
         return $this->viandeRepository->find($alias, $id);

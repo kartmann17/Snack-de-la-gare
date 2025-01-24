@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\SaladesModel;
 use App\Repository\SaladesRepository;
 
 class SaladeService
@@ -15,14 +16,33 @@ class SaladeService
 
     public function addSalade(array $data): bool
     {
+        $data = [
+            'nom' => $data['nom'],
+            'prix' => $data['prix'],
+            'description' => $data['description'],
+        ];
+
+        $saladesModel = new SaladesModel();
+        $saladesModel->hydrate($data);
+
         $alias = 'Nos_Salades';
-        return $this->saladesRepository->create($alias, $data);
+        $saladesRepository = new SaladesRepository();
+        return $saladesRepository->create($alias, $data);
     }
 
     public function updateSalade(string $id, array $data): bool
     {
+        $data = [
+            'nom' => $data['nom'],
+            'prix' => $data['prix'],
+            'description' => $data['description'],
+        ];
+        $saladesModel = new SaladesModel();
+        $saladesModel->hydrate($data);
         $alias = 'Nos_Salades';
-        return $this->saladesRepository->update(
+
+        $saladesRepository = new SaladesRepository();
+        return $saladesRepository->update(
             $alias,
             ['_id' => new \MongoDB\BSON\ObjectId($id)],
             $data
@@ -32,7 +52,12 @@ class SaladeService
     public function deleteSalade(string $id): bool
     {
         $alias = 'Nos_Salades';
-        return $this->saladesRepository->delete(
+        $salade = $this->saladesRepository->find($alias, $id);
+        if (!$salade) {
+            return false;
+        }
+        $saladesRepository = new SaladesRepository();
+        return $saladesRepository->delete(
             $alias,
             ['_id' => new \MongoDB\BSON\ObjectId($id)]
         ) > 0;
@@ -41,12 +66,14 @@ class SaladeService
     public function getSaladeById(string $id): ?array
     {
         $alias = 'Nos_Salades';
-        return $this->saladesRepository->find($alias, $id);
+        $saladesRepository = new SaladesRepository();
+        return $saladesRepository->find($alias, $id);
     }
 
     public function getAllSalades(): array
     {
         $alias = 'Nos_Salades';
-        return $this->saladesRepository->findAll($alias);
+        $saladesRepository = new SaladesRepository();
+        return $saladesRepository->findAll($alias);
     }
 }

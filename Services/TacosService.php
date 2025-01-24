@@ -4,32 +4,77 @@ namespace App\Services;
 
 use App\Repository\TacosRepository;
 use App\Services\CloudinaryService;
+use App\Models\TacosModel;
 
 class TacosService
 {
     private $tacosRepository;
-    private $cloudinaryService;
 
     public function __construct()
     {
         $this->tacosRepository = new TacosRepository();
-        $this->cloudinaryService = new CloudinaryService();
     }
 
-    public function addTacos(array $data, ?string $imgPath): bool
+    public function addTacos(array $data): bool
     {
+        // Instance du service Cloudinary
+        $imgs = new CloudinaryService;
+        $img = $imgs->validateAndUploadImage($_FILES['img']);
+        $data = [
+            'nom' => $data['nom'],
+            'solo' => $data['solo'],
+            'menu' => $data['menu'],
+            'description' => $data['description'],
+            'img' => $img,
+        ];
+
+        $tacosModel = new TacosModel();
+        $tacosModel->hydrate($data);
+
         $alias = 'Tacos';
-        $data['img'] = $imgPath; 
-        return $this->tacosRepository->create($alias, $data);
+        $tacosRepository = new tacosRepository();
+        return $tacosRepository->create($alias, $data);
     }
 
-    public function updateTacos(string $id, array $data, ?string $imgPath): bool
+    public function updateTacos(string $id, array $data): bool
     {
-        $alias = 'Tacos';
-        if ($imgPath) {
+        $cloudinaryService = new CloudinaryService();
+
+        if (isset($_FILES['img']) && $_FILES['img']['error'] === UPLOAD_ERR_OK) {
+            $existingTacos = $this->getTacosById($id);
+
+            if ($existingTacos && !empty($existingTacos['img'])) {
+                $publicId = pathinfo($existingTacos['img'], PATHINFO_FILENAME);
+                $cloudinaryService->deleteFile($publicId);
+            }
+
+
+            $imgPath = $cloudinaryService->validateAndUploadImage($_FILES['img']);
+            if (!$imgPath) {
+                return false;
+            }
+
             $data['img'] = $imgPath;
+        } else {
+            $existingTacos = $this->getTacosById($id);
+            $data['img'] = $existingTacos['img'] ?? null;
         }
-        return $this->tacosRepository->update(
+
+
+        $data = [
+            'nom' => $data['nom'],
+            'solo' => $data['solo'],
+            'menu' => $data['menu'],
+            'description' => $data['description'],
+            'img' => $data['img'],
+        ];
+
+        $tacosModel = new TacosModel();
+        $tacosModel->hydrate($data);
+        $alias = 'Tacos';
+
+        $tacosRepository = new TacosRepository();
+        return $tacosRepository->update(
             $alias,
             ['_id' => new \MongoDB\BSON\ObjectId($id)],
             $data
@@ -37,38 +82,39 @@ class TacosService
     }
 
     public function deleteTacos(string $id): bool
-{
-    $alias = 'Tacos';
+    {
+        $alias = 'Tacos';
+        $tacos = $this->tacosRepository->find($alias, $id);
 
-    $tacos = $this->tacosRepository->find($alias, $id);
-    if (!$tacos) {
-        return false;
+        if (!$tacos) {
+            return false;
+        }
+        if (!empty($tacos['img'])) {
+            $cloudinaryService = new CloudinaryService();
+            $publicId = pathinfo($tacos['img'], PATHINFO_FILENAME);
+            if (!$cloudinaryService->deleteFile($publicId)) {
+                error_log("Échec de la suppression de l'image sur Cloudinary pour le tacos ID : $id");
+            }
+        }
+        $tacosRepository = new TacosRepository();
+        return $tacosRepository->delete(
+            $alias,
+            ['_id' => new \MongoDB\BSON\ObjectId($id)]
+        ) > 0;
     }
-
-
-    if (!empty($tacos['img'])) {
-        $publicId = pathinfo($tacos['img'], PATHINFO_FILENAME);
-        $this->cloudinaryService->deleteFile($publicId);
-    }
-
-    // Supprimer le document dans la base
-    return $this->tacosRepository->delete($alias, ['_id' => new \MongoDB\BSON\ObjectId($id)]) > 0;
-}
 
     public function getTacosById(string $id): ?array
     {
         $alias = 'Tacos';
-        return $this->tacosRepository->find($alias, $id);
+        $tacosRepository = new TacosRepository();
+        return $tacosRepository->find($alias, $id);
     }
 
     public function getAllTacos(): array
     {
         $alias = 'Tacos';
-        return $this->tacosRepository->findAll($alias);
+        $tacosRepository = new TacosRepository();
+        return $tacosRepository->findAll($alias);
     }
 
-    public function getCloudinaryService(): CloudinaryService
-    {
-        return $this->cloudinaryService;
-    }
 }

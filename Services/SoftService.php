@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Repository\SoftRepository;
+use App\Models\SoftsModel;
 
 class SoftService
 {
@@ -15,14 +16,32 @@ class SoftService
 
     public function addSoft(array $data): bool
     {
+
+        $data = [
+            'nom' => $data['nom'],
+            'prix' => $data['prix'],
+        ];
+
+        // Hydrate le modèle
+        $softsModel = new SoftsModel();
+        $softsModel->hydrate($data);
+
         $alias = 'Nos_Soft';
-        return $this->softRepository->create($alias, $data);
+        $softRepository = new SoftRepository();
+        return $softRepository->create($alias, $data);
     }
 
     public function updateSoft(string $id, array $data): bool
     {
+        // Préparation des données
+        $data = [
+            'nom' => $data['nom'],
+            'prix' => $data['prix'],
+        ];
+
         $alias = 'Nos_Soft';
-        return $this->softRepository->update(
+        $softRepository = new SoftRepository();
+        return $softRepository->update(
             $alias,
             ['_id' => new \MongoDB\BSON\ObjectId($id)],
             $data
@@ -31,14 +50,22 @@ class SoftService
 
     public function deleteSoft(string $id): bool
     {
+
         $alias = 'Nos_Soft';
-        return $this->softRepository->delete(
+        $soft = $this->softRepository->find($alias, $id);
+
+        if (!$soft) {
+            return false;
+        }
+
+        $softRepository = new SoftRepository();
+        return $softRepository->delete(
             $alias,
             ['_id' => new \MongoDB\BSON\ObjectId($id)]
         ) > 0;
     }
 
-    public function getSoftById(string $id): ?array
+    public function findSoftById(string $id): ?array
     {
         $alias = 'Nos_Soft';
         return $this->softRepository->find($alias, $id);

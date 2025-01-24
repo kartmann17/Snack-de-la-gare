@@ -26,18 +26,14 @@ class DashVinsController extends Controller
     public function ajoutVins()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $data = [
-                'nom' => $_POST['nom'] ?? null,
-                'prix' => $_POST['prix'] ?? null,
-            ];
+            $data = $_POST;
 
-            $result = $this->vinsService->addVin($data);
+            $vinsService = new VinsService();
+            $result = $vinsService->addVins($data);
 
-            if ($result) {
-                $_SESSION['success_message'] = "Vin ajouté avec succès.";
-            } else {
-                $_SESSION['error_message'] = "Erreur lors de l'ajout du vin.";
-            }
+            $_SESSION['success_message'] = $result
+                ? "Vins ajouté avec succès."
+                : "Erreur lors de l'ajout du vins.";
 
             header("Location: /Dashboard");
             exit;
@@ -46,56 +42,40 @@ class DashVinsController extends Controller
 
     public function updateVins($id)
     {
-        $vin = $this->vinsService->getVinById($id);
-
-        if (!$vin) {
-            $_SESSION['error_message'] = "Le vin avec l'ID $id n'existe pas.";
-            header("Location: /DashVins/liste");
-            exit;
-        }
-
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $data = [
-                'nom' => $_POST['nom'] ?? $vin['nom'],
-                'prix' => $_POST['prix'] ?? $vin['prix'],
-            ];
+            $data = $_POST;
 
-            $result = $this->vinsService->updateVin($id, $data);
+            $vinsService = new VinsService();
+            $result = $vinsService->updateVins($id, $data);
 
-            if ($result) {
-                $_SESSION['success_message'] = "Vin modifié avec succès.";
-            } else {
-                $_SESSION['error_message'] = "Aucune modification n'a été apportée.";
-            }
+            $_SESSION['success_message'] = $result
+                ? "Vins modifié avec succès."
+                : "Erreur lors de la modification du vins.";
 
             header("Location: /DashVins/liste");
             exit;
         }
 
-        $title = "Modifier le vin";
-        $this->render('Dashboard/updateVins', compact('vin', 'title'));
+        $title = "Modifier Vins";
+        $vins = $this->vinsService->getVinsById($id);
+        $this->render('Dashboard/updateVins', compact('vins', 'title'));
     }
 
     public function deleteVins()
     {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $id = $_POST['id'] ?? null;
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['id'])) {
+            $vinsService = new VinsService();
+            $result = $vinsService->deleteVins($_POST['id']);
 
-            if ($id) {
-                $result = $this->vinsService->deleteVin($id);
-
-                if ($result) {
-                    $_SESSION['success_message'] = "Vin supprimé avec succès.";
-                } else {
-                    $_SESSION['error_message'] = "Erreur lors de la suppression du vin.";
-                }
-            } else {
-                $_SESSION['error_message'] = "ID vin invalide.";
-            }
-
-            header("Location: /DashVins/liste");
-            exit();
+            $_SESSION['success_message'] = $result
+                ? "Vins supprimé avec succès."
+                : "Erreur lors de la suppression du vins.";
+        } else {
+            $_SESSION['error_message'] = "ID vin invalide.";
         }
+
+        header("Location: /DashVins/liste");
+        exit;
     }
 
     public function liste()

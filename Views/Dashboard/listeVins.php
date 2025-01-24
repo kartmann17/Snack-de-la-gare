@@ -25,7 +25,7 @@ $css = 'food';
                             <div class="d-flex">
                                 <a href="/DashVins/updateVins/<?= $vin->_id ?>" class="btn btn-warning btn-sm me-1">Modifier</a>
                                 <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
-                                    <form action="/DashVins/deleteVins" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce vin ?');" style="display: inline;">
+                                    <form action="/DashVins/deleteVins" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce vins ?');" style="display: inline;">
                                         <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
                                         <input type="hidden" name="id" value="<?= $vin->_id ?>">
                                         <button class="btn btn-danger btn-sm">Supprimer</button>

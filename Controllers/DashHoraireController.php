@@ -27,13 +27,10 @@ class DashHoraireController extends Controller
     public function addHoraire()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SESSION['id_User'])) {
-            $data = [
-                'jour' => $_POST['jour'] ?? null,
-                'ouverture_M' => $_POST['ouverture_M'] ?? null,
-                'ouverture_S' => $_POST['ouverture_S'] ?? null,
-            ];
+            $data = $_POST;
 
-            $result = $this->horairesService->addHoraire($data);
+            $horairesService = new HorairesService();
+            $result = $horairesService->addHoraire($data);
 
             if ($result) {
                 $_SESSION['success_message'] = "L'horaire a été ajouté avec succès.";
@@ -51,22 +48,11 @@ class DashHoraireController extends Controller
 
     public function updateHoraire($id)
     {
-        $horaire = $this->horairesService->getHoraireById($id);
-
-        if (!$horaire) {
-            $_SESSION['error_message'] = "L'horaire avec l'ID $id n'existe pas.";
-            header("Location: /Dashboard");
-            exit;
-        }
-
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $data = [
-                'jour' => $_POST['jour'] ?? $horaire['jour'],
-                'ouverture_M' => $_POST['ouverture_M'] ?? $horaire['ouverture_M'],
-                'ouverture_S' => $_POST['ouverture_S'] ?? $horaire['ouverture_S'],
-            ];
+            $data = $_POST;
 
-            $result = $this->horairesService->updateHoraire($id, $data);
+            $horairesService = new HorairesService();
+            $result = $horairesService->updateHoraire($id, $data);
 
             if ($result) {
                 $_SESSION['success_message'] = "L'horaire a été mis à jour avec succès.";
@@ -79,35 +65,34 @@ class DashHoraireController extends Controller
         }
 
         $title = "Modifier un Horaire";
+        $horaire = $this->horairesService->getHoraireById($id);
         $this->render('Dashboard/updateHoraires', compact('horaire', 'title'));
     }
 
     public function deleteHoraire()
     {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $id = $_POST['id'] ?? null;
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['id'])) {
+            $horairesService = new HorairesService();
+            $result = $horairesService->deleteHoraire($_POST['id']);
 
-            if ($id) {
-                $result = $this->horairesService->deleteHoraire($id);
-
-                if ($result) {
-                    $_SESSION['success_message'] = "L'horaire a été supprimé avec succès.";
-                } else {
-                    $_SESSION['error_message'] = "Erreur lors de la suppression de l'horaire.";
-                }
+            if ($result) {
+                $_SESSION['success_message'] = "L'horaire a été supprimé avec succès.";
             } else {
-                $_SESSION['error_message'] = "ID invalide.";
+                $_SESSION['error_message'] = "Erreur lors de la suppression de l'horaire.";
             }
-
-            header("Location: /DashHoraire/liste");
-            exit();
+        } else {
+            $_SESSION['error_message'] = "ID invalide.";
         }
+
+        header("Location: /DashHoraire/liste");
+        exit();
     }
 
     public function liste()
     {
         $title = "Liste Horaires";
-        $horaires = $this->horairesService->getAllHoraires();
+        $horairesService = new HorairesService();
+        $horaires = $horairesService->getAllHoraires();
 
         if (isset($_SESSION['id_User'])) {
             $this->render('Dashboard/listeHoraires', [

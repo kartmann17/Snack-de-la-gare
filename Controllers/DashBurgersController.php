@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Services\BurgersService;
 
+
 class DashBurgersController extends Controller
 {
     private $burgersService;
@@ -26,36 +27,16 @@ class DashBurgersController extends Controller
     public function ajoutBurger()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $imgPath = null;
+            $data = $_POST;
 
-            // Téléversement de l'image sur Cloudinary
-            if (isset($_FILES['img']) && $_FILES['img']['error'] === UPLOAD_ERR_OK) {
-                $tmpName = $_FILES['img']['tmp_name'];
-                $imgPath = $this->burgersService->getCloudinaryService()->uploadFile($tmpName);
-
-                if (!$imgPath) {
-                    $_SESSION['error_message'] = "Erreur lors du téléversement de l'image.";
-                    header("Location: /Dashboard");
-                    exit;
-                }
-            }
-
-            // Données du formulaire
-            $data = [
-                'nom' => $_POST['nom'] ?? null,
-                'solo' => $_POST['solo'] ?? null,
-                'menu' => $_POST['menu'] ?? null,
-                'description' => $_POST['description'] ?? null,
-            ];
-
-            $result = $this->burgersService->addBurger($data, $imgPath);
+            $burgersService = new BurgersService();
+            $result = $burgersService->addBurger($data);
 
             if ($result) {
                 $_SESSION['success_message'] = "Burger ajouté avec succès.";
             } else {
                 $_SESSION['error_message'] = "Erreur lors de l'ajout du burger.";
             }
-
             header("Location: /Dashboard");
             exit;
         }
@@ -63,45 +44,21 @@ class DashBurgersController extends Controller
 
     public function updateBurger($id)
     {
-        $burger = $this->burgersService->getBurgerById($id);
-
-        if (!$burger) {
-            $_SESSION['error_message'] = "Le burger avec l'ID $id n'existe pas.";
-            header("Location: /DashBurgers/liste");
-            exit;
-        }
-
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $imgPath = $burger['img'];
+            $data = $_POST;
 
             // Gestion de l'image
             if (isset($_FILES['img']) && $_FILES['img']['error'] === UPLOAD_ERR_OK) {
-                $publicId = pathinfo($burger['img'], PATHINFO_FILENAME);
-                $this->burgersService->getCloudinaryService()->deleteFile($publicId);
-
-                $tmpName = $_FILES['img']['tmp_name'];
-                $imgPath = $this->burgersService->getCloudinaryService()->uploadFile($tmpName);
-
-                if (!$imgPath) {
-                    $_SESSION['error_message'] = "Erreur lors du téléversement de l'image.";
-                    header("Location: /DashBurgers/liste");
-                    exit;
-                }
+                $data['img'] = $_FILES['img'];
             }
 
-            $data = [
-                'nom' => $_POST['nom'] ?? $burger['nom'],
-                'solo' => $_POST['solo'] ?? $burger['solo'],
-                'menu' => $_POST['menu'] ?? $burger['menu'],
-                'description' => $_POST['description'] ?? $burger['description'],
-            ];
-
-            $result = $this->burgersService->updateBurger($id, $data, $imgPath);
+            $burgersService = new BurgersService();
+            $result = $burgersService->updateBurger($id, $data);
 
             if ($result) {
                 $_SESSION['success_message'] = "Burger modifié avec succès.";
             } else {
-                $_SESSION['error_message'] = "Aucune modification n'a été apportée.";
+                $_SESSION['error_message'] = "Erreur lors de la modification du burger.";
             }
 
             header("Location: /DashBurgers/liste");
@@ -109,35 +66,32 @@ class DashBurgersController extends Controller
         }
 
         $title = "Modifier Burger";
+        $burger = $this->burgersService->getBurgerById($id);
         $this->render('Dashboard/updateBurger', compact('burger', 'title'));
     }
 
     public function deleteBurger()
     {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $id = $_POST['id'] ?? null;
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['id'])) {
+            $burgersService = new BurgersService();
+            $result = $burgersService->deleteBurger($_POST['id']);
 
-            if ($id) {
-                $result = $this->burgersService->deleteBurger($id);
-
-                if ($result) {
-                    $_SESSION['success_message'] = "Burger et son image supprimés avec succès.";
-                } else {
-                    $_SESSION['error_message'] = "Erreur lors de la suppression du burger.";
-                }
-            } else {
-                $_SESSION['error_message'] = "ID burger invalide.";
-            }
-
-            header("Location: /DashBurgers/liste");
-            exit();
+            $_SESSION['success_message'] = $result
+                ? "Burger et son image supprimés avec succès."
+                : "Erreur lors de la suppression du burger.";
+        } else {
+            $_SESSION['error_message'] = "ID burger invalide.";
         }
+
+        header("Location: /DashBurgers/liste");
+        exit;
     }
 
     public function liste()
     {
         $title = "Liste Burgers";
-        $burgers = $this->burgersService->getAllBurgers();
+        $burgersService = new BurgersService();
+        $burgers = $burgersService->getAllBurgers();
 
         if (isset($_SESSION['id_User'])) {
             $this->render("Dashboard/listeBurgers", compact('title', 'burgers'));

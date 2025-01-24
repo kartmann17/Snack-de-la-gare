@@ -26,20 +26,16 @@ class DashPizzaController extends Controller
     public function ajoutPizza()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $data = [
-                'nom' => $_POST['nom'] ?? null,
-                'prix' => $_POST['prix'] ?? null,
-                'description' => $_POST['description'] ?? null,
-            ];
+            $data = $_POST;
 
-            $result = $this->pizzaService->addPizza($data);
+            $pizzaService = new PizzaService();
+            $result = $pizzaService->addPizza($data);
 
             if ($result) {
                 $_SESSION['success_message'] = "Pizza ajoutée avec succès.";
             } else {
                 $_SESSION['error_message'] = "Erreur lors de l'ajout de la pizza.";
             }
-
             header("Location: /Dashboard");
             exit;
         }
@@ -47,22 +43,11 @@ class DashPizzaController extends Controller
 
     public function updatePizza($id)
     {
-        $pizza = $this->pizzaService->getPizzaById($id);
-
-        if (!$pizza) {
-            $_SESSION['error_message'] = "La pizza avec l'ID $id n'existe pas.";
-            header("Location: /DashPizza/liste");
-            exit;
-        }
-
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $data = [
-                'nom' => $_POST['nom'] ?? $pizza['nom'],
-                'prix' => $_POST['prix'] ?? $pizza['prix'],
-                'description' => $_POST['description'] ?? $pizza['description'],
-            ];
+            $data = $_POST;
 
-            $result = $this->pizzaService->updatePizza($id, $data);
+            $pizzaService = new PizzaService();
+            $result = $pizzaService->updatePizza($id, $data);
 
             if ($result) {
                 $_SESSION['success_message'] = "Pizza modifiée avec succès.";
@@ -75,16 +60,15 @@ class DashPizzaController extends Controller
         }
 
         $title = "Modifier la pizza";
+        $pizza = $this->pizzaService->getPizzaById($id);
         $this->render('Dashboard/updatePizza', compact('pizza', 'title'));
     }
 
     public function deletePizza()
     {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $id = $_POST['id'] ?? null;
-
-            if ($id) {
-                $result = $this->pizzaService->deletePizza($id);
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['id']) {
+            $pizzaService = new PizzaService();
+            $result = $pizzaService->deletePizza($_POST['id']);
 
                 if ($result) {
                     $_SESSION['success_message'] = "Pizza supprimée avec succès.";
@@ -97,13 +81,13 @@ class DashPizzaController extends Controller
 
             header("Location: /DashPizza/liste");
             exit();
-        }
     }
 
     public function liste()
     {
         $title = "Liste Pizza";
-        $pizzas = $this->pizzaService->getAllPizzas();
+        $pizzaService = new PizzaService();
+        $pizzas = $pizzaService->getAllPizzas();
 
         if (isset($_SESSION['id_User'])) {
             $this->render("Dashboard/listePizza", compact('title', 'pizzas'));

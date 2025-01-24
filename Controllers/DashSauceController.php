@@ -26,11 +26,10 @@ class DashSauceController extends Controller
     public function ajoutSauce()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $data = [
-                'nom' => $_POST['nom'] ?? null,
-            ];
+            $data = $_POST;
 
-            $result = $this->saucesService->addSauce($data);
+            $saucesService = new SaucesService();
+            $result = $saucesService->addSauce($data);
 
             if ($result) {
                 $_SESSION['success_message'] = "Sauce ajoutée avec succès.";
@@ -45,20 +44,11 @@ class DashSauceController extends Controller
 
     public function updateSauce($id)
     {
-        $sauce = $this->saucesService->getSauceById($id);
-
-        if (!$sauce) {
-            $_SESSION['error_message'] = "La sauce avec l'ID $id n'existe pas.";
-            header("Location: /DashSauce/liste");
-            exit;
-        }
-
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $data = [
-                'nom' => $_POST['nom'] ?? $sauce['nom'],
-            ];
+            $data = $_POST;
 
-            $result = $this->saucesService->updateSauce($id, $data);
+            $saucesService = new SaucesService();
+            $result = $saucesService->updateSauce($id, $data);
 
             if ($result) {
                 $_SESSION['success_message'] = "Sauce modifiée avec succès.";
@@ -71,35 +61,34 @@ class DashSauceController extends Controller
         }
 
         $title = "Modifier Sauce";
+        $sauce = $this->saucesService->getSauceById($id);
         $this->render('Dashboard/updateSauce', compact('sauce', 'title'));
     }
 
     public function deleteSauce()
     {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $id = $_POST['id'] ?? null;
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['id']) {
+            $saucesService = new SaucesService();
+            $result = $saucesService->deleteSauce($_POST['id']);
 
-            if ($id) {
-                $result = $this->saucesService->deleteSauce($id);
-
-                if ($result) {
-                    $_SESSION['success_message'] = "Sauce supprimée avec succès.";
-                } else {
-                    $_SESSION['error_message'] = "Erreur lors de la suppression de la sauce.";
-                }
+            if ($result) {
+                $_SESSION['success_message'] = "Sauce supprimée avec succès.";
             } else {
-                $_SESSION['error_message'] = "ID sauce invalide.";
+                $_SESSION['error_message'] = "Erreur lors de la suppression de la sauce.";
             }
-
-            header("Location: /DashSauce/liste");
-            exit();
+        } else {
+            $_SESSION['error_message'] = "ID sauce invalide.";
         }
+
+        header("Location: /DashSauce/liste");
+        exit();
     }
 
     public function liste()
     {
         $title = "Liste Sauces";
-        $sauces = $this->saucesService->getAllSauces();
+        $saucesService = new SaucesService();
+        $sauces = $saucesService->getAllSauces();
 
         if (isset($_SESSION['id_User'])) {
             $this->render("Dashboard/listeSauces", compact('title', 'sauces'));

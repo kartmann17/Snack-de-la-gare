@@ -26,11 +26,10 @@ class DashViandeController extends Controller
     public function ajoutViande()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $data = [
-                'nom' => $_POST['nom'] ?? null,
-            ];
+            $data = $_POST;
 
-            $result = $this->viandeService->addViande($data);
+            $viandeService = new ViandeService();
+            $result = $viandeService->addViande($data);
 
             if ($result) {
                 $_SESSION['success_message'] = "Viande ajoutée avec succès.";
@@ -45,20 +44,11 @@ class DashViandeController extends Controller
 
     public function updateViande($id)
     {
-        $viande = $this->viandeService->getViandeById($id);
-
-        if (!$viande) {
-            $_SESSION['error_message'] = "La viande avec l'ID $id n'existe pas.";
-            header("Location: /DashViande/liste");
-            exit;
-        }
-
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $data = [
-                'nom' => $_POST['nom'] ?? $viande['nom'],
-            ];
+            $data = $_POST;
 
-            $result = $this->viandeService->updateViande($id, $data);
+            $viandeService = new ViandeService();
+            $result = $viandeService->updateViande($id, $data);
 
             if ($result) {
                 $_SESSION['success_message'] = "Viande modifiée avec succès.";
@@ -71,24 +61,20 @@ class DashViandeController extends Controller
         }
 
         $title = "Modifier viande";
+        $viande = $this->viandeService->findViandeById($id);
         $this->render('Dashboard/updateViande', compact('viande', 'title'));
     }
 
     public function deleteViande()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $id = $_POST['id'] ?? null;
+            $viandeService = new ViandeService();
+            $result = $viandeService->deleteViande($_POST['id']);
 
-            if ($id) {
-                $result = $this->viandeService->deleteViande($id);
-
-                if ($result) {
-                    $_SESSION['success_message'] = "Viande supprimée avec succès.";
-                } else {
-                    $_SESSION['error_message'] = "Erreur lors de la suppression de la viande.";
-                }
+            if ($result) {
+                $_SESSION['success_message'] = "Viande supprimée avec succès.";
             } else {
-                $_SESSION['error_message'] = "ID viande invalide.";
+                $_SESSION['error_message'] = "Erreur lors de la suppression de la viande.";
             }
 
             header("Location: /DashViande/liste");

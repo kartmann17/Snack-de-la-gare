@@ -26,33 +26,16 @@ class DashTacosController extends Controller
     public function ajoutTacos()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $imgPath = null;
+            $data = $_POST;
 
-            // Téléversement de l'image
-            if (isset($_FILES['img']) && $_FILES['img']['error'] === UPLOAD_ERR_OK) {
-                $imgPath = $this->tacosService->getCloudinaryService()->uploadFile($_FILES['img']['tmp_name']);
-                if (!$imgPath) {
-                    $_SESSION['error_message'] = "Erreur lors du téléversement de l'image.";
-                    header("Location: /Dashboard");
-                    exit;
-                }
-            }
-
-            $data = [
-                'nom' => $_POST['nom'] ?? null,
-                'solo' => $_POST['solo'] ?? null,
-                'menu' => $_POST['menu'] ?? null,
-                'description' => $_POST['description'] ?? null,
-            ];
-
-            $result = $this->tacosService->addTacos($data, $imgPath);
+            $tacosService = new TacosService();
+            $result = $tacosService->addTacos($data);
 
             if ($result) {
                 $_SESSION['success_message'] = "Tacos ajouté avec succès.";
             } else {
                 $_SESSION['error_message'] = "Erreur lors de l'ajout du tacos.";
             }
-
             header("Location: /Dashboard");
             exit;
         }
@@ -60,37 +43,15 @@ class DashTacosController extends Controller
 
     public function updateTacos($id)
     {
-        $tacos = $this->tacosService->getTacosById($id);
-
-        if (!$tacos) {
-            $_SESSION['error_message'] = "Le tacos avec l'ID $id n'existe pas.";
-            header("Location: /DashTacos/liste");
-            exit;
-        }
-
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $imgPath = $tacos['img'];
+            $data = $_POST;
 
             if (isset($_FILES['img']) && $_FILES['img']['error'] === UPLOAD_ERR_OK) {
-                $publicId = pathinfo($tacos['img'], PATHINFO_FILENAME);
-                $this->tacosService->getCloudinaryService()->deleteFile($publicId);
-
-                $imgPath = $this->tacosService->getCloudinaryService()->uploadFile($_FILES['img']['tmp_name']);
-                if (!$imgPath) {
-                    $_SESSION['error_message'] = "Erreur lors du téléversement de la nouvelle image.";
-                    header("Location: /DashTacos/liste");
-                    exit;
-                }
+                $data['img'] = $_FILES['img'];
             }
 
-            $data = [
-                'nom' => $_POST['nom'] ?? $tacos['nom'],
-                'solo' => $_POST['solo'] ?? $tacos['solo'],
-                'menu' => $_POST['menu'] ?? $tacos['menu'],
-                'description' => $_POST['description'] ?? $tacos['description'],
-            ];
-
-            $result = $this->tacosService->updateTacos($id, $data, $imgPath);
+            $tacosService = new TacosService();
+            $result = $tacosService->updateTacos($id, $data);
 
             if ($result) {
                 $_SESSION['success_message'] = "Tacos modifié avec succès.";
@@ -103,35 +64,34 @@ class DashTacosController extends Controller
         }
 
         $title = "Modifier Tacos";
+        $tacos = $this->tacosService->getTacosById($id);
         $this->render('Dashboard/updateTacos', compact('tacos', 'title'));
     }
 
     public function deleteTacos()
     {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $id = $_POST['id'] ?? null;
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST)) {
+            $tacosService = new TacosService();
+            $result = $tacosService->deleteTacos($_POST['id']);
 
-            if ($id) {
-                $result = $this->tacosService->deleteTacos($id);
-
-                if ($result) {
-                    $_SESSION['success_message'] = "Tacos supprimé avec succès.";
-                } else {
-                    $_SESSION['error_message'] = "Erreur lors de la suppression du tacos.";
-                }
+            if ($result) {
+                $_SESSION['success_message'] = "Tacos supprimé avec succès.";
             } else {
-                $_SESSION['error_message'] = "ID tacos invalide.";
+                $_SESSION['error_message'] = "Erreur lors de la suppression du tacos.";
             }
-
-            header("Location: /DashTacos/liste");
-            exit();
+        } else {
+            $_SESSION['error_message'] = "ID tacos invalide.";
         }
+
+        header("Location: /DashTacos/liste");
+        exit();
     }
 
     public function liste()
     {
         $title = "Liste Tacos";
-        $tacos = $this->tacosService->getAllTacos();
+        $tacosService = new TacosService();
+        $tacos = $tacosService->getAllTacos();
 
         if (isset($_SESSION['id_User'])) {
             $this->render("Dashboard/listetacos", compact('title', 'tacos'));

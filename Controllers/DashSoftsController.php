@@ -26,12 +26,10 @@ class DashSoftsController extends Controller
     public function ajoutSoft()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $data = [
-                'nom' => $_POST['nom'] ?? null,
-                'prix' => $_POST['prix'] ?? null,
-            ];
+            $data = $_POST;
 
-            $result = $this->softService->addSoft($data);
+            $softService = new SoftService();
+            $result = $softService->addSoft($data);
 
             if ($result) {
                 $_SESSION['success_message'] = "La boisson a été ajoutée avec succès.";
@@ -46,21 +44,11 @@ class DashSoftsController extends Controller
 
     public function updateSoft($id)
     {
-        $soft = $this->softService->getSoftById($id);
-
-        if (!$soft) {
-            $_SESSION['error_message'] = "Le soft avec l'ID $id n'existe pas.";
-            header("Location: /DashSofts/liste");
-            exit;
-        }
-
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $data = [
-                'nom' => $_POST['nom'] ?? $soft['nom'],
-                'prix' => $_POST['prix'] ?? $soft['prix'],
-            ];
+            $data =  $_POST;
 
-            $result = $this->softService->updateSoft($id, $data);
+            $softService = new SoftService();
+            $result = $softService->updateSoft($id, $data);
 
             if ($result) {
                 $_SESSION['success_message'] = "Le soft a été modifié avec succès.";
@@ -73,28 +61,26 @@ class DashSoftsController extends Controller
         }
 
         $title = "Modifier le soft";
+        $soft = $this->softService->findSoftById($id);
         $this->render('Dashboard/updateSoft', compact('soft', 'title'));
     }
 
     public function deleteSoft()
     {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $id = $_POST['id'] ?? null;
-
-            if ($id) {
-                $result = $this->softService->deleteSoft($id);
+        if ($_SERVER['REQUEST_METHOD'] === 'POST'  && !empty($_POST['id'])) {
+            $softService = new SoftService();
+            $result = $softService->deleteSoft($_POST['id']);
 
                 if ($result) {
                     $_SESSION['success_message'] = "Le soft a été supprimé avec succès.";
                 } else {
                     $_SESSION['error_message'] = "Erreur lors de la suppression du soft.";
                 }
-            } else {
-                $_SESSION['error_message'] = "ID soft invalide.";
-            }
 
             header("Location: /DashSofts/liste");
             exit();
+        }else {
+            $_SESSION['error_message'] = "ID soft invalide.";
         }
     }
 

@@ -15,7 +15,7 @@ class DashBieresController extends Controller
 
     public function index()
     {
-        $title = "Ajout Bieres";
+        $title = "Ajout Bières";
         if (isset($_SESSION['id_User'])) {
             $this->render("Dashboard/addBieres", compact('title'));
         } else {
@@ -26,18 +26,14 @@ class DashBieresController extends Controller
     public function ajoutBiere()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $data = [
-                'nom' => $_POST['nom'] ?? null,
-                'prix' => $_POST['prix'] ?? null,
-            ];
+            $data = $_POST;
 
-            $result = $this->bieresService->addBiere($data);
+            $bieresService = new BieresService();
+            $result = $bieresService->addBiere($data);
 
-            if ($result) {
-                $_SESSION['success_message'] = "La bière a été ajoutée avec succès.";
-            } else {
-                $_SESSION['error_message'] = "Erreur lors de l'ajout de la bière.";
-            }
+            $_SESSION['success_message'] = $result
+                ? "Bière ajoutée avec succès."
+                : "Erreur lors de l'ajout de la bière.";
 
             header("Location: /Dashboard");
             exit;
@@ -46,62 +42,47 @@ class DashBieresController extends Controller
 
     public function updateBiere($id)
     {
-        $biere = $this->bieresService->findBiereById($id);
-
-        if (!$biere) {
-            $_SESSION['error_message'] = "La bière avec l'ID $id n'existe pas.";
-            header("Location: /Dashboard");
-            exit;
-        }
-
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $data = [
-                'nom' => $_POST['nom'] ?? $biere['nom'],
-                'prix' => $_POST['prix'] ?? $biere['prix'],
-            ];
+            $data = $_POST;
 
-            $result = $this->bieresService->updateBiere($id, $data);
+            $bieresService = new BieresService();
+            $result = $bieresService->updateBiere($id, $data);
 
-            if ($result) {
-                $_SESSION['success_message'] = "La bière a été modifiée avec succès.";
-            } else {
-                $_SESSION['error_message'] = "Aucune modification n'a été apportée.";
-            }
+            $_SESSION['success_message'] = $result
+                ? "Bière modifiée avec succès."
+                : "Erreur lors de la modification de la bière.";
 
             header("Location: /DashBieres/liste");
             exit;
         }
 
-        $title = "Modifier la bière";
+        $title = "Modifier Bière";
+        $biere = $this->bieresService->findBiereById($id);
         $this->render('Dashboard/updateBiere', compact('biere', 'title'));
     }
 
     public function deleteBiere()
     {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $id = $_POST['id'] ?? null;
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['id'])) {
+            $bieresService = new BieresService();
+            $result = $bieresService->deleteBiere($_POST['id']);
 
-            if ($id) {
-                $result = $this->bieresService->deleteBiere($id);
-
-                if ($result) {
-                    $_SESSION['success_message'] = "La bière a été supprimée avec succès.";
-                } else {
-                    $_SESSION['error_message'] = "Aucune bière trouvée avec cet ID.";
-                }
-            } else {
-                $_SESSION['error_message'] = "ID bière invalide.";
-            }
-
-            header("Location: /DashBieres/liste");
-            exit();
+            $_SESSION['success_message'] = $result
+                ? "Bière supprimée avec succès."
+                : "Erreur lors de la suppression de la bière.";
+        } else {
+            $_SESSION['error_message'] = "ID bière invalide.";
         }
+
+        header("Location: /DashBieres/liste");
+        exit;
     }
 
     public function liste()
     {
         $title = "Liste Bières";
-        $bieres = $this->bieresService->getAllBieres();
+        $bieresService = new BieresService();
+        $bieres = $bieresService->getAllBieres();
 
         if (isset($_SESSION['id_User'])) {
             $this->render("Dashboard/listeBieres", compact('title', 'bieres'));

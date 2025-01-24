@@ -26,13 +26,10 @@ class DashSaladeController extends Controller
     public function ajoutSalade()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $data = [
-                'nom' => $_POST['nom'] ?? null,
-                'prix' => $_POST['prix'] ?? null,
-                'description' => $_POST['description'] ?? null,
-            ];
+            $data = $_POST;
 
-            $result = $this->saladeService->addSalade($data);
+            $saladeService = new SaladeService();
+            $result = $saladeService->addSalade($data);
 
             if ($result) {
                 $_SESSION['success_message'] = "Salade ajoutée avec succès.";
@@ -47,22 +44,11 @@ class DashSaladeController extends Controller
 
     public function updateSalade($id)
     {
-        $salade = $this->saladeService->getSaladeById($id);
-
-        if (!$salade) {
-            $_SESSION['error_message'] = "La salade avec l'ID $id n'existe pas.";
-            header("Location: /DashSalade/liste");
-            exit;
-        }
-
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $data = [
-                'nom' => $_POST['nom'] ?? $salade['nom'],
-                'prix' => $_POST['prix'] ?? $salade['prix'],
-                'description' => $_POST['description'] ?? $salade['description'],
-            ];
+            $data = $_POST;
 
-            $result = $this->saladeService->updateSalade($id, $data);
+            $saladeService = new SaladeService();
+            $result = $saladeService->updateSalade($id, $data);
 
             if ($result) {
                 $_SESSION['success_message'] = "Salade modifiée avec succès.";
@@ -75,35 +61,34 @@ class DashSaladeController extends Controller
         }
 
         $title = "Modifier Salade";
+        $salade = $this->saladeService->getSaladeById($id);
         $this->render('Dashboard/updateSalade', compact('salade', 'title'));
     }
 
     public function deleteSalade()
     {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $id = $_POST['id'] ?? null;
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['id']) {
+            $saladeService = new SaladeService();
+            $result = $saladeService->deleteSalade($_POST['id']);
 
-            if ($id) {
-                $result = $this->saladeService->deleteSalade($id);
-
-                if ($result) {
-                    $_SESSION['success_message'] = "Salade supprimée avec succès.";
-                } else {
-                    $_SESSION['error_message'] = "Erreur lors de la suppression de la salade.";
-                }
+            if ($result) {
+                $_SESSION['success_message'] = "Salade supprimée avec succès.";
             } else {
-                $_SESSION['error_message'] = "ID salade invalide.";
+                $_SESSION['error_message'] = "Erreur lors de la suppression de la salade.";
             }
-
-            header("Location: /DashSalade/liste");
-            exit();
+        } else {
+            $_SESSION['error_message'] = "ID salade invalide.";
         }
+
+        header("Location: /DashSalade/liste");
+        exit();
     }
 
     public function liste()
     {
         $title = "Liste Salades";
-        $salades = $this->saladeService->getAllSalades();
+        $saladeService = new SaladeService();
+        $salades = $saladeService->getAllSalades();
 
         if (isset($_SESSION['id_User'])) {
             $this->render("Dashboard/listeSalades", compact('title', 'salades'));

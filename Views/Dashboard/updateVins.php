@@ -4,24 +4,24 @@
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-header bg-primary text-white">
-                        <h2 class="text-center">Mise à jour <?= $vin['nom'] ?></h2>
+                        <h2 class="text-center">Mise à jour <?= $vins['nom'] ?></h2>
                     </div>
                     <div class="card-body">
 
-                        <form action="/DashVins/updateVins/<?= $vin['_id'] ?>" method="POST">
+                        <form action="/DashVins/updateVins/<?= $vins['_id'] ?>" method="POST">
                         <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
-                            <input type="hidden" name="id" value="<?= $vin['_id'] ?>" />
+                            <input type="hidden" name="id" value="<?= $vins['_id'] ?>" />
 
                             <!-- Nom du vins -->
                             <div class="mb-3">
                                 <label for="nom" class="form-label">Nom du vins</label>
-                                <input type="text" class="form-control" id="nom" name="nom" value="<?= $vin['nom'] ?>" placeholder="Nom du vins" required>
+                                <input type="text" class="form-control" id="nom" name="nom" value="<?= $vins['nom'] ?>" placeholder="Nom du vins" required>
                             </div>
 
                             <!-- prix du vins -->
                             <div class="mb-3">
                                 <label for="nom" class="form-label">Prix du vins</label>
-                                <input type="text" class="form-control" id="prix" name="prix" value="<?= $vin['prix'] ?>" placeholder="prix du vins" required>
+                                <input type="text" class="form-control" id="prix" name="prix" value="<?= $vins['prix'] ?>" placeholder="prix du vins" required>
                             </div>
 
                             <!-- Boutons de soumission -->

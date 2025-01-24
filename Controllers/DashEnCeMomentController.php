@@ -26,31 +26,20 @@ class DashEnCeMomentController extends Controller
     public function ajoutEnCeMoment()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $imgPath = null;
+            $data = $_POST;
 
-            // Téléversement de l'image sur Cloudinary
+            // Vérifie si une image a été téléversée
             if (isset($_FILES['img']) && $_FILES['img']['error'] === UPLOAD_ERR_OK) {
-                $tmpName = $_FILES['img']['tmp_name'];
-                $imgPath = $this->enCeMomentsService->getCloudinaryService()->uploadFile($tmpName);
+                $enCeMomentsService = new EnCeMomentsService();
+                $result = $enCeMomentsService->addEnCeMoment($data);
 
-                if (!$imgPath) {
-                    $_SESSION['error_message'] = "Erreur lors du téléversement de l'image.";
-                    header("Location: /Dashboard");
-                    exit;
+                if ($result) {
+                    $_SESSION['success_message'] = "Élément ajouté avec succès.";
+                } else {
+                    $_SESSION['error_message'] = "Erreur lors de l'ajout de l'élément.";
                 }
-            }
-
-            // Données du formulaire
-            $data = [
-                'img' => $imgPath,
-            ];
-
-            $result = $this->enCeMomentsService->addEnCeMoment($data, $imgPath);
-
-            if ($result) {
-                $_SESSION['success_message'] = "Image ajoutée avec succès.";
             } else {
-                $_SESSION['error_message'] = "Erreur lors de l'ajout de l'image.";
+                $_SESSION['error_message'] = "Aucune image n'a été téléversée ou une erreur est survenue.";
             }
 
             header("Location: /Dashboard");
@@ -60,11 +49,9 @@ class DashEnCeMomentController extends Controller
 
     public function deleteEnCeMoment()
     {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $id = $_POST['id'] ?? null;
-
-            if ($id) {
-                $result = $this->enCeMomentsService->deleteEnCeMoment($id);
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['id'])) {
+            $enCeMomentsService = new EnCeMomentsService();
+            $result = $enCeMomentsService->deleteEnCeMoment($_POST['id']);
 
                 if ($result) {
                     $_SESSION['success_message'] = "Image et son enregistrement supprimés avec succès.";
@@ -77,13 +64,13 @@ class DashEnCeMomentController extends Controller
 
             header("Location: /DashEnCeMoment/liste");
             exit();
-        }
     }
 
     public function liste()
     {
         $title = "Liste En Ce Moment";
-        $encemoments = $this->enCeMomentsService->getAllEnCeMoments();
+        $enCeMomentsService = new EnCeMomentsService();
+        $encemoments = $enCeMomentsService->getAllEnCeMoments();
 
         if (isset($_SESSION['id_User'])) {
             $this->render("Dashboard/listeEnCeMoment", compact('title', 'encemoments'));

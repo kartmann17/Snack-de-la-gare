@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\SnacksModel;
 use App\Repository\SnackRepository;
 
 class SnackService
@@ -15,14 +16,34 @@ class SnackService
 
     public function addSnack(array $data): bool
     {
+        $data = [
+            'nom' => $data['nom'],
+            'prix' => $data['prix'],
+            'description' => $data['description']
+        ];
+
+        $snacksModel = new SnacksModel();
+        $snacksModel->hydrate($data);
+
         $alias = 'Nos_Snacks';
-        return $this->snackRepository->create($alias, $data);
+        $snackRepository = new SnackRepository();
+        return $snackRepository->create($alias, $data);
     }
 
     public function updateSnack(string $id, array $data): bool
     {
+        $data = [
+            'nom' => $data['nom'],
+            'prix' => $data['prix'],
+            'description' => $data['description']
+        ];
+
+        $snacksModel = new SnacksModel();
+        $snacksModel->hydrate($data);
         $alias = 'Nos_Snacks';
-        return $this->snackRepository->update(
+
+        $snackRepository = new SnackRepository();
+        return $snackRepository->update(
             $alias,
             ['_id' => new \MongoDB\BSON\ObjectId($id)],
             $data
@@ -32,7 +53,12 @@ class SnackService
     public function deleteSnack(string $id): bool
     {
         $alias = 'Nos_Snacks';
-        return $this->snackRepository->delete(
+        $snack = $this->snackRepository->find($alias, $id);
+        if (!$snack) {
+            return false;
+        }
+        $snackRepository = new SnackRepository();
+        return $snackRepository->delete(
             $alias,
             ['_id' => new \MongoDB\BSON\ObjectId($id)]
         ) > 0;
@@ -41,12 +67,14 @@ class SnackService
     public function getSnackById(string $id): ?array
     {
         $alias = 'Nos_Snacks';
-        return $this->snackRepository->find($alias, $id);
+        $snackRepository = new SnackRepository();
+        return $snackRepository->find($alias, $id);
     }
 
     public function getAllSnacks(): array
     {
         $alias = 'Nos_Snacks';
-        return $this->snackRepository->findAll($alias);
+        $snackRepository = new SnackRepository();
+        return $snackRepository->findAll($alias);
     }
 }

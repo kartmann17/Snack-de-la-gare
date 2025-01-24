@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Repository\PizzaRepository;
+use App\Models\PizzaModel;
 
 class PizzaService
 {
@@ -15,14 +16,36 @@ class PizzaService
 
     public function addPizza(array $data): bool
     {
+        $data = [
+            'nom' => $data['nom'],
+            'prix' => $data['prix'],
+            'description' => $data['description'],
+        ];
+
+        // Hydrate le modèle
+        $pizzaModel = new PizzaModel();
+        $pizzaModel->hydrate($data);
+
         $alias = 'Pizza';
-        return $this->pizzaRepository->create($alias, $data);
+        $pizzaRepository = new PizzaRepository();
+        return $pizzaRepository->create($alias, $data);
     }
 
     public function updatePizza(string $id, array $data): bool
     {
+        $data = [
+            'nom' => $data['nom'],
+            'prix' => $data['prix'],
+            'description' => $data['description'],
+        ];
+
+        // Hydrate le modèle
+        $pizzaModel = new PizzaModel();
+        $pizzaModel->hydrate($data);
         $alias = 'Pizza';
-        return $this->pizzaRepository->update(
+
+        $pizzaRepository = new PizzaRepository();
+        return $pizzaRepository->update(
             $alias,
             ['_id' => new \MongoDB\BSON\ObjectId($id)],
             $data
@@ -32,7 +55,13 @@ class PizzaService
     public function deletePizza(string $id): bool
     {
         $alias = 'Pizza';
-        return $this->pizzaRepository->delete(
+        $pizza = $this->pizzaRepository->find($alias, $id);
+
+        if (!$pizza) {
+            return false;
+        }
+        $pizzaRepository = new PizzaRepository();
+        return $pizzaRepository->delete(
             $alias,
             ['_id' => new \MongoDB\BSON\ObjectId($id)]
         ) > 0;
@@ -41,12 +70,14 @@ class PizzaService
     public function getPizzaById(string $id): ?array
     {
         $alias = 'Pizza';
-        return $this->pizzaRepository->find($alias, $id);
+        $pizzaRepository = new PizzaRepository();
+        return $pizzaRepository->find($alias, $id);
     }
 
     public function getAllPizzas(): array
     {
         $alias = 'Pizza';
-        return $this->pizzaRepository->findAll($alias);
+        $pizzaRepository = new PizzaRepository();
+        return $pizzaRepository->findAll($alias);
     }
 }

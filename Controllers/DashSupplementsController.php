@@ -26,11 +26,10 @@ class DashSupplementsController extends Controller
     public function ajoutSupplement()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $data = [
-                'nom' => $_POST['nom'] ?? null,
-            ];
+            $data = $_POST;
 
-            $result = $this->supplementService->addSupplement($data);
+            $supplementService = new SupplementService();
+            $result = $supplementService->addSupplement($data);
 
             if ($result) {
                 $_SESSION['success_message'] = "Supplément ajouté avec succès.";
@@ -45,20 +44,11 @@ class DashSupplementsController extends Controller
 
     public function updateSupplement($id)
     {
-        $supplement = $this->supplementService->getSupplementById($id);
-
-        if (!$supplement) {
-            $_SESSION['error_message'] = "Le supplément avec l'ID $id n'existe pas.";
-            header("Location: /DashSupplements/liste");
-            exit;
-        }
-
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $data = [
-                'nom' => $_POST['nom'] ?? $supplement['nom'],
-            ];
+            $data = $_POST;
 
-            $result = $this->supplementService->updateSupplement($id, $data);
+            $supplementService = new SupplementService();
+            $result = $supplementService->updateSupplement($id, $data);
 
             if ($result) {
                 $_SESSION['success_message'] = "Supplément modifié avec succès.";
@@ -71,35 +61,34 @@ class DashSupplementsController extends Controller
         }
 
         $title = "Modifier Supplément";
+        $supplement = $this->supplementService->getSupplementById($id);
         $this->render('Dashboard/updateSupplement', compact('supplement', 'title'));
     }
 
     public function deleteSupplement()
     {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $id = $_POST['id'] ?? null;
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['id']) {
+            $supplementService = new SupplementService();
+            $result = $supplementService->deleteSupplement($_POST['id']);
 
-            if ($id) {
-                $result = $this->supplementService->deleteSupplement($id);
-
-                if ($result) {
-                    $_SESSION['success_message'] = "Supplément supprimé avec succès.";
-                } else {
-                    $_SESSION['error_message'] = "Erreur lors de la suppression du supplément.";
-                }
+            if ($result) {
+                $_SESSION['success_message'] = "Supplément supprimé avec succès.";
             } else {
-                $_SESSION['error_message'] = "ID supplément invalide.";
+                $_SESSION['error_message'] = "Erreur lors de la suppression du supplément.";
             }
-
-            header("Location: /DashSupplements/liste");
-            exit();
+        } else {
+            $_SESSION['error_message'] = "ID supplément invalide.";
         }
+
+        header("Location: /DashSupplements/liste");
+        exit();
     }
 
     public function liste()
     {
         $title = "Liste Suppléments";
-        $supplements = $this->supplementService->getAllSupplements();
+        $supplementService = new SupplementService();
+        $supplements = $supplementService->getAllSupplements();
 
         if (isset($_SESSION['id_User'])) {
             $this->render("Dashboard/listeSupplements", compact('title', 'supplements'));
