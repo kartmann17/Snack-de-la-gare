@@ -1,23 +1,25 @@
 document.getElementById('avisForm').addEventListener('submit', async function(event) {
     event.preventDefault();
 
-
     const form = event.target;
     const formData = new FormData(form);
 
     try {
-
         const response = await fetch(form.action, {
             method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+            },
             body: formData
         });
 
         if (response.ok) {
-            alert('Votre avis a été soumis avec succès !');
+            const result = await response.json(); 
+            alert(result.message || 'Votre avis a été soumis avec succès !');
             form.reset();
         } else {
-            const error = await response.text();
-            alert('Erreur lors de l\'envoi de l\'avis : ' + error);
+            const error = await response.json();
+            alert('Erreur : ' + (error.message || 'Une erreur s\'est produite.'));
         }
     } catch (error) {
         console.error('Erreur lors de la requête :', error);

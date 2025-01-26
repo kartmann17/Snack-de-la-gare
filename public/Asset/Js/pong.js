@@ -13,7 +13,7 @@ let y = canvas.height - 30;
 let dx = 2;
 let dy = -2;
 let score = 0;
-let gameOver = false; // Variable pour indiquer si le jeu est terminé
+let gameOver = false;
 
 // Ajout des écouteurs pour les touches
 document.addEventListener("keydown", keyDownHandler);
@@ -58,7 +58,7 @@ function drawPaddle() {
 }
 
 function draw() {
-    if (gameOver) return; // Si le jeu est terminé, arrêter la boucle
+    if (gameOver) return;
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawBall();

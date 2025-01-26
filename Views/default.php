@@ -13,11 +13,11 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/Asset/icones/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/Asset/icones/favicon-16x16.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/Asset/icones/favicon-32x32.png">
-    <?php if(isset($css)): ?>
-    <link href="/Asset/css/<?= $css ?>.css" rel="stylesheet">
+    <?php if (isset($css)): ?>
+        <link href="/Asset/css/<?= $css ?>.css" rel="stylesheet">
     <?php endif; ?>
-    <?php if(isset($style)): ?>
-    <link href="/Asset/css/<?= $style ?>.css" rel="stylesheet">
+    <?php if (isset($style)): ?>
+        <link href="/Asset/css/<?= $style ?>.css" rel="stylesheet">
     <?php endif; ?>
     <link rel="manifest" href="/Asset/icones/site.webmanifest">
     <link rel="preload" as="image" href="https://res.cloudinary.com/dr7jxgr70/image/upload/v1733239254/burger_page_acceuil_emtvkb.webp" imagesrcset="https://res.cloudinary.com/dr7jxgr70/image/upload/v1733239254/burger_page_acceuil_emtvkb.webp" type="image/webp">
@@ -25,49 +25,51 @@
 </head>
 
 <body>
-<nav class="navbar navbar-expand-lg bg-body-transparent">
-    <div class="container-fluid d-flex align-items-center justify-content-between">
+    <header>
+        <nav class="navbar navbar-expand-lg bg-body-transparent">
+            <div class="container-fluid d-flex align-items-center justify-content-between">
 
-        <a class="navbar-brand d-flex align-items-center logo" href="/">
-            <img src="https://res.cloudinary.com/dr7jxgr70/image/upload/v1733222368/logoV2_xgml3q.png" alt="logo-accueil" height="60">
-        </a>
-        <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
-            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <!-- Liens de navigation -->
-        <div class="collapse navbar-collapse justify-content-center" id="navbarNavAltMarkup">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="/">Accueil</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/Contact">Contact</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/Menu">Menu</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/Avis">Avis</a>
-                </li>
-                <?php if (isset($_SESSION['id_User'])): ?>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/Connexion/deconnexion" onclick="return confirm('Voulez vous vous déconnecter ?');">Déconnexion</a>
-                    </li>
-                <?php else: ?>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/Connexion">Connexion</a>
-                    </li>
-                <?php endif; ?>
-                <?php if (isset($_SESSION['role']) && ($_SESSION['role'] === 'admin' || $_SESSION['role'] === 'employe')): ?>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/Dashboard">Dashboard</a>
-                    </li>
-                <?php endif; ?>
-            </ul>
-        </div>
-    </div>
-</nav>
+                <a class="navbar-brand d-flex align-items-center logo" href="/">
+                    <img src="https://res.cloudinary.com/dr7jxgr70/image/upload/v1733222368/logoV2_xgml3q.png" alt="logo-accueil" height="60">
+                </a>
+                <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+                    aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <!-- Liens de navigation -->
+                <div class="collapse navbar-collapse justify-content-center" id="navbarNavAltMarkup">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/">Accueil</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/Contact">Contact</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/Menu">Menu</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/Avis">Avis</a>
+                        </li>
+                        <?php if (isset($_SESSION['id_User'])): ?>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/Connexion/deconnexion" onclick="return confirm('Voulez vous vous déconnecter ?');">Déconnexion</a>
+                            </li>
+                        <?php else: ?>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/Connexion">Connexion</a>
+                            </li>
+                        <?php endif; ?>
+                        <?php if (isset($_SESSION['role']) && ($_SESSION['role'] === 'admin' || $_SESSION['role'] === 'employe')): ?>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/Dashboard">Dashboard</a>
+                            </li>
+                        <?php endif; ?>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
 
     <div class="burger">
         <img class="burgeur" src="https://res.cloudinary.com/dr7jxgr70/image/upload/v1733239254/burger_page_acceuil_emtvkb.webp" width="600" height="400" alt="un burgeur délicieux">
@@ -82,7 +84,7 @@
     </div>
 
     <main>
-        <?= $contenu ?><!--raccourci de echo en php-->
+        <?= $contenu ?>
     </main>
 
 
@@ -90,17 +92,17 @@
         <footer class="footer-container">
             <ul class="wrapper">
                 <li class="icon facebook">
-                <a href="https://www.facebook.com/p/Snack-de-la-gare-100038549299473/?locale=fr_FR" target="blank" rel="noopener noreferrer">
-                    <span class="tooltip">Facebook</span>
-                    <svg
-                        viewBox="0 0 320 512"
-                        height="1.2em"
-                        fill="currentColor"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M279.14 288l14.22-92.66h-88.91v-60.13c0-25.35 12.42-50.06 52.24-50.06h40.42V6.26S260.43 0 225.36 0c-73.22 0-121.08 44.38-121.08 124.72v70.62H22.89V288h81.39v224h100.17V288z"></path>
-                    </svg>
-                </a>
+                    <a href="https://www.facebook.com/p/Snack-de-la-gare-100038549299473/?locale=fr_FR" target="blank" rel="noopener noreferrer">
+                        <span class="tooltip">Facebook</span>
+                        <svg
+                            viewBox="0 0 320 512"
+                            height="1.2em"
+                            fill="currentColor"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M279.14 288l14.22-92.66h-88.91v-60.13c0-25.35 12.42-50.06 52.24-50.06h40.42V6.26S260.43 0 225.36 0c-73.22 0-121.08 44.38-121.08 124.72v70.62H22.89V288h81.39v224h100.17V288z"></path>
+                        </svg>
+                    </a>
                 </li>
                 <li class="icon instagram">
                     <span class="tooltip">Instagram</span>
@@ -128,8 +130,12 @@
             </div>
         </footer>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+        integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+        crossorigin="anonymous"></script>
 
 </body>
 

@@ -13,25 +13,26 @@ class AvisController extends Controller
     }
 
     public function ajoutAvis()
-    {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $data = $_POST;
+{
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        header('Content-Type: application/json');
 
-            $valideAvisService = new ValideAvisService();
-            $result = $valideAvisService->saveAvis($data);
+        $data = $_POST;
 
-            if ($result) {
-                $_SESSION['success_message'] = "Votre avis a été soumis avec succès.";
-            } else {
-                $_SESSION['error_message'] = "Une erreur s'est produite lors de l'enregistrement de votre avis. Veuillez vérifier les champs obligatoires.";
-            }
+        $valideAvisService = new ValideAvisService();
+        $result = $valideAvisService->saveAvis($data);
 
-            header("Location: /accueil");
-            exit();
+        if ($result) {
+            echo json_encode(['success' => true, 'message' => 'Votre avis a été soumis avec succès.']);
+        } else {
+            http_response_code(400);
+            echo json_encode(['success' => false, 'message' => 'Une erreur s\'est produite lors de l\'enregistrement de votre avis.']);
         }
-
-        http_response_code(405);
-        echo "Méthode non autorisée.";
         exit();
     }
+
+    http_response_code(405);
+    echo json_encode(['success' => false, 'message' => 'Méthode non autorisée.']);
+    exit();
+}
 }
