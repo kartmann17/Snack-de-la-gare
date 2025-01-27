@@ -1,5 +1,5 @@
 # Utiliser une image PHP avec Apache
-FROM php:8.3.13-apache
+FROM php:8.2-apache
 
 # Mise à jour du système et installation des extensions nécessaires
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -33,7 +33,7 @@ COPY composer.json composer.lock ./
 # Installer les dépendances avec Composer
 RUN composer install --no-dev --optimize-autoloader
 
-# Copier le reste de l'application
+# Copier l'ensemble du projet dans le conteneur
 COPY . .
 
 # Changer les permissions des fichiers pour Apache
