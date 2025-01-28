@@ -26,16 +26,19 @@ body {
     padding: 10px 20px;
     background-color: #0F2C33;
 }
+
 .navbar-toggler {
     background-color: #EFA00F;
     border: none;
 }
+
 .nav-link {
     color: #E6D1B4;
     font-size: 1.3rem;
     margin: 0 10px;
     font-family: 'JejuHallasan-Regular';
 }
+
 .nav-link:hover {
     color: #EFA00F;
 }
@@ -48,20 +51,22 @@ body {
 
 /* Section principale */
 .burger {
-    margin-top: 10vh;
-    width: 100vw;
-    height: 60vh;
+    margin-top: 5vh;
+    width: 100%;
+    height: 50vh;
     display: flex;
     justify-content: center;
     align-items: center;
     overflow: hidden;
 }
+
 .burgeur {
     width: 100%;
-    height: 100%;
+    height: auto;
     object-fit: cover;
 }
 
+/* Bloc numéro */
 .bloc_num {
     display: flex;
     flex-direction: column;
@@ -69,6 +74,7 @@ body {
     justify-content: center;
     margin-top: 3rem;
 }
+
 .numero a {
     text-decoration: none;
     font-family: "Jost", sans-serif;
@@ -88,50 +94,23 @@ h1 {
 }
 
 /* Responsive */
-@media (max-width: 768px) {
-    .burger {
-        height: 40vh;
-    }
-    .numero a {
-        font-size: 2.5rem;
-        line-height: 3rem;
-    }
-    h1 {
-        font-size: 2rem;
-    }
-}
-
-@media (max-width: 480px) {
+@media (max-width: 1024px) {
     .burger {
         height: 20vh;
-    }
-    .numero a {
-        font-size: 2rem;
-        line-height: 2.5rem;
-    }
-    h1 {
-        font-size: 1.8rem;
-    }
-}
-
-@media (min-width: 600px) and (max-width: 1024px) {
-    .bloc_num {
-        flex-direction: column;
-        text-align: center;
-        margin-top: 3rem;
     }
 
     .numero a {
         font-size: 3.5rem;
         line-height: 4rem;
-        word-break: break-word;
-        text-align: center;
-        display: inline-block;
-        margin: 0 auto;
     }
 
     h1 {
         font-size: 2.5rem;
+    }
+
+    .bloc_num {
+        flex-direction: column;
+        text-align: center;
     }
 
     .produit {
@@ -146,10 +125,42 @@ h1 {
         width: 80px;
         height: 80px;
     }
+
     .overlay-text {
         font-size: 1.2rem;
     }
+
     .specialite {
         margin-top: 100px;
+    }
+}
+
+@media (max-width: 768px) {
+    .burger {
+        height: 20vh;
+    }
+
+    .numero a {
+        font-size: 2.5rem;
+        line-height: 3rem;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .burger {
+        height: 20vh;
+    }
+
+    .numero a {
+        font-size: 2rem;
+        line-height: 2.5rem;
+    }
+
+    h1 {
+        font-size: 1.8rem;
     }
 }

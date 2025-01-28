@@ -20,6 +20,7 @@
     text-align: center;
 }
 
+/* Conteneur de la bannière */
 .banner {
     background-color: #16a085;
     height: auto;
@@ -28,20 +29,14 @@
     text-align: center;
     font-family: 'Roboto', sans-serif;
     clip-path: polygon(18% 6%, 60% 0, 81% 5%, 81% 100%, 38% 96%, 18% 100%);
-
-}
-/* Responsive */
-@media (max-width: 768px) {
-    .banner {
-        width: 95vw;
-        clip-path: polygon(0 3%, 70% 0%, 100% 3%, 100% 100%, 20% 97%, 0 100%);
-    }
-
-    .banner p {
-        font-size: 1rem;
-    }
+    margin: 0 auto;
+    margin-top: 3rem;
+    width: 75%;
 }
 
+.banner {
+    transition: all 0.3s ease-in-out;
+}
 
 .banner p {
     margin: 40px 0;
@@ -52,11 +47,49 @@
     font-weight: bold;
 }
 
-.adresse p{
+/* Styles pour l'adresse */
+.adresse p {
     color: #E6D1B4;
     font-family: 'JejuHallasan-Regular';
     font-size: 2rem;
 }
+
+/* Responsive pour les tablettes */
+@media (max-width: 768px) {
+    .banner {
+        width: 95vw;
+        clip-path: polygon(0 3%, 70% 0%, 100% 3%, 100% 100%, 20% 97%, 0 100%);
+        padding: 15px;
+    }
+
+    .banner p {
+        font-size: 1.5rem;
+        margin: 20px 0;
+    }
+
+    .adresse p {
+        font-size: 1.5rem;
+    }
+}
+
+/* Responsive pour les mobiles */
+@media (max-width: 480px) {
+    .banner {
+        width: 100vw;
+        clip-path: polygon(0 3%, 70% 0%, 100% 3%, 100% 100%, 20% 97%, 0 100%);
+        padding: 10px;
+    }
+
+    .banner p {
+        font-size: 1.2rem;
+        margin: 15px 0;
+    }
+
+    .adresse p {
+        font-size: 1.2rem;
+    }
+}
+
 @media (max-width: 768px) {
 
     .overlay-text {

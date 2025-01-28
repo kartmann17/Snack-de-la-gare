@@ -14,7 +14,7 @@ $css = 'accueil';
             que font des ingrédients frais et un savoir-faire artisanal.
         </p>
     </div>
-    <div class="images m-auto d-flex justify-content-between mt-5">
+    <div class="images m-auto d-flex justify-content-evenly mt-5">
         <img class="im1" src="https://res.cloudinary.com/dr7jxgr70/image/upload/v1733222344/arturrro-4yzEtTQLdL4-unsplash_iw9dus.jpg" loading="lazy" width="300" height="200" alt="pain_presentation">
         <img class="im1" src="https://res.cloudinary.com/dr7jxgr70/image/upload/v1733222363/gaelle-marcel-M-K4R83Rcm0-unsplash_lxlr9t.jpg" loading="lazy" width="300" height="200" alt="salade_presentation">
         <img class="im1" src="https://res.cloudinary.com/dr7jxgr70/image/upload/v1733222601/madie-hamilton-GXehL5_crJ4-unsplash_1_sdmrka.jpg" loading="lazy" width="300" height="200" alt="viande_presentation">
@@ -64,7 +64,7 @@ $css = 'accueil';
 
 <!--rond nos spécialités-->
 <div class="specialite mb-5">
-    <div class="images m-auto d-flex justify-content-between">
+    <div class="images m-auto d-flex justify-content-evenly">
         <img class="im1" src="https://res.cloudinary.com/dr7jxgr70/image/upload/v1733222361/Burger3_nulryq.jpg" loading="lazy" width="300" height="200" alt="burger">
         <img class="im1" src="https://res.cloudinary.com/dr7jxgr70/image/upload/v1733222369/plaque-pizza-u_u43w3y.jpg" loading="lazy" width="300" height="200" alt="pizza plateau">
         <img class="im1" src="https://res.cloudinary.com/dr7jxgr70/image/upload/v1733222362/assiette_ddknkw.jpg" loading="lazy" width="300" height="200" alt="assiette">
@@ -86,7 +86,7 @@ $css = 'accueil';
 <section class="avis">
 
     <!-- caroussel avis-->
-    <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
+    <div id="carouselExampleSlidesOnly1" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">
             <?php if (isset($Avis) && !empty($Avis)): ?>
                 <?php

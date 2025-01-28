@@ -84,7 +84,7 @@
 
 @media (max-width: 768px) {
     .custom-carousel .carousel-inner img {
-        height: 300px; /* Hauteur réduite pour les petits écrans */
+        height: 300px;
     }
 }
 
@@ -136,7 +136,6 @@
 .card-body h5,
 p {
     font-family: roboto, serif;
-
 }
 
 /* Style des étoiles */
@@ -145,3 +144,41 @@ p {
     font-size: 20px;
     margin-right: 2px;
 }
+
+
+
+/* Pour les écrans de tablette (entre 768px et 1024px) */
+@media (min-width: 768px) and (max-width: 1024px) {
+    .card {
+        height: 25rem;
+        margin-bottom: 20px;
+    }
+
+    .col-md-4 {
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+
+    .row.justify-content-center {
+        gap: 20px; /
+    }
+}
+
+/* Pour les écrans de mobile (moins de 768px) */
+@media (max-width: 767px) {
+    .card {
+        height: 20rem;
+        margin-bottom: 15px;
+    }
+
+    .col-12 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+
+    .row.justify-content-center {
+        gap: 15px;
+    }
+}
+
+
