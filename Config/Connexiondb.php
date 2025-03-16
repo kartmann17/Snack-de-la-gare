@@ -19,11 +19,25 @@ class Connexiondb extends PDO
     }
 
     //le singleton = instance unique d'une classe
+    /**
+     * getInstance
+     *
+     * Cette méthode implémente le pattern de conception Singleton. Elle assure qu'une seule et unique
+     * instance de la classe Connexiondb existe pendant toute la durée de vie de l'application.
+     *
+     * @return self Retourne l'unique instance de la classe Connexiondb.
+     */
     public static function getInstance(): self
     {
+        // Vérifie si une instance de la classe existe déjà.
         if (self::$instance === null) {
+            // Si aucune instance n'existe, on en crée une nouvelle.
+            // 'new self()' instancie un nouvel objet de la classe courante (Connexiondb)
             self::$instance = new self();
         }
+        // Si une instance existe déjà, ou qu'elle vient d'être créée, on la retourne.
+        // Cela assure que toutes les parties de l'application qui appellent getInstance() obtiendront
+        // la même instance de la connexion à la base de données.
         return self::$instance;
     }
 }

@@ -38,13 +38,21 @@ class UserRepository extends Repository
     }
 
     public function createUser(array $data)
-    {
-        $columns = implode(', ', array_keys($data));
-        $placeholders = implode(', ', array_fill(0, count($data), '?'));
+{
+    // Génère la liste des colonnes à insérer en les séparant par des virgules.
+    // array_keys($data) récupère les noms des clés du tableau associatif $data (ex: ['nom', 'email', 'password'])
+    $columns = implode(', ', array_keys($data));
 
-        $sql = "INSERT INTO {$this->table} ($columns) VALUES ($placeholders)";
-        return $this->req($sql, array_values($data));
-    }
+    // Crée une liste de placeholders "?" correspondant au nombre de valeurs à insérer.
+    // array_fill(0, count($data), '?') crée un tableau avec autant de '?' qu'il y a de colonnes.
+    $placeholders = implode(', ', array_fill(0, count($data), '?'));
+
+    // Construit la requête SQL d'insertion en insérant dynamiquement les colonnes et les placeholders.
+    $sql = "INSERT INTO {$this->table} ($columns) VALUES ($placeholders)";
+
+    // Exécute la requête SQL en passant les valeurs du tableau $data pour remplacer les placeholders "?".
+    return $this->req($sql, array_values($data));
+}
 
     public function listeUser()
     {
