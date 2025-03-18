@@ -134,4 +134,11 @@ $css = 'accueil';
             <?php endif; ?>
         </div>
     </div>
+
+    <div id="cookie-consent-banner" style="display: none;">
+    Ce site utilise des cookies pour vous garantir la meilleure expérience. En utilisant ce site, vous acceptez notre utilisation des cookies.
+    <button onclick="acceptCookies()">Accepter</button>
+</div>
 </section>
+
+<script src="/Asset/Js/cookies.js"></script>
