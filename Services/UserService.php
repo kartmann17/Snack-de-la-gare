@@ -19,33 +19,33 @@ class UserService
         return $this->userRepository->selectAllRole();
     }
 
-    public function addUser(array $data): bool
-{
-    if (empty($data['nom']) || empty($data['prenom']) || empty($data['email']) || empty($data['role']) || empty($data['pass'])) {
-        return false;
+    public function addUser(array $data)
+    {
+        if (empty($data['nom']) || empty($data['prenom'])
+         || empty($data['email']) || empty($data['role'])
+        || empty($data['pass'])) {
+            return false;
+        }
+        if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+            return false;
+        }
+
+        $data = [
+            'nom' => trim($data['nom']),
+            'prenom' => trim($data['prenom']),
+            'email' => trim($data['email']),
+            'pass' => password_hash($data['pass'], PASSWORD_DEFAULT),
+            'id_role' => $data['role']
+        ];
+
+        $userModel = new UserModel();
+        $userModel->hydrate($data);
+
+        $userRepository = new UserRepository();
+        $userRepository->create($data);
     }
-    if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
-        return false;
-    }
 
-    $data = [
-        'nom' => trim($data['nom']),
-        'prenom' => trim($data['prenom']),
-        'email' => trim($data['email']),
-        'pass' => password_hash($data['pass'], PASSWORD_DEFAULT),
-        'id_role' => $data['role']
-    ];
-
-    $userModel = new UserModel();
-    $userModel->hydrate($data);
-
-    $userRepository = new UserRepository();
-    $result = $userRepository->createUser($data);
-
-    return $result->rowCount() > 0;
-}
-
-public function deleteUser(int $id): bool
+public function deleteUser(int $id)
 {
     $user = $this->userRepository->find($id);
 
@@ -54,9 +54,9 @@ public function deleteUser(int $id): bool
     }
 
     $userRepository = new UserRepository();
-    $result = $userRepository->delete($id);
+    $userRepository->delete($id);
 
-    return $result->rowCount() > 0;
+
 }
 
     public function getAllRoles(): array

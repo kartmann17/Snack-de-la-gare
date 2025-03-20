@@ -21,9 +21,9 @@ class Main
 
         // Si l'URL n'est pas vide, qu'elle n'est pas simplement "/" et qu'elle finit par un "/", je corrige
         if (!empty($uri) && $uri != '/' && $uri[-1] === "/") {
-            $uri = substr($uri, 0, -1); // Je supprime le dernier "/"
+            $uri = substr($uri, 0, -1); // Je supprime le dernier "/" sauf si c'est la racine
             http_response_code(301); // Redirection permanente
-            header('Location: ' . $uri); // Redirection vers l'URL corrigée
+            header('Location: ' . $uri); //  vers l'URL corrigée
             exit(); // Je termine le script après la redirection
         }
 
